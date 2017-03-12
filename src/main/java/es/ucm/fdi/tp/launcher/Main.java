@@ -16,12 +16,33 @@ import es.ucm.fdi.tp.was.WolfAndSheepState;
 
 public class Main {
 
+	/**
+	 * Define el juego tres en rayas.
+	 */
 	private static final String TTT = "TTT";
+	/**
+	 * Define el juego WolfAndSheep
+	 */
 	private static final String WAS = "WAS";
+	/**
+	 * Define el tipo de jugador por consola.
+	 */
 	private static final String CONSOLE = "CONSOLE";
+	/**
+	 * Define a un jugador random.
+	 */
 	private static final String RAND = "RAND";
+	/**
+	 * Define a un jugador controlado por IA.
+	 */
 	private static final String SMART = "SMART";
+	/**
+	 * Listado de jugadores.
+	 */
 	private static List<GamePlayer> players;
+	/**
+	 * Scanner que se encargará de recoger los comandos del usuario.
+	 */
 	private static Scanner scanner;
 
 	public static void main(String[] args) {
@@ -64,10 +85,21 @@ public class Main {
 		scanner.close();
 	}
 
+	 /**
+     * Evalua que el número de parámetros introducidos por el usuario son los necesarios.
+     * @param command
+     * @return Devuelve true si el número de parámetros introducidos es correcto,
+     * false en caso contrario.
+     */
 	public static boolean checkCommand(String[] command) {
 	    return command.length == 3;
     }
 	
+	/**
+	 * Evalua que el juego introducido está definido
+	 * @param gameName Nombre del juego.
+	 * @return Devuelve true en caso de que el juego introducido esté definido.
+	 */
 	public static boolean checkGame(String gameName) {
 		if(gameName.equalsIgnoreCase(TTT) || gameName.equalsIgnoreCase(WAS)) {
 			return true;
@@ -76,6 +108,11 @@ public class Main {
 		return false;
 	}
 
+	/**
+	 * Evalua que los jugadores introducidos están definidos
+	 * @param command Parámetros introducidos por el usuario
+	 * @return Devuelve true en caso de que los jugadores introducidos estén definidos.
+	 */
 	private static boolean checkPlayers(String[] command) {
 	    boolean success = true;
 	    if (players.size() != 2) {
@@ -89,6 +126,10 @@ public class Main {
 		return success;
 	}
 
+	/**
+	 * Crea los jugadores.
+	 * @param gameSettingsData commandos introducidos por el usuario.
+	 */
 	private static void loadPlayers(String[] gameSettingsData) {
 		if (players.size() != 2) {
 			System.out.println(System.getProperty("line.separator") + "Jugador 1 Introduce tu nombre:");
@@ -102,8 +143,10 @@ public class Main {
 	}
 
     /**
-     * @param gameName
-     * @return
+     * Crea el estado inicial para el juego que quiere jugar el usuario.
+     * @param gameName Nombre el juego.
+     * @return Devuelve un juego en su estado inicial si el parámetro introducido
+     *  es correcto, devuelve nulo en caso contrario.
      */
     public static GameState<?,?> createInitialState(String gameName) {
 		GameState<?,?> initialState = null;
@@ -127,6 +170,12 @@ public class Main {
     	return newGamePlayer;
     }
 
+    /**
+     * Controla el juego en curso.
+     * @param initialState Estado inicial del juego.
+     * @param players Jugadores que van a jugar el juego.
+     * @return Devuelve el jugador que ha ganado la partida.
+     */
 	public static <S extends GameState<S, A>, A extends GameAction<S, A>> int playGame(GameState<S, A> initialState,
 			List<GamePlayer> players) {
 		int playerCount = 0;
