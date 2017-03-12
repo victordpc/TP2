@@ -3,11 +3,25 @@ package es.ucm.fdi.tp.was;
 import es.ucm.fdi.tp.base.model.GameAction;
 
 public class WolfAndSheepAction implements GameAction<WolfAndSheepState, WolfAndSheepAction> {
-
+	 /**
+     * Jugador de la acción
+     */
 	private int player;
+    /**
+     * Fila de la nueva posición
+     */
 	private int row;
+    /**
+     * Columna de la nueva posición
+     */
 	private int col;
+    /**
+     * Fila de origen
+     */
 	private int originRow;
+    /**
+     * Columna de origen
+     */
 	private int originColum;
 
 	public WolfAndSheepAction(int player, int row, int col, int originRow, int originColum ) {
@@ -18,11 +32,20 @@ public class WolfAndSheepAction implements GameAction<WolfAndSheepState, WolfAnd
 		this.originColum = originColum;
 	}
 
+    /**
+     * Devuelve el número del jugador.
+     * @return Devuelve un número que índica el número del jugador.
+     */
 	@Override
 	public int getPlayerNumber() {
         return player;
     }
 
+    /**
+     * Mueve la ficha al estado pasado por parámetro.
+     * @param state Estado al que se le va aplicar el movimiento.
+     * @return Devuelve el estado/tablero actualizado tras mover la ficha.
+     */
 	@Override
 	public WolfAndSheepState applyTo(WolfAndSheepState state) {
         if (player != state.getTurn()) {
@@ -43,23 +66,7 @@ public class WolfAndSheepAction implements GameAction<WolfAndSheepState, WolfAnd
 
         return nextState;
 	}
-
-	public boolean isSheepValidAction(int originRow, int originColum) {
-	    boolean isValidAction = false;
-	    if (((row - originRow) == 1) && (((col - originColum) == 1) || ((col - originColum) == -1))) {
-            isValidAction = true;
-        }
-        return isValidAction;
-    }
-
-    public int getRow() {
-        return row;
-    }
-
-    public int getCol() {
-        return col;
-    }
-
+	
     public String toString() {
 	    String playerName = (player == 0) ? "Wolf" : "Sheep";
         return "place " + playerName + " at (" + row + ", " + col + ")";

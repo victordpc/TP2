@@ -1,27 +1,33 @@
 package es.ucm.fdi.tp.was;
 
 public class Coordinate {
-	 private int x;
-	    private int y;
+	/**
+     * Contiene la fila en la que se encuentra la ficha en el tablero
+     */
+    private int x;
+    /**
+     * Contiene la columna en la que se encuentra la ficha en el tablero
+     */
+    private int y;
 
-	    public Coordinate(int x, int y) {
-	        this.x = x;
-	        this.y = y;
-	    }
+    public Coordinate(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 
-	    public int getX() {
-	        return x;
-	    }
+    /**
+     * Contiene la columna en la que se encuentra la ficha en el tablero
+     * @return Devuelve la fila en la que se encuentra la ficha en el tablero.
+     */
+    public int getX() {
+        return x;
+    }
 
-	    public void setX(int x) {
-	        this.x = x;
-	    }
-
-	    public int getY() {
-	        return y;
-	    }
-
-	    public void setY(int y) {
-	        this.y = y;
-	    }
+    /**
+     * Contiene la columna en la que se encuentra la ficha en el tablero
+     * @return Devuelve la columna en la que se encuentra la ficha en el tablero.
+     */
+    public int getY() {
+        return y;
+    }
 }
