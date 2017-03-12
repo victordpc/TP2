@@ -36,7 +36,7 @@ public class Main {
 			System.out.println("Introduce nuevo juego: " + System.getProperty("line.separator"));
 			String[] newCommand = scanner.nextLine().trim().split(" ");
 			if(checkGame(newCommand[0])){
-				if(newCommand.length == 3) {
+				if(checkCommand(newCommand)) {
 					if(checkPlayers(newCommand)) {
 						loadPlayers(newCommand);
 						GameState<?, ?> initialGameState = createInitialState(newCommand[0]);
@@ -64,7 +64,11 @@ public class Main {
 		scanner.close();
 	}
 
-	private static boolean checkGame(String gameName) {
+	public static boolean checkCommand(String[] command) {
+	    return command.length == 3;
+    }
+	
+	public static boolean checkGame(String gameName) {
 		if(gameName.equalsIgnoreCase(TTT) || gameName.equalsIgnoreCase(WAS)) {
 			return true;
 		}

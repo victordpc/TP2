@@ -52,6 +52,15 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 	        this.winner = winner;
 	    }
 
+	    public WolfAndSheepState(int turn, int[][] board, boolean finished, int winner) {
+	        super(2);
+	        this.dim = 8;
+	        this.board = board;
+	        this.turn = turn;
+	        this.finished = finished;
+	        this.winner = winner;
+	    }
+	    
 	    public WolfAndSheepAction isValidMove(int playerNumber, int row, int colum) {
 	        WolfAndSheepAction wolfAndSheepAction = null;
 	        if (isFinished()) {
