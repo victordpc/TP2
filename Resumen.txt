@@ -1,0 +1,13 @@
+En el desarrollo de esta práctica hemos aprendido lo siguiente:
+
+Que es Maven: es una herramienta de software para la gestión y construcción de proyectos Java. Con Maven podemos gestionar dependencias creadas por 3º en nuestro proyecto, como por ejemplo librerías.
+
+Además hemos aprendido JUnit, que es una herramienta que permite crear tests unitarios.
+También hemos aprendido lo que es un test unitario, son un tipo de test que permiten evaluar que el funcionamiento de un método es el esperado.
+
+Para desarrollar la práctica primero hemos creado un diagrama de clases para obtener una visión global del proyecto.
+Una vez creado el diagrama hemos evaluado el funcionamiento del juego TTT y sus clases.
+
+A partir de ahí hemos ido implementando los métodos necesarios para el juego WolfAndSheep.
+
+Primero hemos creado las clases sugeridas por la práctica, WolfAndSheepAction, que contiene los métodos necesarios para definir una acción de alguna ficha del juego WolfAndSheep, y  WolfAndSheepState, que es quien gestiona el estado del tablero así como los movimientos válidos de cada una de las fichas del tablero.
