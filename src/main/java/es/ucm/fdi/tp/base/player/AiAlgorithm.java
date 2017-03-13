@@ -8,10 +8,12 @@ import es.ucm.fdi.tp.base.model.GameState;
  */
 public interface AiAlgorithm {
 
-    /**
-     * @param playerNumber for which to choose action
-     * @param state for which to choose action
-     * @return the chosen action
-     */
-	<S extends GameState<S,A>, A extends GameAction<S,A>> A chooseAction(int playerNumber, S state);
+	/**
+	 * @param playerNumber
+	 *            for which to choose action
+	 * @param state
+	 *            for which to choose action
+	 * @return the chosen action
+	 */
+	<S extends GameState<S, A>, A extends GameAction<S, A>> A chooseAction(int playerNumber, S state);
 }

@@ -3,6 +3,7 @@
 	<name>P4-Tu-Nombre-Aqui</name>
 	<comment></comment>
 	<projects>
+		<project>RemoteSystemsTempFiles</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

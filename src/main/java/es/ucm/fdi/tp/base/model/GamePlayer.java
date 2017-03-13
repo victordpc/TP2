@@ -6,12 +6,9 @@ package es.ucm.fdi.tp.base.model;
 public interface GamePlayer {
 
 	/**
-	 * joins this player to a game.
-	 * 
-	 * @param playerNumber
-	 *            in the game
+	 * @return the player's name. Used when describing the player's actions.
 	 */
-	void join(int playerNumber);
+	String getName();
 
 	/**
 	 * returns the number assigned to the player when joining the game (-1 if
@@ -22,12 +19,15 @@ public interface GamePlayer {
 	int getPlayerNumber();
 
 	/**
-	 * @return the player's name. Used when describing the player's actions.
+	 * joins this player to a game.
+	 * 
+	 * @param playerNumber
+	 *            in the game
 	 */
-	String getName();
+	void join(int playerNumber);
 
 	/**
-	 * demands a move from the player. 
+	 * demands a move from the player.
 	 */
 	<S extends GameState<S, A>, A extends GameAction<S, A>> A requestAction(S state);
 }
