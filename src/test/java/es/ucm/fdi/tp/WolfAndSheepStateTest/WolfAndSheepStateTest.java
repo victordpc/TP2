@@ -90,7 +90,7 @@ public class WolfAndSheepStateTest {
 	        List<WolfAndSheepAction> validActions = new ArrayList<>();
 	        for (int i = 0; i < dim; i++) {
 	            for (int j = 0; j < dim; j++) {
-	                WolfAndSheepAction wolfAndSheepAction = wolfAndSheepState.isValidMove(1, i, j, sheepCoordinates);
+	                WolfAndSheepAction wolfAndSheepAction = wolfAndSheepState.isValidMoveForPlayerInCoordinate(sheepCoordinates, 1, i, j);	                		
 	                if (wolfAndSheepAction != null) {
 	                    validActions.add(wolfAndSheepAction);
 	                }
@@ -102,7 +102,7 @@ public class WolfAndSheepStateTest {
 	         validActions = new ArrayList<>();
 	        for (int i = 0; i < dim; i++) {
 	            for (int j = 0; j < dim; j++) {
-	                WolfAndSheepAction wolfAndSheepAction = wolfAndSheepState.isValidMove(1, i, j, sheepCoordinates);
+	                WolfAndSheepAction wolfAndSheepAction = wolfAndSheepState.isValidMoveForPlayerInCoordinate(sheepCoordinates, 1, i, j);	                		
 	                if (wolfAndSheepAction != null) {
 	                    validActions.add(wolfAndSheepAction);
 	                }

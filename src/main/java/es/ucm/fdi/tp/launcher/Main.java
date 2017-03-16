@@ -2,9 +2,7 @@ package es.ucm.fdi.tp.launcher;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Scanner;
-
 import es.ucm.fdi.tp.base.console.ConsolePlayer;
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GamePlayer;
@@ -186,7 +184,6 @@ public class Main {
 		S currentState = (S) initialState;
 
 		while (!currentState.isFinished()) {
-			int currentStateTurn = currentState.getTurn();
 			// request move
 			A action = players.get(currentState.getTurn()).requestAction(currentState);
 			// apply move
