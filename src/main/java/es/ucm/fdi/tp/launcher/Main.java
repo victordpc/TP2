@@ -206,10 +206,6 @@ public class Main {
 		S currentState = (S) initialState;
 
 		while (!currentState.isFinished()) {
-<<<<<<< HEAD
-=======
-			// int currentStateTurn = currentState.getTurn();
->>>>>>> origin/master
 			// request move
 			A action = players.get(currentState.getTurn()).requestAction(currentState);
 			// apply move

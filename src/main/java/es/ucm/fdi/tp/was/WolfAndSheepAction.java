@@ -3,31 +3,11 @@ package es.ucm.fdi.tp.was;
 import es.ucm.fdi.tp.base.model.GameAction;
 
 public class WolfAndSheepAction implements GameAction<WolfAndSheepState, WolfAndSheepAction> {
-<<<<<<< HEAD
-	 /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	/**
-     * Jugador de la acción
-     */
-	private int player;
-    /**
-     * Fila de la nueva posición
-     */
-	private int row;
-    /**
-     * Columna de la nueva posición
-     */
-=======
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1745600182000535724L;
 	/**
 	 * Columna de la nueva posición
 	 */
->>>>>>> origin/master
 	private int col;
 	/**
 	 * Columna de origen
