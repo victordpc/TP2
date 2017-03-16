@@ -9,32 +9,33 @@ import es.ucm.fdi.tp.base.model.GameState;
  */
 public class AiPlayer implements GamePlayer {
 
-    protected String name;
+	protected AiAlgorithm algorithm;
 
-    protected int playerNumber;
-    protected AiAlgorithm algorithm;
+	protected String name;
+	protected int playerNumber;
 
-    public AiPlayer(String name, AiAlgorithm algorithm) {
-        this.name = name;
-        this.algorithm = algorithm;
-    }
+	public AiPlayer(String name, AiAlgorithm algorithm) {
+		this.name = name;
+		this.algorithm = algorithm;
+	}
 
-    @Override
-    public void join(int playerNumber) {
-        this.playerNumber = playerNumber;
-    }
+	@Override
+	public String getName() {
+		return name;
+	}
 
-    @Override
-    public int getPlayerNumber() {
-    	return playerNumber;
-    }
+	@Override
+	public int getPlayerNumber() {
+		return playerNumber;
+	}
 
-    @Override
-    public String getName() {
-        return name;
-    }
+	@Override
+	public void join(int playerNumber) {
+		this.playerNumber = playerNumber;
+	}
 
-	public <S extends GameState<S,A>, A extends GameAction<S,A>> A requestAction(S state) {
-        return algorithm.chooseAction(playerNumber, state);
-    }
+	@Override
+	public <S extends GameState<S, A>, A extends GameAction<S, A>> A requestAction(S state) {
+		return algorithm.chooseAction(playerNumber, state);
+	}
 }
