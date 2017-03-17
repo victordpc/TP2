@@ -54,7 +54,7 @@ public class Main {
 	 *         correcto, false en caso contrario.
 	 */
 	public static boolean checkCommand(String[] command) {
-		return command.length == 3;
+		return command.length == 3 || (command.length == 1 && players.size() == 2);
 	}
 
 	/**

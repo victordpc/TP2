@@ -34,6 +34,40 @@ public class WolfAndSheepStateTest {
 		assertTrue(WolfAndSheepState.isWinner(board, wolfAndSheepState, 1));
 	}
 
+	@Test
+	public void wolfShouldLoose() {
+		int[][] board = getEmptyBoard();
+		board[0][1] = SHEEP;
+		board[0][3] = SHEEP;
+		board[0][5] = SHEEP;
+		board[5][0] = SHEEP;
+		board[7][0] = WOLF;
+
+		WolfAndSheepState wolfAndSheepState = new WolfAndSheepState(SHEEP, board, false, -1);
+		System.out.println(wolfAndSheepState);
+		WolfAndSheepAction action = new WolfAndSheepAction(SHEEP, 6, 1, 5, 0);
+		wolfAndSheepState = action.applyTo(wolfAndSheepState);
+
+		assertTrue(wolfAndSheepState.isFinished());
+	}
+
+	@Test
+	public void wolfShouldLoose2() {
+		int[][] board = getEmptyBoard();
+		board[0][1] = SHEEP;
+		board[0][3] = SHEEP;
+		board[2][1] = SHEEP;
+		board[2][3] = SHEEP;
+		board[1][2] = WOLF;
+
+		WolfAndSheepState wolfAndSheepState = new WolfAndSheepState(SHEEP, board, false, -1);
+		System.out.println(wolfAndSheepState);
+		WolfAndSheepAction action = new WolfAndSheepAction(SHEEP, 6, 1, 5, 0);
+		wolfAndSheepState = action.applyTo(wolfAndSheepState);
+
+		assertTrue(wolfAndSheepState.isFinished());
+	}
+
 	/**
 	 * Test que evalua: Un lobo en una casilla con y = 0 resulta en victoria del
 	 * lobo
@@ -75,7 +109,7 @@ public class WolfAndSheepStateTest {
 
 	/**
 	 * Test que evalua: Una oveja en su posición inicial tiene 2 acciones
-	 * válidas; y si está en un lateral, tiene 2 acciones válidas.
+	 * válidas; y si está en un lateral, tiene 1 acciones válidas.
 	 */
 	@Test
 	public void sheepsValidActions() {

@@ -37,11 +37,12 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 	 */
 	public static boolean isWinner(int[][] board, WolfAndSheepState state, int playerNumber) {
 		boolean won = false;
-		if (playerNumber == 0) {
+		if (playerNumber == WOLF) {
 			if (board[0][1] == WOLF || board[0][3] == WOLF || board[0][5] == WOLF || board[0][7] == WOLF) {
 				won = true;
-			}
-		} else if (state.validActions(0).size() == 0) {
+			} else if (state.validActions(SHEEP).size() == 0)
+				won = true;
+		} else if (state.validActions(WOLF).size() == 0) {
 			won = true;
 		}
 		return won;
@@ -229,7 +230,7 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 				} else if ((row == wolfCoordinate.getX() + 1) && (colum == wolfCoordinate.getY() - 1)) {
 					wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, wolfCoordinate.getX(),
 							wolfCoordinate.getY());
-				} else if ((row == wolfCoordinate.getX() - 1) && (colum == wolfCoordinate.getY() + 1)) {
+				} else if ((row == wolfCoordinate.getX() - 1) && (colum == wolfCoordinate.getY() + 1) ) {
 					wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, wolfCoordinate.getX(),
 							wolfCoordinate.getY());
 				} else if ((row == wolfCoordinate.getX() + 1) && (colum == wolfCoordinate.getY() + 1)) {

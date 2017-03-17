@@ -59,6 +59,9 @@ public class WolfAndSheepAction implements GameAction<WolfAndSheepState, WolfAnd
 			nextState = new WolfAndSheepState(state, board, true, state.getTurn());
 		} else {
 			nextState = new WolfAndSheepState(state, board, false, -1);
+			if (WolfAndSheepState.isWinner(board, nextState, state.getTurn())) {
+				nextState = new WolfAndSheepState(state, board, true, state.getTurn());
+			}
 		}
 
 		return nextState;
