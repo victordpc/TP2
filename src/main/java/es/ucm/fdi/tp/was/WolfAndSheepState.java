@@ -9,29 +9,17 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 
 	private static final long serialVersionUID = 1L;
 	/**
+
 	 * Contiene que jugador (1-2) le toca mover ficha.
 	 */
 	private final int turn;
+
 	/**
 	 * Define si la partida ha terminado.
 	 */
-<<<<<<< HEAD
-	public static boolean isWinner(int[][] board, WolfAndSheepState state, int playerNumber) {
-		boolean won = false;
-		if (playerNumber == WOLF) {
-			if (board[0][1] == WOLF || board[0][3] == WOLF || board[0][5] == WOLF || board[0][7] == WOLF) {
-				won = true;
-			} else if (state.validActions(SHEEP).size() == 0)
-				won = true;
-		} else if (state.validActions(WOLF).size() == 0) {
-			won = true;
-		}
-		return won;
-	}
-
-=======
 	private final boolean finished;
->>>>>>> origin/master
+
+
 	/**
 	 * Representación del tablero.
 	 */
@@ -243,7 +231,7 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 	 * Devuelve si la partida ha terminado o no.
 	 * @return Devuelve true en caso de que la partida halla acabado, en caso contrario false.
 	 */
-<<<<<<< HEAD
+
 	public WolfAndSheepAction isValidMove(int playerNumber, int row, int colum) {
 		WolfAndSheepAction wolfAndSheepAction = null;
 		if (isFinished()) {
@@ -269,11 +257,12 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 			}
 		}
 		return wolfAndSheepAction;
-=======
+}
+	
 	@Override
 	public boolean isFinished() {
 		return finished;
->>>>>>> origin/master
+
 	}
 
 	/**
@@ -313,15 +302,18 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 	 */
 	public static boolean isWinner(int[][] board, WolfAndSheepState state, int playerNumber) {
 		boolean won = false;
-		if (playerNumber == 0) {
+		if (playerNumber == WOLF) {
 			if (board[0][1] == WOLF || board[0][3] == WOLF || board[0][5] == WOLF || board[0][7] == WOLF) {
 				won = true;
-			}
-		} else if (state.validActions(0).size() == 0) {
+			} else if (state.validActions(SHEEP).size() == 0)
+				won = true;
+		} else if (state.validActions(WOLF).size() == 0) {
 			won = true;
-		}else if (board[7][0] == SHEEP || board[7][2] == SHEEP || board[7][4] == SHEEP || board[7][6] == SHEEP) {
-			won = true;			
 		}
 		return won;
 	}
+
+
+
+
 }
