@@ -1,8 +1,13 @@
 package es.ucm.fdi.tp.base;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.net.URL;
+import java.util.Iterator;
+import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,6 +15,23 @@ import java.util.regex.Pattern;
  * Utilities class for games.
  */
 public class Utils {
+
+	/**
+	 * An {@link Executor} created using
+	 * {@link Executors#newCachedThreadPool()}.
+	 */
+	public final static ExecutorService worker = Executors.newCachedThreadPool();
+
+	/**
+	 * Reads an image from a file inside the current classpath.
+	 * 
+	 * @return the image; can be displayed and used in ImageIcons.
+	 */
+	public static Image loadImage(String path) {
+		URL imgUrl = Utils.class.getClassLoader().getResource(path);
+		return Toolkit.getDefaultToolkit().createImage(imgUrl);
+	}
+
 	/**
 	 * Extracts the first match of a pattern against a string.
 	 * 
@@ -31,14 +53,40 @@ public class Utils {
 	}
 
 	/**
-	 * Reads an image from a file inside the current classpath.
+	 * Generates an iterator for generating random colors. It generates the same
+	 * sequences of colors over different runs since it always uses the same
+	 * seed.
 	 * 
-	 * @param path
-	 *            path for the image
-	 * @return the image; can be displayed and used in ImageIcons.
+	 * 
+	 * @return An iterator for generating random colors.
 	 */
-	public static Image loadImage(String path) {
-		URL imgUrl = Utils.class.getClassLoader().getResource(path);
-		return Toolkit.getDefaultToolkit().createImage(imgUrl);
+
+	public static Iterator<Color> colorsGenerator() {
+
+		Iterator<Color> i = new Iterator<Color>() {
+			// since we use a fixed seed, we always get the same sequence of
+			// colors
+			//
+			private Random r = new Random(314159265);
+
+			@Override
+			public Color next() {
+				return new Color(r.nextInt(256), r.nextInt(256), r.nextInt(256));
+			}
+
+			@Override
+			public boolean hasNext() {
+				return true;
+			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException("read-only iterator");
+			}
+		};
+
+		return i;
+
 	}
+
 }
