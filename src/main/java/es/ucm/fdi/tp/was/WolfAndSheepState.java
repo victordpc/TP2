@@ -7,34 +7,15 @@ import es.ucm.fdi.tp.base.model.GameState;
 
 public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheepAction> {
 
-	/**
-	 * Representación de lugar vacío en el tablero.
-	 */
-	private final static int EMPTY = -1;
 	private static final long serialVersionUID = 1L;
-
 	/**
-	 * Representación de una oveja en el tablero.
+	 * Contiene que jugador (1-2) le toca mover ficha.
 	 */
-	private final static int SHEEP = 1;
-
+	private final int turn;
 	/**
-	 * Representación del lobo en el tablero.
+	 * Define si la partida ha terminado.
 	 */
-	private final static int WOLF = 0;
-
-	/**
-	 * Evalua si el jugador pasado por parámetro ha ganado.
-	 * 
-	 * @param board
-	 *            tablero actúal.
-	 * @param state
-	 *            Estado actúal de la partida.
-	 * @param playerNumber
-	 *            Jugador a evaluar.
-	 * @return Si el jugador ha ganado la partida devuelve true, en caso
-	 *         contrario false.
-	 */
+<<<<<<< HEAD
 	public static boolean isWinner(int[][] board, WolfAndSheepState state, int playerNumber) {
 		boolean won = false;
 		if (playerNumber == WOLF) {
@@ -48,27 +29,33 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 		return won;
 	}
 
+=======
+	private final boolean finished;
+>>>>>>> origin/master
 	/**
 	 * Representación del tablero.
 	 */
 	private final int[][] board;
 	/**
+	 * El jugador que ha ganado.
+	 */
+	private final int winner;
+	/**
 	 * CLa dimensión del tablero
 	 */
 	private final int dim;
 	/**
-	 * Define si la partida ha terminado.
+	 * Representación de lugar vacío en el tablero.
 	 */
-	private final boolean finished;
+	private final static int EMPTY = -1;
 	/**
-	 * Contiene que jugador (1-2) le toca mover ficha.
+	 * Representación del lobo en el tablero.
 	 */
-	private final int turn;
-
+	private final static int WOLF = 0;
 	/**
-	 * El jugador que ha ganado.
+	 * Representación de una oveja en el tablero.
 	 */
-	private final int winner;
+	private final static int SHEEP = 1;
 
 	public WolfAndSheepState(int dim) {
 		super(2);
@@ -94,15 +81,6 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 		this.finished = false;
 	}
 
-	public WolfAndSheepState(int turn, int[][] board, boolean finished, int winner) {
-		super(2);
-		this.dim = 8;
-		this.board = board;
-		this.turn = turn;
-		this.finished = finished;
-		this.winner = winner;
-	}
-
 	public WolfAndSheepState(WolfAndSheepState prev, int[][] board, boolean finished, int winner) {
 		super(2);
 		this.dim = prev.dim;
@@ -112,38 +90,65 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 		this.winner = winner;
 	}
 
-	/**
-	 * @return a copy of the board
-	 */
-	public int[][] getBoard() {
-		int[][] copy = new int[board.length][];
-		for (int i = 0; i < board.length; i++) {
-			copy[i] = board[i].clone();
-		}
-		return copy;
+	public WolfAndSheepState(int turn, int[][] board, boolean finished, int winner) {
+		super(2);
+		this.dim = 8;
+		this.board = board;
+		this.turn = turn;
+		this.finished = finished;
+		this.winner = winner;
 	}
 
 	/**
-	 * Analiza el tablero en busca de las posiciones de las ovejas.
-	 * 
-	 * @return devuelve un listado con las coordenas de todas las ovejas en el
-	 *         tablero.
+	 * Método que evalua si un movimiento es válido para un jugador
+	 * @param playerCoordinates La posición en el tablero en la que se encuentra el jugador.
+	 * @param playerNumber El turno del jugador al que evaluaremos si el movimiento es válido.
+	 * @param row La fila a que pretende moverse el jugador
+	 * @param colum La columna a que pretende moverse el jugador
+	 * @return devuelve una acción en caso de que el movimiento sea válido, si no, devuelve nulo.
 	 */
-	private List<Coordinate> getSheepsCoordinates() {
-		List<Coordinate> sheepCoordinatesList = new ArrayList<>();
-		for (int i = 0; i < dim; i++) {
-			for (int j = 0; j < dim; j++) {
-				if (board[i][j] == SHEEP) {
-					sheepCoordinatesList.add(new Coordinate(i, j));
+	public WolfAndSheepAction isValidMoveForPlayerInCoordinate(Coordinate playerCoordinates, int playerNumber, int row, int colum) {
+		if (isFinished()) {
+			return null;
+		}
+
+		WolfAndSheepAction wolfAndSheepAction = null;
+		if ((row >= 0 && row <= 7) && (colum >= 0 && colum <= 7)) {
+			if (isPositionEmpty(row, colum)) {
+				if(playerNumber == 0) {
+					if ((row == playerCoordinates.getX() - 1) && (colum == playerCoordinates.getY() - 1)) {
+						wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, playerCoordinates.getX(), playerCoordinates.getY());
+					} else if ((row == playerCoordinates.getX() + 1) && (colum == playerCoordinates.getY() - 1)) {
+						wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, playerCoordinates.getX(), playerCoordinates.getY());
+					} else if ((row == playerCoordinates.getX() - 1) && (colum == playerCoordinates.getY() + 1)) {
+						wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, playerCoordinates.getX(), playerCoordinates.getY());
+					} else if ((row == playerCoordinates.getX() + 1) && (colum == playerCoordinates.getY() + 1)) {
+						wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, playerCoordinates.getX(), playerCoordinates.getY());
+					}
+				}else {
+					if ((row == playerCoordinates.getX() + 1) && (colum == playerCoordinates.getY() - 1)) {
+						wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, playerCoordinates.getX(), playerCoordinates.getY());
+					} else if ((row == playerCoordinates.getX() + 1) && (colum == playerCoordinates.getY() + 1)) {
+						wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, playerCoordinates.getX(), playerCoordinates.getY());
+					}
 				}
 			}
 		}
-		return sheepCoordinatesList;
+		return wolfAndSheepAction;
+	}
+
+	/**
+	 * Método que evalua si una determinada posición ene el tablero está vacía.
+	 * @param row Fila en la que se encuentra la posición a evaular.
+	 * @param column Colummna en la que se encuentra la posición a evaular.
+	 * @return Devuelve true en caso de que la posición evaluada esté vacía y false en caso contrario.
+	 */
+	private boolean isPositionEmpty(int row, int column) {
+		return board[row][column] == EMPTY;
 	}
 
 	/**
 	 * Devuelve el turno
-	 * 
 	 * @return Devuelve el turno
 	 */
 	@Override
@@ -152,18 +157,47 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 	}
 
 	/**
-	 * Devuelve el ganador de la partida.
-	 * 
-	 * @return Devuelve el ganador de la partida.
+	 * Crea un listado de las acciones válidas para un determinado jugador
+	 * @param playerNumber Jugador al que se le van a evaluar las acciones.
+	 * @return el listado de las acciones válidas para el jugador.
 	 */
 	@Override
-	public int getWinner() {
-		return winner;
+	public List<WolfAndSheepAction> validActions(int playerNumber) {
+		List<WolfAndSheepAction> validActions = new ArrayList<>();
+		if (finished) {
+			return validActions;
+		}
+
+		if (playerNumber == 0) {
+			Coordinate wolfCoordinates = getWolfCoordinates();
+			for (int i = 0; i < dim; i++) {
+				for (int j = 0; j < dim; j++) {
+					WolfAndSheepAction wolfAndSheepAction = isValidMoveForPlayerInCoordinate(wolfCoordinates, playerNumber, i, j);
+					if (wolfAndSheepAction != null) {
+						validActions.add(wolfAndSheepAction);
+					}
+				}
+			}
+		} else {
+			List<Coordinate> sheepCoordinatesList = getSheepsCoordinates();
+			for (int i = 0; i < dim; i++) {
+				for (int j = 0; j < dim; j++) {
+					int index = 0;
+					while (index < 4) {
+						WolfAndSheepAction wolfAndSheepAction = isValidMoveForPlayerInCoordinate(sheepCoordinatesList.get(index), playerNumber, i, j);								
+						if (wolfAndSheepAction != null) {
+							validActions.add(wolfAndSheepAction);
+						}
+						index++;
+					}
+				}
+			}
+		}
+		return validActions;
 	}
 
 	/**
 	 * Analiza el tablero en busca de la posición del lobo.
-	 * 
 	 * @return Devuelve las coordenadas del lobo.
 	 */
 	private Coordinate getWolfCoordinates() {
@@ -179,43 +213,37 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 	}
 
 	/**
+	 * Analiza el tablero en busca de las posiciones de las ovejas.
+	 * @return devuelve un listado con las coordenas de todas las ovejas en el tablero.
+	 */
+	private List<Coordinate> getSheepsCoordinates() {
+		List<Coordinate> sheepCoordinatesList = new ArrayList<>();
+		for (int i = 0; i < dim; i++) {
+			for (int j = 0; j < dim; j++) {
+				if (board[i][j] == SHEEP) {
+					sheepCoordinatesList.add(new Coordinate(i, j));
+				}
+			}
+		}
+		return sheepCoordinatesList;
+	}
+
+	/**
+	 * @return a copy of the board
+	 */
+	public int[][] getBoard() {
+		int[][] copy = new int[board.length][];
+		for (int i = 0; i < board.length; i++) {
+			copy[i] = board[i].clone();
+		}
+		return copy;
+	}
+
+	/**
 	 * Devuelve si la partida ha terminado o no.
-	 * 
-	 * @return Devuelve true en caso de que la partida halla acabado, en caso
-	 *         contrario false.
+	 * @return Devuelve true en caso de que la partida halla acabado, en caso contrario false.
 	 */
-	@Override
-	public boolean isFinished() {
-		return finished;
-	}
-
-	/**
-	 * Método que evalua si una determinada posición ene el tablero está vacía.
-	 * 
-	 * @param row
-	 *            Fila en la que se encuentra la posición a evaular.
-	 * @param column
-	 *            Colummna en la que se encuentra la posición a evaular.
-	 * @return Devuelve true en caso de que la posición evaluada esté vacía y
-	 *         false en caso contrario.
-	 */
-	private boolean isPositionEmpty(int row, int column) {
-		return board[row][column] == EMPTY;
-	}
-
-	/**
-	 * Método que evalua si un movimiento es válido para un jugador
-	 * 
-	 * @param playerNumber
-	 *            El turno del jugador al que evaluaremos si el movimiento es
-	 *            válido.
-	 * @param row
-	 *            La fila a que pretende moverse el jugador
-	 * @param colum
-	 *            La columna a que pretende moverse el jugador
-	 * @return devuelve una acción en caso de que el movimiento sea válido, si
-	 *         no, devuelve nulo.
-	 */
+<<<<<<< HEAD
 	public WolfAndSheepAction isValidMove(int playerNumber, int row, int colum) {
 		WolfAndSheepAction wolfAndSheepAction = null;
 		if (isFinished()) {
@@ -241,37 +269,20 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 			}
 		}
 		return wolfAndSheepAction;
+=======
+	@Override
+	public boolean isFinished() {
+		return finished;
+>>>>>>> origin/master
 	}
 
 	/**
-	 * Método que evalua si un movimiento es válido para un jugador
-	 * 
-	 * @param playerNumber
-	 *            El turno del jugador al que evaluaremos si el movimiento es
-	 *            válido.
-	 * @param row
-	 *            La fila a que pretende moverse el jugador
-	 * @param colum
-	 *            La columna a que pretende moverse el jugador
-	 * @param sheepCoordinate
-	 *            coordenadas de la oveja
-	 * @return devuelve una acción en caso de que el movimiento sea válido, si
-	 *         no, devuelve nulo.
+	 * Devuelve el ganador de la partida.
+	 * @return Devuelve el ganador de la partida.
 	 */
-	public WolfAndSheepAction isValidMove(int playerNumber, int row, int colum, Coordinate sheepCoordinate) {
-		WolfAndSheepAction wolfAndSheepAction = null;
-		if ((row >= 0 && row <= 7) && (colum >= 0 && colum <= 7)) {
-			if (isPositionEmpty(row, colum)) {
-				if ((row == sheepCoordinate.getX() + 1) && (colum == sheepCoordinate.getY() - 1)) {
-					wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, sheepCoordinate.getX(),
-							sheepCoordinate.getY());
-				} else if ((row == sheepCoordinate.getX() + 1) && (colum == sheepCoordinate.getY() + 1)) {
-					wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, sheepCoordinate.getX(),
-							sheepCoordinate.getY());
-				}
-			}
-		}
-		return wolfAndSheepAction;
+	@Override
+	public int getWinner() {
+		return winner;
 	}
 
 	@Override
@@ -294,44 +305,23 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 	}
 
 	/**
-	 * Crea un listado de las acciones válidas para un determinado jugador
-	 * 
-	 * @param playerNumber
-	 *            Jugador al que se le van a evaluar las acciones.
-	 * @return el listado de las acciones válidas para el jugador.
+	 * Evalua si el jugador pasado por parámetro ha ganado.
+	 * @param board tablero actúal.
+	 * @param state Estado actúal de la partida.
+	 * @param playerNumber Jugador a evaluar.
+	 * @return Si el jugador ha ganado la partida devuelve true, en caso contrario false.
 	 */
-	@Override
-	public List<WolfAndSheepAction> validActions(int playerNumber) {
-		List<WolfAndSheepAction> validActions = new ArrayList<>();
-		if (finished) {
-			return validActions;
-		}
-
+	public static boolean isWinner(int[][] board, WolfAndSheepState state, int playerNumber) {
+		boolean won = false;
 		if (playerNumber == 0) {
-			for (int i = 0; i < dim; i++) {
-				for (int j = 0; j < dim; j++) {
-					WolfAndSheepAction wolfAndSheepAction = isValidMove(playerNumber, i, j);
-					if (wolfAndSheepAction != null) {
-						validActions.add(wolfAndSheepAction);
-					}
-				}
+			if (board[0][1] == WOLF || board[0][3] == WOLF || board[0][5] == WOLF || board[0][7] == WOLF) {
+				won = true;
 			}
-		} else {
-			List<Coordinate> sheepCoordinatesList = getSheepsCoordinates();
-			for (int i = 0; i < dim; i++) {
-				for (int j = 0; j < dim; j++) {
-					int index = 0;
-					while (index < 4) {
-						WolfAndSheepAction wolfAndSheepAction = isValidMove(playerNumber, i, j,
-								sheepCoordinatesList.get(index));
-						if (wolfAndSheepAction != null) {
-							validActions.add(wolfAndSheepAction);
-						}
-						index++;
-					}
-				}
-			}
+		} else if (state.validActions(0).size() == 0) {
+			won = true;
+		}else if (board[7][0] == SHEEP || board[7][2] == SHEEP || board[7][4] == SHEEP || board[7][6] == SHEEP) {
+			won = true;			
 		}
-		return validActions;
+		return won;
 	}
 }

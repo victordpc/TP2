@@ -3,9 +3,7 @@ package es.ucm.fdi.tp.was;
 import es.ucm.fdi.tp.base.model.GameAction;
 
 public class WolfAndSheepAction implements GameAction<WolfAndSheepState, WolfAndSheepAction> {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1745600182000535724L;
 	/**
 	 * Columna de la nueva posición
