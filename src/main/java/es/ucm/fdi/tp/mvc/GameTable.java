@@ -2,6 +2,8 @@ package es.ucm.fdi.tp.mvc;
 
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GameState;
+import es.ucm.fdi.tp.ttt.TttState;
+import es.ucm.fdi.tp.was.WolfAndSheepState;
 
 /**
  * An event-driven game engine.
@@ -11,6 +13,9 @@ import es.ucm.fdi.tp.base.model.GameState;
 public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> implements GameObservable<S, A> {
 
     // define fields here
+
+    private S unkownType;
+
 
     public GameTable(S initState) {
         // add code here
@@ -26,6 +31,7 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
     }
     public S getState() {
         // add code here
+        return unkownType;
     } 
 
     public void addObserver(GameObserver<S, A> o) {
