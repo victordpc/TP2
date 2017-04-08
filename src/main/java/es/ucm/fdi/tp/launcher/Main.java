@@ -118,38 +118,6 @@ public class Main {
 
     }
 
-    /**
-     * Evalua que el juego introducido está definido
-     *
-     * @param gameName Nombre del juego.
-     * @return Devuelve true en caso de que el juego introducido esté definido.
-     */
-    private static boolean checkGame(String gameName) {
-        if (gameName.equalsIgnoreCase(TTT) || gameName.equalsIgnoreCase(WAS)) {
-            return true;
-        }
-        System.err.println("Error: juego " + gameName + " no definido" + System.getProperty("line.separator"));
-        return false;
-    }
-
-    /**
-     * Evalua que los jugadores introducidos están definidos
-     *
-     * @param command Parámetros introducidos por el usuario
-     * @return Devuelve true en caso de que los jugadores introducidos estén
-     * definidos.
-     */
-    private static boolean checkPlayers(String[] command) {
-        boolean success = true;
-        for (int i = 1; i < command.length; i++) {
-            if (!command[i].equalsIgnoreCase(MANUAL) && !command[i].equalsIgnoreCase(RAND) && !command[i].equalsIgnoreCase(SMART)) {
-                System.err.println("Error: jugador " + command[i] + " no definido" + System.getProperty("line.separator"));
-                return false;
-            }
-        }
-        return success;
-    }
-
     private static GamePlayer createPlayer(String playerType, String playerName) {
         GamePlayer newGamePlayer;
         if (playerType.equalsIgnoreCase(MANUAL)) {
