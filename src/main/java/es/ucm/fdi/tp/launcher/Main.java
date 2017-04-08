@@ -32,10 +32,6 @@ public class Main {
      */
     private static final String CONSOLE = "CONSOLE";
     /**
-     * Define a un jugador random.
-     */
-    private static final String RAND = "RAND";
-    /**
      * Scanner que se encargará de recoger los comandos del usuario.
      */
     private static Scanner scanner;
@@ -132,7 +128,6 @@ public class Main {
 
     /**
      * Crea los jugadores.
-     *
      * @param gameSettingsData commandos introducidos por el usuario.
      */
     private static List<GamePlayer> loadPlayers(String[] gameSettingsData) {
