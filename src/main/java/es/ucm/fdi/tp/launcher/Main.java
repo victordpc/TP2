@@ -1,8 +1,10 @@
 package es.ucm.fdi.tp.launcher;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+
 import es.ucm.fdi.tp.base.console.ConsolePlayer;
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GamePlayer;
@@ -17,6 +19,14 @@ import es.ucm.fdi.tp.was.WolfAndSheepState;
 
 public class Main {
 
+    /**
+     * Define el tipo de jugador por consola.
+     */
+    private static final String MANUAL = "MANUAL";
+    /**
+     * Define el tipo de interfaz de la partida.
+     */
+    private static final String GUI = "GUI";
     /**
      * Define el tipo de jugador por consola.
      */
@@ -51,12 +61,27 @@ public class Main {
     public static void main(String[] args) {
         scanner = new Scanner(System.in);
         System.out.println("Introduce nuevo juego: " + System.getProperty("line.separator"));
-        String[] newCommand = scanner.nextLine().trim().split(" ");
-        if (checkGame(newCommand[0])) {
-            if (checkPlayers(newCommand)) {
-                GameTable gameTable = createGame(newCommand[0]);
-                startConsoleMode(gameTable, newCommand);
-            }
+        String[] arguments = scanner.nextLine().trim().split(" ");
+
+        if (arguments.length < 2) {
+            System.err.println("El número de parámetros introducidos, es menor al número de parámetros mínimos requeridos para iniciar una partida.");
+            System.exit(1);
+        }
+
+        GameTable gameTable = createGame(arguments[0]);
+        if (gameTable == null) {
+            System.err.println("Juego inválido");
+            System.exit(1);
+        }
+
+        String[] otherArgs = Arrays.copyOfRange(arguments, 2, arguments.length);
+        if (arguments[1].equalsIgnoreCase(CONSOLE)) {
+            startConsoleMode(gameTable, otherArgs);
+        }else if (arguments[1].equalsIgnoreCase(GUI)) {
+            startGUIMode(arguments[0], gameTable, otherArgs);
+        }else {
+            System.err.println("Invalid view mode: " + arguments[1]);
+            System.exit(1);
         }
         scanner.close();
     }
@@ -89,6 +114,10 @@ public class Main {
         new ConsoleController(players, gameTable).run();
     }
 
+    private static <S extends GameState<S, A>, A extends GameAction<S, A>> void startGUIMode(String gType, GameTable<S, A> game, String playerModes[]) {
+
+    }
+
     /**
      * Evalua que el juego introducido está definido
      *
@@ -113,7 +142,7 @@ public class Main {
     private static boolean checkPlayers(String[] command) {
         boolean success = true;
         for (int i = 1; i < command.length; i++) {
-            if (!command[i].equalsIgnoreCase(CONSOLE) && !command[i].equalsIgnoreCase(RAND) && !command[i].equalsIgnoreCase(SMART)) {
+            if (!command[i].equalsIgnoreCase(MANUAL) && !command[i].equalsIgnoreCase(RAND) && !command[i].equalsIgnoreCase(SMART)) {
                 System.err.println("Error: jugador " + command[i] + " no definido" + System.getProperty("line.separator"));
                 return false;
             }
@@ -123,7 +152,7 @@ public class Main {
 
     private static GamePlayer createPlayer(String playerType, String playerName) {
         GamePlayer newGamePlayer;
-        if (playerType.equalsIgnoreCase(CONSOLE)) {
+        if (playerType.equalsIgnoreCase(MANUAL)) {
             newGamePlayer = new ConsolePlayer(playerName, new Scanner(System.in));
         } else if (playerType.equalsIgnoreCase(SMART)) {
             newGamePlayer = new SmartPlayer(playerName, 5);
@@ -135,12 +164,13 @@ public class Main {
 
     /**
      * Crea los jugadores.
+     *
      * @param gameSettingsData commandos introducidos por el usuario.
      */
     private static List<GamePlayer> loadPlayers(String[] gameSettingsData) {
         List<GamePlayer> players = new ArrayList<>();
-        for (int i = 1; i < gameSettingsData.length; i++) {
-            System.out.println(System.getProperty("line.separator") + "Jugador " + (i-1) + " Introduce tu nombre:");
+        for (int i = 0; i < gameSettingsData.length; i++) {
+            System.out.println(System.getProperty("line.separator") + "Jugador " + (i + 1) + " Introduce tu nombre:");
             String playerName = scanner.nextLine();
             players.add(createPlayer(gameSettingsData[1], playerName));
         }
