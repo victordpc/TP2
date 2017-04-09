@@ -7,7 +7,7 @@ import es.ucm.fdi.tp.mvc.GameTable;
 
 import java.util.List;
 
-public class ConsoleController<S extends GameState<S, A>, A extends GameAction<S, A>> implements Runnable {
+public class ConsoleController<S extends GameState<S, A>, A extends GameAction<S, A>> extends GameController {
 
     private List<GamePlayer> players;
     private GameTable<S, A> game;
