@@ -1,5 +1,8 @@
 package es.ucm.fdi.tp.launcher;
 
+import java.awt.*;
+import java.io.Console;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,11 +14,14 @@ import es.ucm.fdi.tp.base.model.GamePlayer;
 import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.base.player.RandomPlayer;
 import es.ucm.fdi.tp.base.player.SmartPlayer;
+import es.ucm.fdi.tp.extra.jboard.BoardExample;
+import es.ucm.fdi.tp.extra.jboard.JBoard;
 import es.ucm.fdi.tp.mvc.GameTable;
 import es.ucm.fdi.tp.ttt.TttState;
-import es.ucm.fdi.tp.view.ConsoleController;
-import es.ucm.fdi.tp.view.ConsoleView;
+import es.ucm.fdi.tp.view.*;
 import es.ucm.fdi.tp.was.WolfAndSheepState;
+
+import javax.swing.*;
 
 public class Main {
 
@@ -73,9 +79,9 @@ public class Main {
         String[] otherArgs = Arrays.copyOfRange(arguments, 2, arguments.length);
         if (arguments[1].equalsIgnoreCase(CONSOLE)) {
             startConsoleMode(gameTable, otherArgs);
-        }else if (arguments[1].equalsIgnoreCase(GUI)) {
+        } else if (arguments[1].equalsIgnoreCase(GUI)) {
             startGUIMode(arguments[0], gameTable, otherArgs);
-        }else {
+        } else {
             System.err.println("Invalid view mode: " + arguments[1]);
             System.exit(1);
         }
@@ -110,8 +116,34 @@ public class Main {
         new ConsoleController(players, gameTable).run();
     }
 
-    private static <S extends GameState<S, A>, A extends GameAction<S, A>> void startGUIMode(String gType, GameTable<S, A> game, String playerModes[]) {
+    private static <S extends GameState<S, A>, A extends GameAction<S, A>> void startGUIMode(String gameType, GameTable<S, A> gameTable, String playerModes[]) {
+        List<GamePlayer> players = loadPlayers(playerModes);
+        final GUIController gameController = new GUIController(players, gameTable);;
+        try {
+            SwingUtilities.invokeAndWait(new Runnable() {
+                @Override
+                public void run() {
+                    GameView gameView = null;
+                    if (gameType.equalsIgnoreCase(TTT)) {
+                        gameView = new TttView(3, 3);
+                    } else {
 
+                    }
+
+                    GameView gameContainer = new GameContainer(gameView, gameController, gameTable);
+                    gameContainer.enableWindowMode();
+                }
+            });
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            System.out.println("Some error occurred while creating the view...");
+        }
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                gameController.run();
+            }
+        });
     }
 
     private static GamePlayer createPlayer(String playerType, String playerName) {
@@ -128,6 +160,7 @@ public class Main {
 
     /**
      * Crea los jugadores.
+     *
      * @param gameSettingsData commandos introducidos por el usuario.
      */
     private static List<GamePlayer> loadPlayers(String[] gameSettingsData) {
