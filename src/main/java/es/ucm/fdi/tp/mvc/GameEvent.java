@@ -26,6 +26,7 @@ public class GameEvent<S extends GameState<S,A>, A extends GameAction<S,A>> {
     private A action;
     private S state;
     private GameError error;
+
     private String description;
 
     /**

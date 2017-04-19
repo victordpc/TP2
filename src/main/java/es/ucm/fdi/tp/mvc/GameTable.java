@@ -6,6 +6,8 @@ import java.util.List;
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GamePlayer;
 import es.ucm.fdi.tp.base.model.GameState;
+import java.util.ArrayList;
+import java.util.List;
 import es.ucm.fdi.tp.mvc.GameEvent.EventType;
 
 /**
@@ -14,56 +16,67 @@ import es.ucm.fdi.tp.mvc.GameEvent.EventType;
  */
 public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> implements GameObservable<S, A> {
 
-	// define fields here
-	List<GameObserver<S, A>> observerList = new LinkedList<GameObserver<S, A>>();
-	List<GamePlayer> playerList = new LinkedList<GamePlayer>();
-	S state;
+    private S initState;
+    private S currentState;
+    private List<GameObserver<S, A>> observers;
 
-	public GameTable(S initState) {
-		// add code here
-		state = initState;
-		observerList = new java.util.LinkedList<GameObserver<S, A>>();
-	}
+    public GameTable(S initState) {
+        this.initState = initState;
+        this.currentState = initState;
+        this.observers = new ArrayList<>();
+    }
 
-	public void start() {
-		// add code here
-		for (GameObserver<S, A> gO : observerList) {
-			gO.notifyEvent(new GameEvent<S, A>(EventType.Start, null, null, null, "Game started"));
-		}
-	}
+    public void start() {
+        currentState = initState;
+        notifyGameHasStarted();
+    }
 
-	public void stop() {
-		// add code here
-		for (GameObserver<S, A> gO : observerList) {
-			gO.notifyEvent(new GameEvent<S, A>(EventType.Stop, null, state, null, "Game stoped"));
-		}
-	}
+    public void stop() {
+        GameEvent<S, A> event = new GameEvent<>(GameEvent.EventType.Stop, null, currentState, null, "El juego ha parado");
+        for (GameObserver<S, A> gameObserver : observers) {
+            gameObserver.notifyEvent(event);
+        }
+    }
 
-	public void execute(A action) {
-		// add code here
-		
-		
-		
-		for (GameObserver<S, A> gO : observerList) {
-			gO.notifyEvent(
-					new GameEvent<S, A>(EventType.Change, action, state, null, "Action executed " + action.toString()));
-		}
-	}
+    public void execute(A action) {
+        // apply move
+        currentState = action.applyTo(currentState);
+        notifyGameHasChanged();
+        if (currentState.isFinished()) {
+            notifyGameHasFinished();
+        }
+    }
 
-	public S getState() {
-		// add code here
-		return state;
-	}
+    public S getState() {
+        return currentState;
+    }
 
-	public void addObserver(GameObserver<S, A> o) {
-		// add code here
-		if (!observerList.contains(o))
-			observerList.add(o);
-	}
+    public void addObserver(GameObserver<S, A> o) {
+        observers.add(o);
+    }
 
-	public void removeObserver(GameObserver<S, A> o) {
-		// add code here
-		if (observerList.contains(o))
-			observerList.remove(o);
-	}
+    public void removeObserver(GameObserver<S, A> o) {
+        observers.remove(o);
+    }
+
+    private void notifyGameHasStarted() {
+        GameEvent<S, A> event = new GameEvent<>(GameEvent.EventType.Start, null, currentState, null, "¡¡¡¡¡La partida ha empezado!!!!!!");
+        for (GameObserver gameObserver : observers) {
+            gameObserver.notifyEvent(event);
+        }
+    }
+
+    private void notifyGameHasChanged() {
+        GameEvent<S, A> event = new GameEvent<>(GameEvent.EventType.Change, null, currentState, null, "El juego ha cambiado");
+        for (GameObserver gameObserver : observers) {
+            gameObserver.notifyEvent(event);
+        }
+    }
+
+    private void notifyGameHasFinished() {
+        GameEvent<S, A> event = new GameEvent<>(GameEvent.EventType.Stop, null, currentState, null, "El juego ha terminado ");
+        for (GameObserver gameObserver : observers) {
+            gameObserver.notifyEvent(event);
+        }
+    }
 }
