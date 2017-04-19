@@ -148,7 +148,6 @@ public abstract class JBoard extends JComponent {
 
 			}
 		}
-
 	}
 
 	protected abstract void keyTyped(int keyCode);
