@@ -1,14 +1,18 @@
 package es.ucm.fdi.tp.mvc;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import es.ucm.fdi.tp.base.model.GameAction;
+import es.ucm.fdi.tp.base.model.GamePlayer;
 import es.ucm.fdi.tp.base.model.GameState;
 import java.util.ArrayList;
 import java.util.List;
+import es.ucm.fdi.tp.mvc.GameEvent.EventType;
 
 /**
- * An event-driven game engine.
- * Keeps a list of players and a state, and notifies observers
- * of any changes to the game.
+ * An event-driven game engine. Keeps a list of players and a state, and
+ * notifies observers of any changes to the game.
  */
 public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> implements GameObservable<S, A> {
 
