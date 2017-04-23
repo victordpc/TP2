@@ -40,14 +40,10 @@ public class GameView extends JFrame {
         westLabel.setOpaque(true);
         this.getContentPane().add(westLabel, BorderLayout.WEST);
 
-        String path = "/dice.png";
-        ImageIcon pawnW = new ImageIcon(getClass().getResource(path));
-
-        JLabel centerLabel = new JLabel(pawnW);
+        TttView tttView = new TttView();
         System.out.println();
-        centerLabel.setBackground(Color.GRAY);
-        centerLabel.setOpaque(true);
-        this.getContentPane().add(centerLabel, BorderLayout.CENTER);
+        tttView.setOpaque(true);
+        this.getContentPane().add(tttView, BorderLayout.CENTER);
 
 
         JLabel bottomLabel = new JLabel("region centerLabel");
