@@ -14,7 +14,7 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
 
     private S initState;
     private S currentState;
-    private List<GameObserver<S, A>> observers;
+    private List<GameObserver<S, A>> observers = new ArrayList<>();
 
     public GameTable(S initState) {
         this.initState = initState;

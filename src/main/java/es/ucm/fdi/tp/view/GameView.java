@@ -1,38 +1,59 @@
 package es.ucm.fdi.tp.view;
-
-import es.ucm.fdi.tp.base.model.GameAction;
-import es.ucm.fdi.tp.base.model.GameState;
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 
-public abstract class GameView<S extends GameState<S, A>, A extends GameAction<S, A>> extends JComponent {
+public class GameView extends JFrame {
 
-    protected JFrame window;
+    private static BufferedImage bi;
 
-    public JFrame getWindow() {
-        return window;
+
+    public GameView () {
+        super("Mi primera ventana - GameView");
+        this.setSize(600, 600);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.getContentPane().setLayout(new BorderLayout());
+
+        ControlPanel controlPanel = new ControlPanel(new GameController() {
+            @Override
+            public void run() {
+
+            }
+        });
+//        Color.decode("#eeeeee");
+
+        controlPanel.setBackground(Color.BLUE);
+        this.getContentPane().add(controlPanel, BorderLayout.NORTH);
+        controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.X_AXIS));
+
+        JLabel lblEste = new JLabel("region este");
+        lblEste.setBackground(Color.GREEN);
+        lblEste.setOpaque(true);
+        this.getContentPane().add(lblEste,BorderLayout.EAST);
+
+        JLabel westLabel = new JLabel("region oeste");
+        westLabel.setBackground(Color.YELLOW);
+        westLabel.setOpaque(true);
+        this.getContentPane().add(westLabel, BorderLayout.WEST);
+
+        String path = "/dice.png";
+        ImageIcon pawnW = new ImageIcon(getClass().getResource(path));
+
+        JLabel centerLabel = new JLabel(pawnW);
+        System.out.println();
+        centerLabel.setBackground(Color.GRAY);
+        centerLabel.setOpaque(true);
+        this.getContentPane().add(centerLabel, BorderLayout.CENTER);
+
+
+        JLabel bottomLabel = new JLabel("region centerLabel");
+        bottomLabel.setBackground(Color.RED);
+        bottomLabel.setOpaque(true);
+        this.getContentPane().add(bottomLabel, BorderLayout.SOUTH);
     }
-
-    public void enableWindowMode() {
-        this.window = new JFrame("Swing");
-        window.setContentPane(this);
-    }
-
-    public void disableWindowMode() {
-        window.dispose();
-        window = null;
-    }
-
-    public void setTitle(String title) {
-        if (window != null) {
-            window.setTitle(title);
-        }else {
-            this.setBorder(BorderFactory.createTitledBorder(title));
-        }
-    }
-
-    @Override
-    public abstract void setEnabled(boolean b);
-    public abstract void update(S state);
-    public abstract void setController(GameController gameController);
 
 }

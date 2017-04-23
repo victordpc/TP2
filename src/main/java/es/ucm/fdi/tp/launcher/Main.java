@@ -63,7 +63,7 @@ public class Main {
     public static void main(String[] args) {
         scanner = new Scanner(System.in);
         System.out.println("Introduce nuevo juego: " + System.getProperty("line.separator"));
-        String[] arguments = scanner.nextLine().trim().split(" ");
+        String[] arguments = {"ttt", "gui", "manual", "manual"};//scanner.nextLine().trim().split(" ");
 
         if (arguments.length < 2) {
             System.err.println("El número de parámetros introducidos, es menor al número de parámetros mínimos requeridos para iniciar una partida.");
@@ -117,33 +117,39 @@ public class Main {
     }
 
     private static <S extends GameState<S, A>, A extends GameAction<S, A>> void startGUIMode(String gameType, GameTable<S, A> gameTable, String playerModes[]) {
-        List<GamePlayer> players = loadPlayers(playerModes);
-        final GUIController gameController = new GUIController(players, gameTable);;
-        try {
-            SwingUtilities.invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
-                    GameView gameView = null;
-                    if (gameType.equalsIgnoreCase(TTT)) {
-                        gameView = new TttView(3, 3);
-                    } else {
 
-                    }
+        EventQueue.invokeLater(new Runnable() { public void run() {
+            GameView v = new GameView();
+            v.setVisible(true);
+        }});
 
-                    GameView gameContainer = new GameContainer(gameView, gameController, gameTable);
-                    gameContainer.enableWindowMode();
-                }
-            });
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            System.out.println("Some error occurred while creating the view...");
-        }
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                gameController.run();
-            }
-        });
+        //        List<GamePlayer> players = loadPlayers(playerModes);
+//        final GUIController gameController = new GUIController(players, gameTable);;
+//        try {
+//            SwingUtilities.invokeAndWait(new Runnable() {
+//                @Override
+//                public void run() {
+//                    GameView gameView = null;
+//                    if (gameType.equalsIgnoreCase(TTT)) {
+//                        gameView = new TttView(3, 3);
+//                    } else {
+//
+//                    }
+//
+//                    GameView gameContainer = new GameContainer(gameView, gameController, gameTable);
+//                    gameContainer.enableWindowMode();
+//                }
+//            });
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (InvocationTargetException e) {
+//            System.out.println("Some error occurred while creating the view...");
+//        }
+//        SwingUtilities.invokeLater(new Runnable() {
+//            public void run() {
+//                gameController.run();
+//            }
+//        });
     }
 
     private static GamePlayer createPlayer(String playerType, String playerName) {
