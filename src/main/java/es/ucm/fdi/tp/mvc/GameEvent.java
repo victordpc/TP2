@@ -19,7 +19,7 @@ public class GameEvent<S extends GameState<S,A>, A extends GameAction<S,A>> {
         /** The game has ended */
         Stop,
         /** None of the above; see toString() */
-        Info
+       Info
     }
 
     private EventType type;
