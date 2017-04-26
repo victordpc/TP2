@@ -1,7 +1,6 @@
 package es.ucm.fdi.tp.launcher;
 
 import java.awt.*;
-import java.io.Console;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,9 +13,10 @@ import es.ucm.fdi.tp.base.model.GamePlayer;
 import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.base.player.RandomPlayer;
 import es.ucm.fdi.tp.base.player.SmartPlayer;
-import es.ucm.fdi.tp.extra.jboard.BoardExample;
-import es.ucm.fdi.tp.extra.jboard.JBoard;
+import es.ucm.fdi.tp.mvc.GameName;
 import es.ucm.fdi.tp.mvc.GameTable;
+import es.ucm.fdi.tp.mvc.GameType;
+import es.ucm.fdi.tp.mvc.PlayerType;
 import es.ucm.fdi.tp.ttt.TttState;
 import es.ucm.fdi.tp.view.*;
 import es.ucm.fdi.tp.was.WolfAndSheepState;
@@ -26,33 +26,10 @@ import javax.swing.*;
 public class Main {
 
     /**
-     * Define el tipo de jugador por consola.
-     */
-    private static final String MANUAL = "MANUAL";
-    /**
-     * Define el tipo de interfaz de la partida.
-     */
-    private static final String GUI = "GUI";
-    /**
-     * Define el tipo de jugador por consola.
-     */
-    private static final String CONSOLE = "CONSOLE";
-    /**
      * Scanner que se encargará de recoger los comandos del usuario.
      */
     private static Scanner scanner;
-    /**
-     * Define a un jugador controlado por IA.
-     */
-    private static final String SMART = "SMART";
-    /**
-     * Define el juego tres en rayas.
-     */
-    private static final String TTT = "TTT";
-    /**
-     * Define el juego WolfAndSheep
-     */
-    private static final String WAS = "WAS";
+
 
     /**
      * Inicializa el modelo.
@@ -77,9 +54,9 @@ public class Main {
         }
 
         String[] otherArgs = Arrays.copyOfRange(arguments, 2, arguments.length);
-        if (arguments[1].equalsIgnoreCase(CONSOLE)) {
+        if (arguments[1].equalsIgnoreCase(GameType.CONSOLE.toString())) {
             startConsoleMode(gameTable, otherArgs);
-        } else if (arguments[1].equalsIgnoreCase(GUI)) {
+        } else if (arguments[1].equalsIgnoreCase(GameType.GUI.toString())) {
             startGUIMode(arguments[0], gameTable, otherArgs);
         } else {
             System.err.println("Invalid view mode: " + arguments[1]);
@@ -102,9 +79,9 @@ public class Main {
      */
     private static GameState<?, ?> createInitialState(String gameName) {
         GameState<?, ?> initialState = null;
-        if (gameName.equalsIgnoreCase(TTT)) {
+        if (gameName.equalsIgnoreCase(GameName.TTT.toString())) {
             initialState = new TttState(3);
-        } else if (gameName.equalsIgnoreCase(WAS)) {
+        } else if (gameName.equalsIgnoreCase(GameName.WAS.toString())) {
             initialState = new WolfAndSheepState(8);
         }
         return initialState;
@@ -118,13 +95,49 @@ public class Main {
 
     private static <S extends GameState<S, A>, A extends GameAction<S, A>> void startGUIMode(String gameType, GameTable<S, A> gameTable, String playerModes[]) {
 
-        EventQueue.invokeLater(new Runnable() { public void run() {
-            GameView v = new GameView();
-            v.setVisible(true);
-        }});
+        List<GamePlayer> players = loadPlayers(playerModes);
+        if (gameType.equalsIgnoreCase(GameName.TTT.toString())) {
+            try {
+                SwingUtilities.invokeAndWait(new Runnable() {
+                    @Override
+                    public void run() {
+                        UIController gameControllerPlayer0 = new UIController(0, null, null, gameTable);
+                        UIController gameControllerPlayer1 = new UIController(1, null, null, gameTable);
+                        GameView containerView1 = new GameView(gameTable.getState());
+                        containerView1.createGameView(GameName.TTT, gameControllerPlayer0);
+                        containerView1.setVisible(true);
 
-        //        List<GamePlayer> players = loadPlayers(playerModes);
-//        final GUIController gameController = new GUIController(players, gameTable);;
+                        GameView containerView2 = new GameView(gameTable.getState());
+                        containerView2.createGameView(GameName.TTT, gameControllerPlayer1);
+                        containerView2.setVisible(true);
+                    }
+                });
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                System.out.println("Some error occurred while creating the view...");
+            }
+
+        } else {
+
+        }
+
+//
+//        EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                GameView gameView;
+//                if (gameType.equalsIgnoreCase(TTT)) {
+//                    gameController = new UIController(0, null, null, gameTable);
+//                    gameView = new TttView(gameControllerPlayer0, gameTable.getState());
+//                } else {
+//
+//                }
+//                v.setVisible(true);
+//            }
+//        });
+
+//                List<GamePlayer> players = loadPlayers(playerModes);
+//        final UIController gameController = new UIController(players, gameTable);;
 //        try {
 //            SwingUtilities.invokeAndWait(new Runnable() {
 //                @Override
@@ -152,11 +165,12 @@ public class Main {
 //        });
     }
 
+
     private static GamePlayer createPlayer(String playerType, String playerName) {
         GamePlayer newGamePlayer;
-        if (playerType.equalsIgnoreCase(MANUAL)) {
+        if (playerType.equalsIgnoreCase(PlayerType.MANUAL.toString())) {
             newGamePlayer = new ConsolePlayer(playerName, new Scanner(System.in));
-        } else if (playerType.equalsIgnoreCase(SMART)) {
+        } else if (playerType.equalsIgnoreCase(PlayerType.SMART.toString())) {
             newGamePlayer = new SmartPlayer(playerName, 5);
         } else {
             newGamePlayer = new RandomPlayer(playerName);

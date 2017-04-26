@@ -1,15 +1,21 @@
 package es.ucm.fdi.tp.view;
 
+import es.ucm.fdi.tp.base.model.GameAction;
+import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.extra.jboard.JBoard;
 
 import javax.swing.*;
 import java.awt.*;
 
-public abstract class RectBoardView extends UIComponent {
+public abstract class RectBoardView<S extends GameState<S, A>, A extends GameAction<S, A>> extends UIComponent<S, A> {
 
     private JComponent jBoard;
+    protected GameController<S, A> gameController;
+    protected S state;
 
-    public RectBoardView() {
+    public RectBoardView(GameController<S, A> gameController, S state) {
+        this.gameController = gameController;
+        this.state = state;
         initUI();
     }
 

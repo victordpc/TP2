@@ -1,16 +1,20 @@
 package es.ucm.fdi.tp.view;
 
+import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.extra.jboard.JBoard;
+import es.ucm.fdi.tp.ttt.TttAction;
+import es.ucm.fdi.tp.ttt.TttState;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class TttView extends RectBoardView {
+public class TttView extends RectBoardView<TttState, TttAction> {
 
     private JComponent jBoard;
 
-    public TttView() {
+    public TttView(GameController gameController, TttState state) {
+        super(gameController, state);
         initUI();
     }
 
@@ -34,7 +38,11 @@ public class TttView extends RectBoardView {
 
             @Override
             protected Color getColor(int player) {
-                return TttView.this.getPlayerColor(player);
+                if (player == 0) {
+                    return Color.BLUE;
+                }else {
+                    return Color.MAGENTA;
+                }
             }
 
             @Override
@@ -82,7 +90,7 @@ public class TttView extends RectBoardView {
 
     @Override
     protected Integer getPosition(int row, int col) {
-        return 0;
+        return state.at(row, col);
     }
 
     @Override
