@@ -22,7 +22,7 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
     }
 
     private void initGUI() {
-
+ 
     }
 
     @Override
@@ -51,6 +51,6 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
 
     @Override
     public void setController(GameController gameController) {
-
+    	this.gameController=gameController;
     }
 }

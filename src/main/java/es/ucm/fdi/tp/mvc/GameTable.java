@@ -2,12 +2,9 @@ package es.ucm.fdi.tp.mvc;
 
 import java.util.LinkedList;
 import java.util.List;
-
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GamePlayer;
 import es.ucm.fdi.tp.base.model.GameState;
-import java.util.ArrayList;
-import java.util.List;
 import es.ucm.fdi.tp.mvc.GameEvent.EventType;
 
 /**
@@ -23,7 +20,7 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
     public GameTable(S initState) {
         this.initState = initState;
         this.currentState = initState;
-        this.observers = new ArrayList<>();
+        this.observers = new LinkedList<>();
     }
 
     public void start() {
@@ -41,7 +38,7 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
     public void execute(A action) {
         // apply move
         currentState = action.applyTo(currentState);
-        notifyGameHasChanged();
+        notifyGameHasChanged(action);
         if (currentState.isFinished()) {
             notifyGameHasFinished();
         }
@@ -61,22 +58,22 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
 
     private void notifyGameHasStarted() {
         GameEvent<S, A> event = new GameEvent<>(GameEvent.EventType.Start, null, currentState, null, "¡¡¡¡¡La partida ha empezado!!!!!!");
-        for (GameObserver gameObserver : observers) {
-            gameObserver.notifyEvent(event);
-        }
+        notifyAll(event);
     }
 
-    private void notifyGameHasChanged() {
-        GameEvent<S, A> event = new GameEvent<>(GameEvent.EventType.Change, null, currentState, null, "El juego ha cambiado");
-        for (GameObserver gameObserver : observers) {
-            gameObserver.notifyEvent(event);
-        }
+    private void notifyGameHasChanged(A action) {
+        GameEvent<S, A> event = new GameEvent<>(GameEvent.EventType.Change, action, currentState, null, "El juego ha cambiado");
+        notifyAll(event);
     }
 
     private void notifyGameHasFinished() {
         GameEvent<S, A> event = new GameEvent<>(GameEvent.EventType.Stop, null, currentState, null, "El juego ha terminado ");
-        for (GameObserver gameObserver : observers) {
+        notifyAll(event);
+    }
+    
+    private void notifyAll(GameEvent<S, A> event){
+    for (GameObserver<S, A> gameObserver : observers) {
             gameObserver.notifyEvent(event);
-        }
+        }	
     }
 }

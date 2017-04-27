@@ -20,11 +20,11 @@ public class GUIController<S extends GameState<S, A>, A extends GameAction<S, A>
     @Override
     public void run() {
         game.start();
-        while (!game.getState().isFinished()) {
+        //while (!game.getState().isFinished()) {
             // request move
 //            A action = players.get(game.getState().getTurn()).requestAction(game.getState());
 //            game.execute(action);
-        }
-        System.out.print("Ganador: " + players.get(game.getState().getWinner()).getName() + System.getProperty("line.separator"));
+        //}
+        //System.out.print("Ganador: " + players.get(game.getState().getWinner()).getName() + System.getProperty("line.separator"));
     }
 }
