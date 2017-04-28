@@ -38,6 +38,7 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
         }
     }
 
+    //NOTIFICAR DE ERRORES,
     public void execute(A action) {
         // apply move
         currentState = action.applyTo(currentState);

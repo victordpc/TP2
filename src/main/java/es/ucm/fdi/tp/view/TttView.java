@@ -28,7 +28,7 @@ public class TttView extends RectBoardView<TttState, TttAction> {
 
             @Override
             protected void mouseClicked(int row, int col, int clickCount, int mouseButton) {
-
+                TttView.this.mouseClicked(row, col, clickCount, mouseButton);
             }
 
             @Override
@@ -98,9 +98,11 @@ public class TttView extends RectBoardView<TttState, TttAction> {
         }
     }
 
+    ///QUE SE ILUMINEN LAS CASILLAS VÁLIDAS.
     @Override
     protected void mouseClicked(int row, int col, int clickCount, int mouseButton) {
-
+        state.isValid(row, col);
+        System.out.println("MosueClicked");
     }
 
     @Override
