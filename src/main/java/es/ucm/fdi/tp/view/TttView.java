@@ -90,7 +90,12 @@ public class TttView extends RectBoardView<TttState, TttAction> {
 
     @Override
     protected Integer getPosition(int row, int col) {
-        return state.at(row, col);
+        int shape = state.at(row, col);
+        if (shape != -1) {
+            return shape;
+        }else  {
+            return null;
+        }
     }
 
     @Override

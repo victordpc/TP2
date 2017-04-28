@@ -23,7 +23,7 @@ public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>>
 
     @Override
     public void makeManualMove(A a) {
-
+        gameTable.execute(a);
     }
 
     @Override

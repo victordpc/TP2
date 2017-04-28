@@ -165,7 +165,6 @@ public class Main {
 //        });
     }
 
-
     private static GamePlayer createPlayer(String playerType, String playerName) {
         GamePlayer newGamePlayer;
         if (playerType.equalsIgnoreCase(PlayerType.MANUAL.toString())) {

@@ -32,7 +32,6 @@ public class GameView<S extends GameState<S, A>, A extends GameAction<S, A>> ext
     }
 
     public void createGameView(GameName gameType, GameController gameController) {
-
         ControlPanel controlPanel = new ControlPanel(gameController);
 //        Color.decode("#eeeeee");
 

@@ -56,7 +56,6 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
         add(toolBar);
     }
 
-
     @Override
     public void setEnable() {
 
