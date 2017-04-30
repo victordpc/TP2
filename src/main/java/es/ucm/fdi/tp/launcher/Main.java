@@ -110,6 +110,7 @@ public class Main {
 
                         GameView containerView2 = new GameView(gameTable.getState());
                         containerView2.createGameView(GameName.TTT, gameControllerPlayer1);
+                        containerView2.setEnabled(false);
                         gameTable.addObserver(containerView2);
                         containerView2.setVisible(true);
                     }

@@ -15,6 +15,7 @@ public class GameView<S extends GameState<S, A>, A extends GameAction<S, A>> ext
 
     private S state;
     private RectBoardView rectBoardView;
+    private GameController gameController;
 
     public GameView(S state) {
         super("Mi primera ventana - GameView");
@@ -35,6 +36,7 @@ public class GameView<S extends GameState<S, A>, A extends GameAction<S, A>> ext
     }
 
     public void createGameView(GameName gameType, GameController gameController) {
+        this.gameController = gameController;
         this.setTitle("Jugador " +gameController.getPlayerId());
         ControlPanel controlPanel = new ControlPanel(gameController);
 //        Color.decode("#eeeeee");
@@ -49,6 +51,10 @@ public class GameView<S extends GameState<S, A>, A extends GameAction<S, A>> ext
         this.getContentPane().add(rectBoardView, BorderLayout.CENTER);
     }
 
+    public void isEnable() {
+        this.setEnabled(state.getTurn() == gameController.getPlayerId());
+    }
+
     @Override
     public void notifyEvent(GameEvent<S, A> e) {
         switch (e.getType()) {
@@ -56,8 +62,9 @@ public class GameView<S extends GameState<S, A>, A extends GameAction<S, A>> ext
                 System.out.println(e.toString() + System.getProperty("line.separator"));
                 break;
             case Change:
+                this.state = e.getState();
                 rectBoardView.update(e.getState());
-                System.out.print("After action: " + System.getProperty("line.separator") + e.getState() + System.getProperty("line.separator"));
+//                System.out.print("After action: " + System.getProperty("line.separator") + e.getState() + System.getProperty("line.separator"));
                 break;
             case Stop:
                 System.out.println(e.toString() + System.getProperty("line.separator"));
@@ -65,5 +72,7 @@ public class GameView<S extends GameState<S, A>, A extends GameAction<S, A>> ext
             default:
                 break;
         }
+        isEnable();
     }
+
 }

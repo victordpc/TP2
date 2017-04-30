@@ -57,11 +57,6 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
     }
 
     @Override
-    public void setEnable() {
-
-    }
-
-    @Override
     public void update(GameState state) {
 
     }

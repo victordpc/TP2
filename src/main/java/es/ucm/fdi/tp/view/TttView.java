@@ -67,11 +67,6 @@ public class TttView extends RectBoardView<TttState, TttAction> {
     }
 
     @Override
-    public void setEnable() {
-
-    }
-
-    @Override
     public void update(TttState state) {
         this.state = state;
         jBoard.repaint();
