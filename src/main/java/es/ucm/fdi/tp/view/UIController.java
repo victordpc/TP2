@@ -53,6 +53,6 @@ public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>>
 
     @Override
     public int getPlayerId() {
-        return 0;
+        return playerId;
     }
 }

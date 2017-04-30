@@ -105,10 +105,12 @@ public class Main {
                         UIController gameControllerPlayer1 = new UIController(1, null, null, gameTable);
                         GameView containerView1 = new GameView(gameTable.getState());
                         containerView1.createGameView(GameName.TTT, gameControllerPlayer0);
+                        gameTable.addObserver(containerView1);
                         containerView1.setVisible(true);
 
                         GameView containerView2 = new GameView(gameTable.getState());
                         containerView2.createGameView(GameName.TTT, gameControllerPlayer1);
+                        gameTable.addObserver(containerView2);
                         containerView2.setVisible(true);
                     }
                 });

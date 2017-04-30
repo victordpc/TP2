@@ -1,7 +1,5 @@
 package es.ucm.fdi.tp.view;
 
-import es.ucm.fdi.tp.base.model.GameAction;
-import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.extra.jboard.JBoard;
 import es.ucm.fdi.tp.ttt.TttAction;
 import es.ucm.fdi.tp.ttt.TttState;
@@ -40,7 +38,7 @@ public class TttView extends RectBoardView<TttState, TttAction> {
             protected Color getColor(int player) {
                 if (player == 0) {
                     return Color.BLUE;
-                }else {
+                } else {
                     return Color.MAGENTA;
                 }
             }
@@ -74,8 +72,9 @@ public class TttView extends RectBoardView<TttState, TttAction> {
     }
 
     @Override
-    public void update(GameState state) {
-
+    public void update(TttState state) {
+        this.state = state;
+        jBoard.repaint();
     }
 
     @Override
@@ -93,7 +92,7 @@ public class TttView extends RectBoardView<TttState, TttAction> {
         int shape = state.at(row, col);
         if (shape != -1) {
             return shape;
-        }else  {
+        } else {
             return null;
         }
     }
@@ -101,8 +100,8 @@ public class TttView extends RectBoardView<TttState, TttAction> {
     ///QUE SE ILUMINEN LAS CASILLAS VÁLIDAS.
     @Override
     protected void mouseClicked(int row, int col, int clickCount, int mouseButton) {
-        state.isValid(row, col);
-        System.out.println("MosueClicked");
+        TttAction action = new TttAction(gameController.getPlayerId(), row, col);
+        gameController.makeManualMove(action);
     }
 
     @Override
