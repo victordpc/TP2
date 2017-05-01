@@ -1,10 +1,11 @@
-package es.ucm.fdi.tp.view;
+package es.ucm.fdi.tp.view.Controller;
 
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GamePlayer;
 import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.mvc.GameEvent;
 import es.ucm.fdi.tp.mvc.GameTable;
+import es.ucm.fdi.tp.view.Controller.GameController;
 
 public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>> implements GameController<S, A> {
 

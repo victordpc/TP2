@@ -1,6 +1,5 @@
 package es.ucm.fdi.tp.launcher;
 
-import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,6 +18,8 @@ import es.ucm.fdi.tp.mvc.GameType;
 import es.ucm.fdi.tp.mvc.PlayerType;
 import es.ucm.fdi.tp.ttt.TttState;
 import es.ucm.fdi.tp.view.*;
+import es.ucm.fdi.tp.view.Controller.ConsoleController;
+import es.ucm.fdi.tp.view.Controller.UIController;
 import es.ucm.fdi.tp.was.WolfAndSheepState;
 
 import javax.swing.*;
@@ -94,7 +95,6 @@ public class Main {
     }
 
     private static <S extends GameState<S, A>, A extends GameAction<S, A>> void startGUIMode(String gameType, GameTable<S, A> gameTable, String playerModes[]) {
-
         List<GamePlayer> players = loadPlayers(playerModes);
         if (gameType.equalsIgnoreCase(GameName.TTT.toString())) {
             try {

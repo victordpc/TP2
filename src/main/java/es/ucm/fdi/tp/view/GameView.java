@@ -6,7 +6,8 @@ import es.ucm.fdi.tp.mvc.GameEvent;
 import es.ucm.fdi.tp.mvc.GameName;
 import es.ucm.fdi.tp.mvc.GameObserver;
 import es.ucm.fdi.tp.ttt.TttState;
-import oracle.jvm.hotspot.jfr.JFR;
+import es.ucm.fdi.tp.view.Controller.GameController;
+import es.ucm.fdi.tp.view.InfoPanel.InfoView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,15 +25,9 @@ public class GameView<S extends GameState<S, A>, A extends GameAction<S, A>> ext
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.getContentPane().setLayout(new BorderLayout());
 
-        JLabel lblEste = new JLabel("region este");
-        lblEste.setBackground(Color.GREEN);
-        lblEste.setOpaque(true);
-        this.getContentPane().add(lblEste, BorderLayout.EAST);
-
-        JLabel bottomLabel = new JLabel("region centerLabel");
-        bottomLabel.setBackground(Color.RED);
-        bottomLabel.setOpaque(true);
-        this.getContentPane().add(bottomLabel, BorderLayout.SOUTH);
+        InfoView infoView = new InfoView(state);
+        infoView.setOpaque(true);
+        this.getContentPane().add(infoView, BorderLayout.EAST);
     }
 
     public void createGameView(GameName gameType, GameController gameController) {
@@ -41,7 +36,7 @@ public class GameView<S extends GameState<S, A>, A extends GameAction<S, A>> ext
         ControlPanel controlPanel = new ControlPanel(gameController);
 //        Color.decode("#eeeeee");
 
-        controlPanel.setBackground(Color.BLUE);
+        controlPanel.setBackground(Color.decode("#eeeeee"));
         this.getContentPane().add(controlPanel, BorderLayout.NORTH);
         controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.X_AXIS));
 

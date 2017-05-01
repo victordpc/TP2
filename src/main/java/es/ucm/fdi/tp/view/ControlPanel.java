@@ -2,16 +2,13 @@ package es.ucm.fdi.tp.view;
 
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GameState;
+import es.ucm.fdi.tp.view.Controller.GameController;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>  extends UIComponent {
+public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>> extends UIComponent implements ActionListener {
 
     private GameController<S, A> gameController;
 
@@ -19,6 +16,7 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
     private final String EXIT_ICON_PATH = "/exit.png";
     private final String NERD_ICON_PATH = "/nerd.png";
     private final String RESTART_ICON_PATH = "/restart.png";
+    private final String[] playerModes = {"Manual", "Random", "Automatic"};
 
     public ControlPanel(GameController gameController) {
         this.gameController = gameController;
@@ -50,6 +48,12 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
         ImageIcon exitIcon = new ImageIcon(getClass().getResource(EXIT_ICON_PATH));
         exitButton.setIcon(exitIcon);
         toolBar.add(exitButton);
+        toolBar.addSeparator(); //añade un separador
+
+        JComboBox playerModeList = new JComboBox(playerModes);
+        playerModeList.addActionListener(this);
+        toolBar.add(playerModeList);
+        toolBar.addSeparator(); //añade un separador
 
         toolBar.setFloatable(false); //impide que se pueda mover de su sitio
         toolBar.setOrientation(JToolBar.HORIZONTAL);
@@ -59,5 +63,12 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
     @Override
     public void update(GameState state) {
 
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JComboBox cb = (JComboBox)e.getSource();
+        String playerMode = (String)cb.getSelectedItem();
+       System.out.println("Mode selected " +playerMode);
     }
 }

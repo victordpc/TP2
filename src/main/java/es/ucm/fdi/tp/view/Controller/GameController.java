@@ -1,4 +1,4 @@
-package es.ucm.fdi.tp.view;
+package es.ucm.fdi.tp.view.Controller;
 
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GameState;

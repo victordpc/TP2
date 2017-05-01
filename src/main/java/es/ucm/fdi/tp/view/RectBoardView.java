@@ -3,6 +3,7 @@ package es.ucm.fdi.tp.view;
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.extra.jboard.JBoard;
+import es.ucm.fdi.tp.view.Controller.GameController;
 
 import javax.swing.*;
 import java.awt.*;
