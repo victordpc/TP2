@@ -2,21 +2,41 @@ package es.ucm.fdi.tp.view.InfoPanel;
 
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GameState;
+import es.ucm.fdi.tp.mvc.GameEvent;
+import es.ucm.fdi.tp.mvc.GameObserver;
+import es.ucm.fdi.tp.view.Controller.GameController;
+import es.ucm.fdi.tp.view.GUIView;
+
 import javax.swing.*;
 
-public class InfoView<S extends GameState<S, A>, A extends GameAction<S, A>> extends JPanel {
+import static com.sun.tools.internal.xjc.reader.Ring.add;
 
-    private S state;
+public class InfoView<S extends GameState<S, A>, A extends GameAction<S, A>> extends GUIView {
+
     MessageViewer messageViewer;
 
-    public InfoView(S state) {
-        this.state = state;
+    public InfoView() {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         initGUI();
     }
 
     private void initGUI() {
-        messageViewer = new MessageViewerComponent(state);
+        messageViewer = new MessageViewerComponent();
         add(messageViewer);
+    }
+
+    @Override
+    public void update(GameState state) {
+
+    }
+
+    @Override
+    public void setMessageViewer(MessageViewer infoViewer) {
+
+    }
+
+    @Override
+    public void setGameController(GameController gameCtrl) {
+
     }
 }

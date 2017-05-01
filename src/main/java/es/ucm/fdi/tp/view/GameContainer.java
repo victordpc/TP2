@@ -4,51 +4,56 @@ import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.mvc.GameEvent;
 import es.ucm.fdi.tp.mvc.GameName;
+import es.ucm.fdi.tp.mvc.GameObservable;
 import es.ucm.fdi.tp.mvc.GameObserver;
 import es.ucm.fdi.tp.ttt.TttState;
 import es.ucm.fdi.tp.view.Controller.GameController;
 import es.ucm.fdi.tp.view.InfoPanel.InfoView;
+import es.ucm.fdi.tp.view.InfoPanel.MessageViewer;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>> extends JFrame implements GameObserver<S, A> {
+public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>> extends GUIView implements GameObserver<S, A> {
 
-    private S state;
-    private RectBoardView rectBoardView;
+    private GUIView<S, A> rectBoardView;
     private GameController gameController;
 
-    public GameContainer(S state) {
-        super("Mi primera ventana - GameContainer");
-        this.state = state;
-        this.setSize(600, 600);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.getContentPane().setLayout(new BorderLayout());
-
-        InfoView infoView = new InfoView(state);
-        infoView.setOpaque(true);
-        this.getContentPane().add(infoView, BorderLayout.EAST);
-    }
-
-    public void createGameView(GameName gameType, GameController gameController) {
-        this.gameController = gameController;
+    public GameContainer(GUIView<S, A> gameView, GameController gameController, GameObservable<S, A> game) {
         this.setTitle("Jugador " +gameController.getPlayerId());
+        this.setLayout(new BorderLayout(5, 5));
+
+        this.rectBoardView = gameView;
+        this.gameController = gameController;
+        game.addObserver(this);
+        initGUI();
+    }
+
+    public void initGUI() {
         ControlPanel controlPanel = new ControlPanel(gameController);
-//        Color.decode("#eeeeee");
-
         controlPanel.setBackground(Color.decode("#eeeeee"));
-        this.getContentPane().add(controlPanel, BorderLayout.NORTH);
         controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.X_AXIS));
+        this.add(controlPanel, BorderLayout.NORTH);
+        this.add(rectBoardView, BorderLayout.CENTER);
 
-        rectBoardView = new TttView(gameController, (TttState)state);
-        System.out.println();
-        rectBoardView.setOpaque(true);
-        this.getContentPane().add(rectBoardView, BorderLayout.CENTER);
+        InfoView infoView = new InfoView();
+        infoView.setOpaque(true);
+        this.add(infoView, BorderLayout.EAST);
+
     }
 
-    public void isEnable() {
-        this.setEnabled(state.getTurn() == gameController.getPlayerId());
-    }
+    //Color.decode("#eeeeee");
+//    public void createGameView(GameName gameType) {
+//        ControlPanel controlPanel = new ControlPanel(gameController);
+//        controlPanel.setBackground(Color.decode("#eeeeee"));
+//        controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.X_AXIS));
+//        this.getContentPane().add(controlPanel, BorderLayout.NORTH);
+////
+////        rectBoardView = new TttView(gameController, (TttState)state);
+////        System.out.println();
+////        rectBoardView.setOpaque(true);
+////        this.window.getContentPane().add(rectBoardView, BorderLayout.CENTER);
+//    }
 
     @Override
     public void notifyEvent(GameEvent<S, A> e) {
@@ -57,7 +62,6 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
                 System.out.println(e.toString() + System.getProperty("line.separator"));
                 break;
             case Change:
-                this.state = e.getState();
                 rectBoardView.update(e.getState());
 //                System.out.print("After action: " + System.getProperty("line.separator") + e.getState() + System.getProperty("line.separator"));
                 break;
@@ -67,7 +71,21 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
             default:
                 break;
         }
-        isEnable();
+
     }
 
+    @Override
+    public void update(GameState state) {
+
+    }
+
+    @Override
+    public void setMessageViewer(MessageViewer infoViewer) {
+
+    }
+
+    @Override
+    public void setGameController(GameController gameCtrl) {
+
+    }
 }

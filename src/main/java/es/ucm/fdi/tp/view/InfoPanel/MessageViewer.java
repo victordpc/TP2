@@ -13,7 +13,7 @@ public abstract class MessageViewer<S extends GameState<S, A>, A extends GameAct
 
     private JTextArea textArea;
     private S state;
-    public MessageViewer(S state) {
+    public MessageViewer() {
         this.state = state;
         initGUI();
     }

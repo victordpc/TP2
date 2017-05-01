@@ -6,8 +6,8 @@ import es.ucm.fdi.tp.view.Controller.GameController;
 
 public class MessageViewerComponent<S extends GameState<S, A>, A extends GameAction<S, A>> extends MessageViewer {
 
-    public MessageViewerComponent(GameState state) {
-        super(state);
+    public MessageViewerComponent() {
+        super();
     }
 
     @Override

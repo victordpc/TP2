@@ -19,6 +19,7 @@ import es.ucm.fdi.tp.mvc.PlayerType;
 import es.ucm.fdi.tp.ttt.TttState;
 import es.ucm.fdi.tp.view.*;
 import es.ucm.fdi.tp.view.Controller.ConsoleController;
+import es.ucm.fdi.tp.view.Controller.GameController;
 import es.ucm.fdi.tp.view.Controller.UIController;
 import es.ucm.fdi.tp.was.WolfAndSheepState;
 
@@ -48,7 +49,7 @@ public class Main {
             System.exit(1);
         }
 
-        GameTable gameTable = createGame(arguments[0]);
+        GameTable gameTable = createGameModel(arguments[0]);
         if (gameTable == null) {
             System.err.println("Juego inválido");
             System.exit(1);
@@ -66,7 +67,7 @@ public class Main {
         scanner.close();
     }
 
-    private static GameTable<?, ?> createGame(String gameTye) {
+    private static GameTable<?, ?> createGameModel(String gameTye) {
         GameState<?, ?> initialGameState = createInitialState(gameTye);
         return new GameTable(initialGameState);
     }
@@ -94,6 +95,10 @@ public class Main {
         new ConsoleController(players, gameTable).run();
     }
 
+    private static <S extends GameState<S, A>, A extends GameAction<S, A>> GUIView<S, A> createGUIGame(String gameName, GameController<S, A> gameController, GameState<S, A> gameState) {
+        return (GUIView<S, A>) new TttView(gameController, (TttState) gameState);
+    }
+
     private static <S extends GameState<S, A>, A extends GameAction<S, A>> void startGUIMode(String gameType, GameTable<S, A> gameTable, String playerModes[]) {
         List<GamePlayer> players = loadPlayers(playerModes);
         if (gameType.equalsIgnoreCase(GameName.TTT.toString())) {
@@ -102,6 +107,12 @@ public class Main {
                     @Override
                     public void run() {
                         UIController gameControllerPlayer0 = new UIController(0, null, null, gameTable);
+                       GUIView<S, A> guiView = (GUIView<S, A>) createGUIGame(GameName.TTT.name(), gameControllerPlayer0, gameTable.getState());
+
+                        GUIView<S, A> container = new GameContainer<>(guiView, gameControllerPlayer0, gameTable);
+                        container.enableWindowMode();
+
+/**
                         UIController gameControllerPlayer1 = new UIController(1, null, null, gameTable);
                         GameContainer containerView1 = new GameContainer(gameTable.getState());
                         containerView1.createGameView(GameName.TTT, gameControllerPlayer0);
@@ -112,18 +123,34 @@ public class Main {
                         containerView2.createGameView(GameName.TTT, gameControllerPlayer1);
                         containerView2.setEnabled(false);
                         gameTable.addObserver(containerView2);
-                        containerView2.setVisible(true);
+                        containerView2.setVisible(true);*/
                     }
                 });
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                System.out.println("Some error occurred while creating the view..." + e.getMessage() + " --- ");
             } catch (InvocationTargetException e) {
-                System.out.println("Some error occurred while creating the view...");
+                System.out.println("Some error occurred while creating the view..." +e.getCause());
+            }
+
+            try {
+                SwingUtilities.invokeAndWait(new Runnable() {
+                    @Override
+                    public void run() {
+                        gameTable.start();
+                    }
+                });
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                System.out.println("Some error occurred while creating the view..." + e.getMessage() + " --- ");
+            } catch (InvocationTargetException e) {
+                System.out.println("Some error occurred while creating the view..." +e.getCause());
             }
 
         } else {
 
         }
+
 
 //
 //        EventQueue.invokeLater(new Runnable() {
