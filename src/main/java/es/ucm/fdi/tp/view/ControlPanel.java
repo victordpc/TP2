@@ -19,6 +19,18 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
     private final String RESTART_ICON_PATH = "/restart.png";
     private final String[] playerModes = {"Manual", "Random", "Automatic"};
 
+    private enum EventType {
+        ComboBoxEvent,
+        ButtonEvent
+    }
+
+    private enum ActionType {
+        RandomMove,
+        SmartMove,
+        Restart,
+        Exit
+    }
+
     public ControlPanel(GameController gameController) {
         this.gameController = gameController;
         initGUI();
@@ -28,7 +40,8 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
         JButton randomMoveButton = new JButton();
         ImageIcon randomIcon = new ImageIcon(getClass().getResource(DICE_ICON_PATH));
         randomMoveButton.setIcon(randomIcon);
-
+        randomMoveButton.setActionCommand("RandomMove");
+        randomMoveButton.addActionListener(this);
         JToolBar toolBar = new JToolBar("Still draggable");
         toolBar.add(randomMoveButton);
         toolBar.addSeparator(); //añade un separador
@@ -36,22 +49,29 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
         JButton smartMoveButton = new JButton("");
         ImageIcon nerdIcon = new ImageIcon(getClass().getResource(NERD_ICON_PATH));
         smartMoveButton.setIcon(nerdIcon);
+        smartMoveButton.setActionCommand("SmartMove");
+        smartMoveButton.addActionListener(this);
         toolBar.add(smartMoveButton);
         toolBar.addSeparator(); //añade un separador
 
         JButton restartButton = new JButton("");
         ImageIcon restartIcon = new ImageIcon(getClass().getResource(RESTART_ICON_PATH));
         restartButton.setIcon(restartIcon);
+        restartButton.setActionCommand("Restart");
+        restartButton.addActionListener(this);
         toolBar.add(restartButton);
         toolBar.addSeparator(); //añade un separador
 
         JButton exitButton = new JButton("");
         ImageIcon exitIcon = new ImageIcon(getClass().getResource(EXIT_ICON_PATH));
         exitButton.setIcon(exitIcon);
+        exitButton.setActionCommand("Exit");
+        exitButton.addActionListener(this);
         toolBar.add(exitButton);
         toolBar.addSeparator(); //añade un separador
 
         JComboBox playerModeList = new JComboBox(playerModes);
+        playerModeList.setActionCommand("ComboBox");
         playerModeList.addActionListener(this);
         toolBar.add(playerModeList);
         toolBar.addSeparator(); //añade un separador
@@ -78,8 +98,23 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        JComboBox cb = (JComboBox)e.getSource();
-        String playerMode = (String)cb.getSelectedItem();
-       System.out.println("Mode selected " +playerMode);
+        if (e.getActionCommand() == EventType.ComboBoxEvent.toString()) {
+            JComboBox cb = (JComboBox)e.getSource();
+            String playerMode = (String)cb.getSelectedItem();
+            System.out.println("Mode selected " +playerMode);
+        }else {
+            switch (ActionType.valueOf(e.getActionCommand())) {
+                case RandomMove:
+                    gameController.makeRandomMove();
+                    break;
+                case SmartMove:
+                    gameController.makeSmartMove();
+                    break;
+                case Restart:
+                    break;
+                case Exit:
+                    break;
+            }
+        }
     }
 }
