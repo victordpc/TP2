@@ -3,12 +3,13 @@ package es.ucm.fdi.tp.view;
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.view.Controller.GameController;
+import es.ucm.fdi.tp.view.InfoPanel.MessageViewer;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>> extends UIComponent implements ActionListener {
+public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>> extends GUIView implements ActionListener {
 
     private GameController<S, A> gameController;
 
@@ -62,6 +63,16 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 
     @Override
     public void update(GameState state) {
+
+    }
+
+    @Override
+    public void setMessageViewer(MessageViewer infoViewer) {
+
+    }
+
+    @Override
+    public void setGameController(GameController gameCtrl) {
 
     }
 

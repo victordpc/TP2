@@ -4,6 +4,7 @@ import es.ucm.fdi.tp.extra.jboard.JBoard;
 import es.ucm.fdi.tp.ttt.TttAction;
 import es.ucm.fdi.tp.ttt.TttState;
 import es.ucm.fdi.tp.view.Controller.GameController;
+import es.ucm.fdi.tp.view.InfoPanel.MessageViewer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -71,6 +72,16 @@ public class TttView extends RectBoardView<TttState, TttAction> {
     public void update(TttState state) {
         this.state = state;
         jBoard.repaint();
+    }
+
+    @Override
+    public void setMessageViewer(MessageViewer<TttState, TttAction> infoViewer) {
+
+    }
+
+    @Override
+    public void setGameController(GameController<TttState, TttAction> gameCtrl) {
+
     }
 
     @Override

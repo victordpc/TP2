@@ -103,12 +103,12 @@ public class Main {
                     public void run() {
                         UIController gameControllerPlayer0 = new UIController(0, null, null, gameTable);
                         UIController gameControllerPlayer1 = new UIController(1, null, null, gameTable);
-                        GameView containerView1 = new GameView(gameTable.getState());
+                        GameContainer containerView1 = new GameContainer(gameTable.getState());
                         containerView1.createGameView(GameName.TTT, gameControllerPlayer0);
                         gameTable.addObserver(containerView1);
                         containerView1.setVisible(true);
 
-                        GameView containerView2 = new GameView(gameTable.getState());
+                        GameContainer containerView2 = new GameContainer(gameTable.getState());
                         containerView2.createGameView(GameName.TTT, gameControllerPlayer1);
                         containerView2.setEnabled(false);
                         gameTable.addObserver(containerView2);
@@ -128,7 +128,7 @@ public class Main {
 //
 //        EventQueue.invokeLater(new Runnable() {
 //            public void run() {
-//                GameView gameView;
+//                GameContainer gameView;
 //                if (gameType.equalsIgnoreCase(TTT)) {
 //                    gameController = new UIController(0, null, null, gameTable);
 //                    gameView = new TttView(gameControllerPlayer0, gameTable.getState());
@@ -145,14 +145,14 @@ public class Main {
 //            SwingUtilities.invokeAndWait(new Runnable() {
 //                @Override
 //                public void run() {
-//                    GameView gameView = null;
+//                    GameContainer gameView = null;
 //                    if (gameType.equalsIgnoreCase(TTT)) {
 //                        gameView = new TttView(3, 3);
 //                    } else {
 //
 //                    }
 //
-//                    GameView gameContainer = new GameContainer(gameView, gameController, gameTable);
+//                    GameContainer gameContainer = new GameContainer(gameView, gameController, gameTable);
 //                    gameContainer.enableWindowMode();
 //                }
 //            });
@@ -187,11 +187,13 @@ public class Main {
      */
     private static List<GamePlayer> loadPlayers(String[] gameSettingsData) {
         List<GamePlayer> players = new ArrayList<>();
-        for (int i = 0; i < gameSettingsData.length; i++) {
+        players.add(createPlayer("MANUAL", "Jugador 0"));
+        players.add(createPlayer("MANUAL", "Jugador 1"));
+        /**for (int i = 0; i < gameSettingsData.length; i++) {
             System.out.println(System.getProperty("line.separator") + "Jugador " + (i + 1) + " Introduce tu nombre:");
             String playerName = scanner.nextLine();
             players.add(createPlayer(gameSettingsData[1], playerName));
-        }
+        }*/
         return players;
     }
 }

@@ -12,14 +12,14 @@ import es.ucm.fdi.tp.view.InfoPanel.InfoView;
 import javax.swing.*;
 import java.awt.*;
 
-public class GameView<S extends GameState<S, A>, A extends GameAction<S, A>> extends JFrame implements GameObserver<S, A> {
+public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>> extends JFrame implements GameObserver<S, A> {
 
     private S state;
     private RectBoardView rectBoardView;
     private GameController gameController;
 
-    public GameView(S state) {
-        super("Mi primera ventana - GameView");
+    public GameContainer(S state) {
+        super("Mi primera ventana - GameContainer");
         this.state = state;
         this.setSize(600, 600);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

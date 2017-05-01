@@ -8,7 +8,7 @@ import es.ucm.fdi.tp.view.Controller.GameController;
 import javax.swing.*;
 import java.awt.*;
 
-public abstract class RectBoardView<S extends GameState<S, A>, A extends GameAction<S, A>> extends UIComponent<S, A> {
+public abstract class RectBoardView<S extends GameState<S, A>, A extends GameAction<S, A>> extends GUIView<S, A> {
 
     private JComponent jBoard;
     protected GameController<S, A> gameController;
