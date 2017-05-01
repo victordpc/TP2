@@ -27,12 +27,13 @@ public abstract class PlayersInfoViewer<S extends GameState<S, A>, A extends Gam
     public void setPlayersInfoViewer(PlayersInfoViewer<S, A> playersInfoViewer){}
 
     abstract public void setNumberOfPlayer(int i);
+    abstract public void updateColors();
 
-    /**
-     * Used to consult the color assigned to a player
-     * @param playerId the id of the player
-     * @return the color assigned to the player.
-     */
+        /**
+         * Used to consult the color assigned to a player
+         * @param playerId the id of the player
+         * @return the color assigned to the player.
+         */
     abstract public Color getPlayerColor(int playerId);
 
     @Override

@@ -20,17 +20,18 @@ public class PlayersInfoComponent<S extends GameState<S, A>, A extends GameActio
     private Map<Integer, Color> colors; // Line -> Color
     private ColorChooser colorChooser;
     private PlayersInfoObserver playersInfoObserver;
+    private List<GamePlayer> gamePlayers;
 
     public PlayersInfoComponent(List<GamePlayer> gamePlayers, PlayersInfoObserver playersInfoObserver) {
         this.playersInfoObserver = playersInfoObserver;
+        this.gamePlayers = gamePlayers;
         List<String> playerNames = new ArrayList<>();
         for (GamePlayer gamePlayer : gamePlayers) {
             playerNames.add(gamePlayer.getName());
         }
         playerModel = new PlayerModel(playerNames);
         colors = new HashMap<>();
-        colors.put(0, gamePlayers.get(0).getPlayerColor());
-        colors.put(1, gamePlayers.get(0).getPlayerColor());
+        loadColors();
         colorChooser = new ColorChooser(new JFrame(), "Choose Line Color", Color.BLACK);
         initGUI();
     }
@@ -78,6 +79,17 @@ public class PlayersInfoComponent<S extends GameState<S, A>, A extends GameActio
         scrollPane.setBorder(borderLayout);
         scrollPane.setBackground(null);
         add(scrollPane);
+    }
+
+    private void loadColors() {
+        for(int i = 0; i < gamePlayers.size(); i++) {
+            colors.put(i, gamePlayers.get(i).getPlayerColor());
+        }
+    }
+
+    public void updateColors() {
+        loadColors();
+        repaint();
     }
 
     private void changeColor(int row) {

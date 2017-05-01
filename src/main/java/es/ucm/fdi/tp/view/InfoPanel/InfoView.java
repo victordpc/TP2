@@ -34,7 +34,7 @@ public class InfoView<S extends GameState<S, A>, A extends GameAction<S, A>> ext
     }
 
     public void repaintPlayersInfoViewer() {
-        playersInfoViewer.repaint();
+        playersInfoViewer.updateColors();
     }
 
     public void addContent(String message) {
