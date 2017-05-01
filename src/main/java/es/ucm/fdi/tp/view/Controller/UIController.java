@@ -7,6 +7,8 @@ import es.ucm.fdi.tp.mvc.GameEvent;
 import es.ucm.fdi.tp.mvc.GameTable;
 import es.ucm.fdi.tp.view.Controller.GameController;
 
+import java.util.List;
+
 public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>> implements GameController<S, A> {
 
     private GamePlayer randomPlayer;
@@ -55,5 +57,10 @@ public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>>
     @Override
     public int getPlayerId() {
         return playerId;
+    }
+
+    @Override
+    public List<GamePlayer> getGamePlayers() {
+        return gameTable.getGamePlayers();
     }
 }

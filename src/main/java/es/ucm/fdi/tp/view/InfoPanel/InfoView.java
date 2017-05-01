@@ -1,6 +1,7 @@
 package es.ucm.fdi.tp.view.InfoPanel;
 
 import es.ucm.fdi.tp.base.model.GameAction;
+import es.ucm.fdi.tp.base.model.GamePlayer;
 import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.mvc.GameEvent;
 import es.ucm.fdi.tp.mvc.GameObserver;
@@ -9,20 +10,25 @@ import es.ucm.fdi.tp.view.GUIView;
 
 import javax.swing.*;
 
+import java.util.List;
+
 import static com.sun.tools.internal.xjc.reader.Ring.add;
 
 public class InfoView<S extends GameState<S, A>, A extends GameAction<S, A>> extends GUIView {
 
     private MessageViewer messageViewer;
+    private PlayersInfoViewer playersInfoViewer;
 
-    public InfoView() {
+    public InfoView(List<GamePlayer> gamePlayers) {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        initGUI();
+        initGUI(gamePlayers);
     }
 
-    private void initGUI() {
+    private void initGUI(List<GamePlayer> gamePlayers) {
         messageViewer = new MessageViewerComponent();
+        playersInfoViewer = new PlayersInfoComponent(gamePlayers);
         add(messageViewer);
+        add(playersInfoViewer);
     }
 
     public void addContent(String message) {

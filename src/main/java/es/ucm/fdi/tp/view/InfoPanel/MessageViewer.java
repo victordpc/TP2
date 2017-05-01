@@ -12,9 +12,7 @@ import java.awt.*;
 public abstract class MessageViewer<S extends GameState<S, A>, A extends GameAction<S, A>> extends GUIView {
 
     protected JTextArea textArea;
-    private S state;
     public MessageViewer() {
-        this.state = state;
         initGUI();
     }
 

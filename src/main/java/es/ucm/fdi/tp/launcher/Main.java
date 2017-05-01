@@ -101,6 +101,7 @@ public class Main {
 
     private static <S extends GameState<S, A>, A extends GameAction<S, A>> void startGUIMode(String gameType, GameTable<S, A> gameTable, String playerModes[]) {
         List<GamePlayer> players = loadPlayers(playerModes);
+        gameTable.setGamePlayers(players);
         if (gameType.equalsIgnoreCase(GameName.TTT.toString())) {
             try {
                 SwingUtilities.invokeAndWait(new Runnable() {
@@ -121,7 +122,7 @@ public class Main {
                 e.printStackTrace();
                 System.out.println("Some error occurred while creating the view..." + e.getMessage() + " --- ");
             } catch (InvocationTargetException e) {
-                System.out.println("Some error occurred while creating the view..." + e.getCause());
+                System.out.println("Some error occurred while creating the view..." + e.getMessage());
             }
 
             try {

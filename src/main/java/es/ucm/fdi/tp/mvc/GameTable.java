@@ -1,14 +1,11 @@
 package es.ucm.fdi.tp.mvc;
 
-import java.util.LinkedList;
 import java.util.List;
-
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GameError;
 import es.ucm.fdi.tp.base.model.GamePlayer;
 import es.ucm.fdi.tp.base.model.GameState;
 import java.util.ArrayList;
-import java.util.List;
 import es.ucm.fdi.tp.mvc.GameEvent.EventType;
 
 /**
@@ -20,6 +17,7 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
     private S initState;
     private S currentState;
     private List<GameObserver<S, A>> observers = new ArrayList<>();
+    private List<GamePlayer> gamePlayers;
 
     public GameTable(S initState) {
         this.initState = initState;
@@ -38,6 +36,14 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
         for (GameObserver<S, A> gameObserver : observers) {
             gameObserver.notifyEvent(event);
         }
+    }
+
+    public List<GamePlayer>getGamePlayers() {
+        return gamePlayers;
+    }
+
+    public void setGamePlayers(List<GamePlayer> gamePlayers) {
+        this.gamePlayers = gamePlayers;
     }
 
     //NOTIFICAR DE ERRORES,

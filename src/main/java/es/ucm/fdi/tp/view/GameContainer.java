@@ -37,7 +37,7 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
         this.add(controlPanel, BorderLayout.NORTH);
         this.add(rectBoardView, BorderLayout.CENTER);
 
-        infoView = new InfoView();
+        infoView = new InfoView(gameController.getGamePlayers());
         infoView.setOpaque(true);
         this.add(infoView, BorderLayout.EAST);
 

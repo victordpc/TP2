@@ -1,22 +1,27 @@
 package es.ucm.fdi.tp.view.Controller;
 
 import es.ucm.fdi.tp.base.model.GameAction;
+import es.ucm.fdi.tp.base.model.GamePlayer;
 import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.mvc.GameEvent;
 
+import java.util.List;
+
 public interface GameController<S extends GameState<S, A>, A extends GameAction<S, A>> {
-    public void makeManualMove(A a);
+    void makeManualMove(A a);
 
-    public void makeRandomMove();
+    void makeRandomMove();
 
-    public void makeSmartMove();
+    void makeSmartMove();
 
-    public void restartGame();
+    void restartGame();
 
-    public void stopGame();
+    void stopGame();
 
-    public void handleEvent(GameEvent<S, A> e);
+    void handleEvent(GameEvent<S, A> e);
 
     //public void changePlayerMode(PlayerMode p);
-    public int getPlayerId();
+    int getPlayerId();
+
+    List<GamePlayer> getGamePlayers();
 }
