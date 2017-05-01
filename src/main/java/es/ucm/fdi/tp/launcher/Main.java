@@ -142,49 +142,6 @@ public class Main {
         } else {
 
         }
-
-
-//
-//        EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                GameContainer gameView;
-//                if (gameType.equalsIgnoreCase(TTT)) {
-//                    gameController = new UIController(0, null, null, gameTable);
-//                    gameView = new TttView(gameControllerPlayer0, gameTable.getState());
-//                } else {
-//
-//                }
-//                v.setVisible(true);
-//            }
-//        });
-
-//                List<GamePlayer> players = loadPlayers(playerModes);
-//        final UIController gameController = new UIController(players, gameTable);;
-//        try {
-//            SwingUtilities.invokeAndWait(new Runnable() {
-//                @Override
-//                public void run() {
-//                    GameContainer gameView = null;
-//                    if (gameType.equalsIgnoreCase(TTT)) {
-//                        gameView = new TttView(3, 3);
-//                    } else {
-//
-//                    }
-//
-//                    GameContainer gameContainer = new GameContainer(gameView, gameController, gameTable);
-//                    gameContainer.enableWindowMode();
-//                }
-//            });
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (InvocationTargetException e) {
-//            System.out.println("Some error occurred while creating the view...");
-//        }
-//        SwingUtilities.invokeLater(new Runnable() {
-//            public void run() {
-//                gameController.run();
-//            }
-//        });
     }
 
     private static GamePlayer createPlayer(String playerType, String playerName) {

@@ -19,7 +19,7 @@ public class ConsolePlayer implements GamePlayer {
 	private Scanner in;
 	private String name;
 	private int playerNumber;
-	private Color playerColor = Color.GREEN;
+	private Color playerColor = Color.WHITE;
 
 	public ConsolePlayer(String name, Scanner in) {
 		this.name = name;
@@ -61,7 +61,6 @@ public class ConsolePlayer implements GamePlayer {
 			System.out.print("Please type your move index: ");
 			try {
 				int choice = in.nextInt();
-
 				if (choice == 0) {
 					// user wants to exit
 					System.out.println("Game exiting by request of " + name);
