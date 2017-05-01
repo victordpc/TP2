@@ -1,5 +1,6 @@
 package es.ucm.fdi.tp.base.console;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -18,6 +19,7 @@ public class ConsolePlayer implements GamePlayer {
 	private Scanner in;
 	private String name;
 	private int playerNumber;
+	private Color playerColor = Color.GREEN;
 
 	public ConsolePlayer(String name, Scanner in) {
 		this.name = name;
@@ -74,5 +76,15 @@ public class ConsolePlayer implements GamePlayer {
 			}
 		}
 		return action;
+	}
+
+	@Override
+	public Color getPlayerColor() {
+		return playerColor;
+	}
+
+	@Override
+	public void setPlayerColor(Color newColor) {
+		this.playerColor = newColor;
 	}
 }

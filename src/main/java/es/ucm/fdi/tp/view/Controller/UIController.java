@@ -63,4 +63,9 @@ public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>>
     public List<GamePlayer> getGamePlayers() {
         return gameTable.getGamePlayers();
     }
+
+    @Override
+    public void notifyInterfaceNeedBeUpdated() {
+        gameTable.notifyInterfaceNeedBeUpdated();
+    }
 }

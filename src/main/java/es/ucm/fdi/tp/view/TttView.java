@@ -38,11 +38,7 @@ public class TttView extends RectBoardView<TttState, TttAction> {
 
             @Override
             protected Color getColor(int player) {
-                if (player == 0) {
-                    return Color.BLUE;
-                } else {
-                    return Color.MAGENTA;
-                }
+                return gameController.getGamePlayers().get(player).getPlayerColor();
             }
 
             @Override

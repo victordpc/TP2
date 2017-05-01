@@ -1,5 +1,7 @@
 package es.ucm.fdi.tp.base.model;
 
+import java.awt.*;
+
 /**
  * A player of games. Can generate game actions to apply on the game.
  */
@@ -30,4 +32,7 @@ public interface GamePlayer {
 	 * demands a move from the player.
 	 */
 	<S extends GameState<S, A>, A extends GameAction<S, A>> A requestAction(S state);
+
+	Color getPlayerColor();
+	void setPlayerColor(Color newColor);
 }

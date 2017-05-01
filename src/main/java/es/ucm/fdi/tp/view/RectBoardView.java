@@ -90,6 +90,6 @@ public abstract class RectBoardView<S extends GameState<S, A>, A extends GameAct
     }
 
     protected Color getPlayerColor(int id) {
-        return id == 0 ? Color.BLUE : Color.RED;
+        return gameController.getGamePlayers().get(id).getPlayerColor();
     }
 }

@@ -74,6 +74,13 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
         observers.remove(o);
     }
 
+    public void notifyInterfaceNeedBeUpdated() {
+        GameEvent<S, A> event = new GameEvent<>(GameEvent.EventType.Change, null, currentState, null, "El juego ha cambiado");
+        for (GameObserver gameObserver : observers) {
+            gameObserver.notifyEvent(event);
+        }
+    }
+
     private void notifyGameHasStarted() {
         GameEvent<S, A> event = new GameEvent<>(GameEvent.EventType.Start, null, currentState, null, "¡La partida ha empezado!");
         for (GameObserver gameObserver : observers) {

@@ -18,17 +18,23 @@ public class InfoView<S extends GameState<S, A>, A extends GameAction<S, A>> ext
 
     private MessageViewer messageViewer;
     private PlayersInfoViewer playersInfoViewer;
+    private PlayersInfoObserver playersInfoObserver;
 
-    public InfoView(List<GamePlayer> gamePlayers) {
+    public InfoView(List<GamePlayer> gamePlayers, PlayersInfoObserver playersInfoObserver) {
+        this.playersInfoObserver = playersInfoObserver;
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         initGUI(gamePlayers);
     }
 
     private void initGUI(List<GamePlayer> gamePlayers) {
         messageViewer = new MessageViewerComponent();
-        playersInfoViewer = new PlayersInfoComponent(gamePlayers);
+        playersInfoViewer = new PlayersInfoComponent(gamePlayers, playersInfoObserver);
         add(messageViewer);
         add(playersInfoViewer);
+    }
+
+    public void repaintPlayersInfoViewer() {
+        playersInfoViewer.repaint();
     }
 
     public void addContent(String message) {
@@ -40,9 +46,7 @@ public class InfoView<S extends GameState<S, A>, A extends GameAction<S, A>> ext
     }
 
     @Override
-    public void update(GameState state) {
-
-    }
+    public void update(GameState state) {}
 
     @Override
     public void setMessageViewer(MessageViewer messageViewer) {

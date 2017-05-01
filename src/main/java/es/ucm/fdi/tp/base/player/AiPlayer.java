@@ -4,6 +4,8 @@ import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GamePlayer;
 import es.ucm.fdi.tp.base.model.GameState;
 
+import java.awt.*;
+
 /**
  * A player that can play any game.
  */
@@ -13,6 +15,7 @@ public class AiPlayer implements GamePlayer {
 
 	protected String name;
 	protected int playerNumber;
+	protected Color playerColor = Color.GRAY;
 
 	public AiPlayer(String name, AiAlgorithm algorithm) {
 		this.name = name;
@@ -38,4 +41,16 @@ public class AiPlayer implements GamePlayer {
 	public <S extends GameState<S, A>, A extends GameAction<S, A>> A requestAction(S state) {
 		return algorithm.chooseAction(playerNumber, state);
 	}
+
+	@Override
+	public Color getPlayerColor() {
+		return playerColor;
+	}
+
+	@Override
+	public void setPlayerColor(Color newColor) {
+		this.playerColor = newColor;
+	}
+
+
 }

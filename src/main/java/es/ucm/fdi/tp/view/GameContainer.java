@@ -1,6 +1,7 @@
 package es.ucm.fdi.tp.view;
 
 import es.ucm.fdi.tp.base.model.GameAction;
+import es.ucm.fdi.tp.base.model.GamePlayer;
 import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.mvc.GameEvent;
 import es.ucm.fdi.tp.mvc.GameName;
@@ -10,11 +11,12 @@ import es.ucm.fdi.tp.ttt.TttState;
 import es.ucm.fdi.tp.view.Controller.GameController;
 import es.ucm.fdi.tp.view.InfoPanel.InfoView;
 import es.ucm.fdi.tp.view.InfoPanel.MessageViewer;
+import es.ucm.fdi.tp.view.InfoPanel.PlayersInfoObserver;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>> extends GUIView implements GameObserver<S, A> {
+public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>> extends GUIView implements GameObserver<S, A>, PlayersInfoObserver {
 
     private GUIView<S, A> rectBoardView;
     private GameController gameController;
@@ -37,7 +39,7 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
         this.add(controlPanel, BorderLayout.NORTH);
         this.add(rectBoardView, BorderLayout.CENTER);
 
-        infoView = new InfoView(gameController.getGamePlayers());
+        infoView = new InfoView(gameController.getGamePlayers(), this);
         infoView.setOpaque(true);
         this.add(infoView, BorderLayout.EAST);
 
@@ -53,6 +55,7 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
                 break;
             case Change:
                 rectBoardView.update(e.getState());
+                infoView.repaintPlayersInfoViewer();
 //                System.out.print("After action: " + System.getProperty("line.separator") + e.getState() + System.getProperty("line.separator"));
                 break;
             case Info:
@@ -87,5 +90,12 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
     @Override
     public void setGameController(GameController gameCtrl) {
 
+    }
+
+    @Override
+    public void colorChanged(int player, Color color) {
+        GamePlayer gamePlayer =  (GamePlayer)gameController.getGamePlayers().get(player);
+        gamePlayer.setPlayerColor(color);
+        gameController.notifyInterfaceNeedBeUpdated();
     }
 }

@@ -24,4 +24,6 @@ public interface GameController<S extends GameState<S, A>, A extends GameAction<
     int getPlayerId();
 
     List<GamePlayer> getGamePlayers();
+
+    void notifyInterfaceNeedBeUpdated();
 }
