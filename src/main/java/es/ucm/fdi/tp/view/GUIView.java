@@ -37,6 +37,6 @@ public abstract class GUIView<S extends GameState<S,A>, A extends GameAction<S,A
     }
 
     public abstract void update(S state);
-    public abstract void setMessageViewer(MessageViewer<S,A> infoViewer);
+    public abstract void setMessageViewer(MessageViewer<S,A> messageViewer);
     public abstract void setGameController(GameController<S, A> gameCtrl);
 }

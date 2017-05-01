@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import es.ucm.fdi.tp.base.model.GameAction;
+import es.ucm.fdi.tp.base.model.GameError;
 import es.ucm.fdi.tp.base.model.GamePlayer;
 import es.ucm.fdi.tp.base.model.GameState;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
     public void start() {
         currentState = initState;
         notifyGameHasStarted();
+        notifyInfo();
     }
 
     public void stop() {
@@ -40,11 +42,17 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
 
     //NOTIFICAR DE ERRORES,
     public void execute(A action) {
-        // apply move
-        currentState = action.applyTo(currentState);
-        notifyGameHasChanged();
-        if (currentState.isFinished()) {
-            notifyGameHasFinished();
+        if (action.getPlayerNumber() == currentState.getTurn()) {
+            // apply move
+            currentState = action.applyTo(currentState);
+            notifyGameHasChanged();
+            if (currentState.isFinished()) {
+                notifyGameHasFinished();
+            }else {
+                notifyInfo();
+            }
+        }else {
+            notifyErrorHasOcurred("No es tu turno jugador " +action.getPlayerNumber());
         }
     }
 
@@ -61,7 +69,7 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
     }
 
     private void notifyGameHasStarted() {
-        GameEvent<S, A> event = new GameEvent<>(GameEvent.EventType.Start, null, currentState, null, "¡¡¡¡¡La partida ha empezado!!!!!!");
+        GameEvent<S, A> event = new GameEvent<>(GameEvent.EventType.Start, null, currentState, null, "¡La partida ha empezado!");
         for (GameObserver gameObserver : observers) {
             gameObserver.notifyEvent(event);
         }
@@ -74,8 +82,22 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
         }
     }
 
+    private void notifyInfo() {
+        GameEvent<S, A> event = new GameEvent<>(EventType.Info, null, currentState, null,  null);
+        for (GameObserver gameObserver : observers) {
+            gameObserver.notifyEvent(event);
+        }
+    }
+
+    private void notifyErrorHasOcurred(String message) {
+        GameEvent<S, A> event = new GameEvent<>(EventType.Error, null, currentState, new GameError(message), null);
+        for (GameObserver gameObserver : observers) {
+            gameObserver.notifyEvent(event);
+        }
+    }
+
     private void notifyGameHasFinished() {
-        GameEvent<S, A> event = new GameEvent<>(GameEvent.EventType.Stop, null, currentState, null, "El juego ha terminado ");
+        GameEvent<S, A> event = new GameEvent<>(GameEvent.EventType.Stop, null, currentState, null, "El juego ha terminado, Ganador " +currentState.getWinner());
         for (GameObserver gameObserver : observers) {
             gameObserver.notifyEvent(event);
         }

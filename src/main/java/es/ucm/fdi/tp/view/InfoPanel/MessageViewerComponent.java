@@ -12,12 +12,16 @@ public class MessageViewerComponent<S extends GameState<S, A>, A extends GameAct
 
     @Override
     public void addContent(String msg) {
-
+        if (textArea.getText().length() > 0) {
+            textArea.append(System.getProperty("line.separator") + msg);
+        }else {
+            textArea.append(msg);
+        }
     }
 
     @Override
     public void setContent(String msg) {
-
+        textArea.append(msg);
     }
 
     @Override

@@ -18,6 +18,7 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
 
     private GUIView<S, A> rectBoardView;
     private GameController gameController;
+    private InfoView infoView;
 
     public GameContainer(GUIView<S, A> gameView, GameController gameController, GameObservable<S, A> game) {
         this.setTitle("Jugador " +gameController.getPlayerId());
@@ -36,37 +37,36 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
         this.add(controlPanel, BorderLayout.NORTH);
         this.add(rectBoardView, BorderLayout.CENTER);
 
-        InfoView infoView = new InfoView();
+        infoView = new InfoView();
         infoView.setOpaque(true);
         this.add(infoView, BorderLayout.EAST);
 
     }
 
     //Color.decode("#eeeeee");
-//    public void createGameView(GameName gameType) {
-//        ControlPanel controlPanel = new ControlPanel(gameController);
-//        controlPanel.setBackground(Color.decode("#eeeeee"));
-//        controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.X_AXIS));
-//        this.getContentPane().add(controlPanel, BorderLayout.NORTH);
-////
-////        rectBoardView = new TttView(gameController, (TttState)state);
-////        System.out.println();
-////        rectBoardView.setOpaque(true);
-////        this.window.getContentPane().add(rectBoardView, BorderLayout.CENTER);
-//    }
 
     @Override
     public void notifyEvent(GameEvent<S, A> e) {
         switch (e.getType()) {
             case Start:
-                System.out.println(e.toString() + System.getProperty("line.separator"));
+                infoView.setContent(e.toString());
                 break;
             case Change:
                 rectBoardView.update(e.getState());
 //                System.out.print("After action: " + System.getProperty("line.separator") + e.getState() + System.getProperty("line.separator"));
                 break;
+            case Info:
+                if (e.getState().getTurn() == gameController.getPlayerId()) {
+                    infoView.addContent("Tu turno");
+                }else {
+                    infoView.addContent("Turno del jugador " + e.getState().getTurn());
+                }
+                break;
+            case Error:
+                infoView.addContent(e.getError().getMessage());
+                break;
             case Stop:
-                System.out.println(e.toString() + System.getProperty("line.separator"));
+                infoView.addContent(e.toString());
                 break;
             default:
                 break;
@@ -80,8 +80,8 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
     }
 
     @Override
-    public void setMessageViewer(MessageViewer infoViewer) {
-
+    public void setMessageViewer(MessageViewer messageViewer) {
+        infoView.setMessageViewer(messageViewer);
     }
 
     @Override

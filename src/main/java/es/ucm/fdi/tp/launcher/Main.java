@@ -107,30 +107,21 @@ public class Main {
                     @Override
                     public void run() {
                         UIController gameControllerPlayer0 = new UIController(0, null, null, gameTable);
-                       GUIView<S, A> guiView = (GUIView<S, A>) createGUIGame(GameName.TTT.name(), gameControllerPlayer0, gameTable.getState());
+                        GUIView<S, A> guiViewPlayer0 = (GUIView<S, A>)createGUIGame(GameName.TTT.name(), gameControllerPlayer0, gameTable.getState());
+                        GUIView<S, A> containerViewPlayer0 = new GameContainer<>(guiViewPlayer0, gameControllerPlayer0, gameTable);
+                        containerViewPlayer0.enableWindowMode();
 
-                        GUIView<S, A> container = new GameContainer<>(guiView, gameControllerPlayer0, gameTable);
-                        container.enableWindowMode();
-
-/**
                         UIController gameControllerPlayer1 = new UIController(1, null, null, gameTable);
-                        GameContainer containerView1 = new GameContainer(gameTable.getState());
-                        containerView1.createGameView(GameName.TTT, gameControllerPlayer0);
-                        gameTable.addObserver(containerView1);
-                        containerView1.setVisible(true);
-
-                        GameContainer containerView2 = new GameContainer(gameTable.getState());
-                        containerView2.createGameView(GameName.TTT, gameControllerPlayer1);
-                        containerView2.setEnabled(false);
-                        gameTable.addObserver(containerView2);
-                        containerView2.setVisible(true);*/
+                        GUIView<S, A> guiViewPlayer1 = (GUIView<S, A>)createGUIGame(GameName.TTT.name(), gameControllerPlayer1, gameTable.getState());
+                        GUIView<S, A> containerViewPlayer1 = new GameContainer<>(guiViewPlayer1, gameControllerPlayer1, gameTable);
+                        containerViewPlayer1.enableWindowMode();
                     }
                 });
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 System.out.println("Some error occurred while creating the view..." + e.getMessage() + " --- ");
             } catch (InvocationTargetException e) {
-                System.out.println("Some error occurred while creating the view..." +e.getCause());
+                System.out.println("Some error occurred while creating the view..." + e.getCause());
             }
 
             try {
@@ -144,7 +135,7 @@ public class Main {
                 e.printStackTrace();
                 System.out.println("Some error occurred while creating the view..." + e.getMessage() + " --- ");
             } catch (InvocationTargetException e) {
-                System.out.println("Some error occurred while creating the view..." +e.getCause());
+                System.out.println("Some error occurred while creating the view..." + e.getCause());
             }
 
         } else {
@@ -217,10 +208,10 @@ public class Main {
         players.add(createPlayer("MANUAL", "Jugador 0"));
         players.add(createPlayer("MANUAL", "Jugador 1"));
         /**for (int i = 0; i < gameSettingsData.length; i++) {
-            System.out.println(System.getProperty("line.separator") + "Jugador " + (i + 1) + " Introduce tu nombre:");
-            String playerName = scanner.nextLine();
-            players.add(createPlayer(gameSettingsData[1], playerName));
-        }*/
+         System.out.println(System.getProperty("line.separator") + "Jugador " + (i + 1) + " Introduce tu nombre:");
+         String playerName = scanner.nextLine();
+         players.add(createPlayer(gameSettingsData[1], playerName));
+         }*/
         return players;
     }
 }

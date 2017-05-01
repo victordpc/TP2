@@ -11,7 +11,7 @@ import java.awt.*;
 
 public abstract class MessageViewer<S extends GameState<S, A>, A extends GameAction<S, A>> extends GUIView {
 
-    private JTextArea textArea;
+    protected JTextArea textArea;
     private S state;
     public MessageViewer() {
         this.state = state;
@@ -19,18 +19,17 @@ public abstract class MessageViewer<S extends GameState<S, A>, A extends GameAct
     }
 
     private void initGUI() {
-        textArea = new JTextArea("Status Message");
+        textArea = new JTextArea(15, 20);
         textArea.setLineWrap(true);
         textArea.setEditable(false);
 
         JScrollPane scrollPane = new JScrollPane(textArea);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setPreferredSize(new Dimension(150, 150));
-        Border borderLayout = new TitledBorder("") {
+        scrollPane.setPreferredSize(new Dimension(200, 200));
+        Border borderLayout = new TitledBorder("Status Messages") {
             private Insets customInsets = new Insets(20, 10, 10, 10);
-
-            public Insets getCustomInsets() {
+            public Insets getBorderInsets(Component c) {
                 return customInsets;
             }
         };

@@ -13,7 +13,7 @@ import static com.sun.tools.internal.xjc.reader.Ring.add;
 
 public class InfoView<S extends GameState<S, A>, A extends GameAction<S, A>> extends GUIView {
 
-    MessageViewer messageViewer;
+    private MessageViewer messageViewer;
 
     public InfoView() {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -25,18 +25,25 @@ public class InfoView<S extends GameState<S, A>, A extends GameAction<S, A>> ext
         add(messageViewer);
     }
 
+    public void addContent(String message) {
+        messageViewer.addContent(message);
+    }
+
+    public void setContent(String message) {
+        messageViewer.setContent(message);
+    }
+
     @Override
     public void update(GameState state) {
 
     }
 
     @Override
-    public void setMessageViewer(MessageViewer infoViewer) {
-
+    public void setMessageViewer(MessageViewer messageViewer) {
+        this.messageViewer = messageViewer;
     }
 
     @Override
-    public void setGameController(GameController gameCtrl) {
+    public void setGameController(GameController gameCtrl) {}
 
-    }
 }
