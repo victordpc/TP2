@@ -21,19 +21,15 @@ public class MessageViewerComponent<S extends GameState<S, A>, A extends GameAct
 
     @Override
     public void setContent(String msg) {
-        textArea.append(msg);
+        textArea.setText(msg);
     }
 
     @Override
-    public void update(GameState state) {
-
-    }
+    public void update(GameState state) {}
 
     @Override
     public void setMessageViewer(MessageViewer infoViewer) {}
 
     @Override
-    public void setGameController(GameController gameCtrl) {
-
-    }
+    public void setGameController(GameController gameCtrl) {}
 }

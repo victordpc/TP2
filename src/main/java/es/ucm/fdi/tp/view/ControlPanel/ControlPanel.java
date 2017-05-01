@@ -37,7 +37,7 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
         RandomMove,
         SmartMove,
         Restart,
-        Exit
+        Stop
     }
 
     public ControlPanel(GameController gameController) {
@@ -75,11 +75,13 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
         JButton exitButton = new JButton();
         ImageIcon exitIcon = new ImageIcon(getClass().getResource(EXIT_ICON_PATH));
         exitButton.setIcon(exitIcon);
-        exitButton.setActionCommand("Exit");
+        exitButton.setActionCommand("Stop");
         exitButton.addActionListener(this);
         toolBar.add(exitButton);
         toolBar.addSeparator(); //añade un separador
 
+        JLabel playerModeLabel = new JLabel("Player Mode: ");
+        toolBar.add(playerModeLabel);
         JComboBox playerModeList = new JComboBox(playerModes);
         playerModeList.setActionCommand("ComboBoxEvent");
         playerModeList.addActionListener(this);
@@ -102,19 +104,13 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
     }
 
     @Override
-    public void update(GameState state) {
-
-    }
+    public void update(GameState state) {}
 
     @Override
-    public void setMessageViewer(MessageViewer infoViewer) {
-
-    }
+    public void setMessageViewer(MessageViewer infoViewer) {}
 
     @Override
-    public void setGameController(GameController gameCtrl) {
-
-    }
+    public void setGameController(GameController gameCtrl) {}
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -133,8 +129,10 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
                     gameController.makeSmartMove();
                     break;
                 case Restart:
+                    gameController.restartGame();
                     break;
-                case Exit:
+                case Stop:
+                    gameController.stopGame();
                     break;
             }
         }

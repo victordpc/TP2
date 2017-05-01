@@ -22,9 +22,7 @@ public class TttView extends RectBoardView<TttState, TttAction> {
         this.setLayout(new BorderLayout());
         jBoard = new JBoard() {
             @Override
-            protected void keyTyped(int keyCode) {
-
-            }
+            protected void keyTyped(int keyCode) {}
 
             @Override
             protected void mouseClicked(int row, int col, int clickCount, int mouseButton) {
@@ -78,14 +76,10 @@ public class TttView extends RectBoardView<TttState, TttAction> {
     }
 
     @Override
-    public void setMessageViewer(MessageViewer<TttState, TttAction> infoViewer) {
-
-    }
+    public void setMessageViewer(MessageViewer<TttState, TttAction> infoViewer) {}
 
     @Override
-    public void setGameController(GameController<TttState, TttAction> gameCtrl) {
-
-    }
+    public void setGameController(GameController<TttState, TttAction> gameCtrl) {}
 
     @Override
     protected int getNumCols() {
@@ -115,7 +109,5 @@ public class TttView extends RectBoardView<TttState, TttAction> {
     }
 
     @Override
-    protected void keyTyped(int keyCode) {
-
-    }
+    protected void keyTyped(int keyCode) {}
 }

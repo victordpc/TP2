@@ -63,6 +63,11 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
         }
     }
 
+    public void restartGame() {
+        currentState = initState;
+        notifyGameHasStarted();
+    }
+
     public S getState() {
         return currentState;
     }

@@ -52,17 +52,16 @@ public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>>
 
     @Override
     public void restartGame() {
-
+        gameTable.restartGame();
     }
 
     @Override
     public void stopGame() {
-
+        System.exit(0);
     }
 
     @Override
     public void handleEvent(GameEvent<S, A> e) {
-
     }
 
     @Override

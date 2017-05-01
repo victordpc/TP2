@@ -40,16 +40,15 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
         infoView = new InfoView(gameController.getGamePlayers(), this);
         infoView.setOpaque(true);
         this.add(infoView, BorderLayout.EAST);
-
     }
-
-    //Color.decode("#eeeeee");
 
     @Override
     public void notifyEvent(GameEvent<S, A> e) {
         switch (e.getType()) {
             case Start:
                 infoView.setContent(e.toString());
+                rectBoardView.update(e.getState());
+                infoView.repaintPlayersInfoViewer();
                 break;
             case Change:
                 rectBoardView.update(e.getState());
