@@ -17,5 +17,7 @@ public enum PlayerType {
      */
     CONSOLE,
 
-    SMART;
+    SMART,
+
+    RANDOM
 }

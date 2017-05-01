@@ -7,6 +7,7 @@ import es.ucm.fdi.tp.base.player.AiAlgorithm;
 import es.ucm.fdi.tp.base.player.MinMax;
 import es.ucm.fdi.tp.mvc.GameEvent;
 import es.ucm.fdi.tp.mvc.GameTable;
+import es.ucm.fdi.tp.mvc.PlayerType;
 import es.ucm.fdi.tp.view.Controller.GameController;
 
 import java.util.List;
@@ -21,8 +22,10 @@ public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>>
     private GameTable<S, A> gameTable;
     private Random random = new Random();
     protected AiAlgorithm algorithm;
+    private PlayerType playerType;
 
     public UIController(int playerId, GamePlayer randomPlayer, GamePlayer smartPlayer, GameTable<S, A> gameTable) {
+        this.playerType = PlayerType.MANUAL;
         this.playerId = playerId;
         this.randomPlayer = randomPlayer;
         this.smartPlayer = smartPlayer;
@@ -75,5 +78,15 @@ public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>>
     @Override
     public void notifyInterfaceNeedBeUpdated() {
         gameTable.notifyInterfaceNeedBeUpdated();
+    }
+
+    @Override
+    public PlayerType getPlayerMode() {
+        return playerType;
+    }
+
+    @Override
+    public void changePlayerMode(PlayerType playerMode) {
+        this.playerType = playerMode;
     }
 }

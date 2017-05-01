@@ -4,6 +4,7 @@ import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GamePlayer;
 import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.mvc.GameEvent;
+import es.ucm.fdi.tp.mvc.PlayerType;
 
 import java.util.List;
 
@@ -26,4 +27,7 @@ public interface GameController<S extends GameState<S, A>, A extends GameAction<
     List<GamePlayer> getGamePlayers();
 
     void notifyInterfaceNeedBeUpdated();
+
+    PlayerType getPlayerMode();
+    void changePlayerMode(PlayerType playerMode);
 }

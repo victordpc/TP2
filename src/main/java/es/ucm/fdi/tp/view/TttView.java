@@ -28,7 +28,9 @@ public class TttView extends RectBoardView<TttState, TttAction> {
 
             @Override
             protected void mouseClicked(int row, int col, int clickCount, int mouseButton) {
-                TttView.this.mouseClicked(row, col, clickCount, mouseButton);
+                if (isEnabled()) {
+                    TttView.this.mouseClicked(row, col, clickCount, mouseButton);
+                }
             }
 
             @Override
@@ -62,6 +64,11 @@ public class TttView extends RectBoardView<TttState, TttAction> {
             }
         };
         this.add(jBoard, BorderLayout.CENTER);
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        jBoard.setEnabled(enabled);
     }
 
     @Override
