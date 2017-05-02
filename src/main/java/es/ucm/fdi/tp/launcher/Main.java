@@ -109,15 +109,12 @@ public class Main {
             SwingUtilities.invokeAndWait(new Runnable() {
                 @Override
                 public void run() {
-                    UIController gameControllerPlayer0 = new UIController(0, null, null, gameTable);
-                    GUIView<S, A> guiViewPlayer0 = (GUIView<S, A>) createGUIGame(gameName, gameControllerPlayer0, gameTable.getState());
-                    GUIView<S, A> containerViewPlayer0 = new GameContainer<>(guiViewPlayer0, gameControllerPlayer0, gameTable);
-                    containerViewPlayer0.enableWindowMode();
-
-                    UIController gameControllerPlayer1 = new UIController(1, null, null, gameTable);
-                    GUIView<S, A> guiViewPlayer1 = (GUIView<S, A>) createGUIGame(gameName, gameControllerPlayer1, gameTable.getState());
-                    GUIView<S, A> containerViewPlayer1 = new GameContainer<>(guiViewPlayer1, gameControllerPlayer1, gameTable);
-                    containerViewPlayer1.enableWindowMode();
+                    for (int i = 0; i < players.size(); i++) {
+                        UIController gameControllerPlayer = new UIController(i, gameTable);
+                        GUIView<S, A> guiViewPlayer = (GUIView<S, A>) createGUIGame(gameName, gameControllerPlayer, gameTable.getState());
+                        GUIView<S, A> containerViewPlayer = new GameContainer<>(guiViewPlayer, gameControllerPlayer, gameTable);
+                        containerViewPlayer.enableWindowMode();
+                    }
                 }
             });
         } catch (InterruptedException e) {

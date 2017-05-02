@@ -15,20 +15,15 @@ import java.util.Random;
 
 public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>> implements GameController<S, A> {
 
-    private GamePlayer randomPlayer;
-    private GamePlayer smartPlayer;
-    //    private PlayerMode playerMode;
     private int playerId;
     private GameTable<S, A> gameTable;
     private Random random = new Random();
     protected AiAlgorithm algorithm;
     private PlayerType playerType;
 
-    public UIController(int playerId, GamePlayer randomPlayer, GamePlayer smartPlayer, GameTable<S, A> gameTable) {
-        this.playerType = PlayerType.MANUAL;
+    public UIController(int playerId, GameTable<S, A> gameTable) {
         this.playerId = playerId;
-        this.randomPlayer = randomPlayer;
-        this.smartPlayer = smartPlayer;
+        this.playerType = PlayerType.MANUAL;
         this.gameTable = gameTable;
         this.algorithm = new MinMax(5);
     }
