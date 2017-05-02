@@ -90,7 +90,7 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
 
     protected Color getBackground(int row, int col) {
         if ((originCoordinates != null) && (originCoordinates.isEqual(new Coordinate(row, col)))) {
-            return Color.BLUE;
+            return Color.decode("#9E9E9E");
         }else {
             return (row + col) % 2 == 0 ? Color.decode("#934d1a") : Color.decode("#d8b283");
         }
@@ -118,19 +118,21 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
 
     @Override
     protected void mouseClicked(int row, int col, int clickCount, int mouseButton) {
-        if (!state.isPositionEmpty(row, col)) {
-            if (originCoordinates == null) {
-                originCoordinates = new Coordinate(row, col);
-                playersInfoObserver.postMessage("Haz click en una celda destino");
-                jBoard.repaint();
-            }
-        }else if (originCoordinates != null) {
-            WolfAndSheepAction newAction = state.isValidMoveForPlayerInCoordinate(originCoordinates, gameController.getPlayerId(), row, col);
-            if (newAction != null) {
-                gameController.makeManualMove(newAction);
-                originCoordinates = null;
-            }else {
-                playersInfoObserver.postMessage("Movimiento no válido");
+        if (gameController.getPlayerId() == state.getTurn()) {
+            if (!state.isPositionEmpty(row, col)) {
+                if (originCoordinates == null) {
+                    originCoordinates = new Coordinate(row, col);
+                    playersInfoObserver.postMessage("Haz click en una celda destino");
+                    jBoard.repaint();
+                }
+            } else if (originCoordinates != null) {
+                WolfAndSheepAction newAction = state.isValidMoveForPlayerInCoordinate(originCoordinates, gameController.getPlayerId(), row, col);
+                if (newAction != null) {
+                    gameController.makeManualMove(newAction);
+                    originCoordinates = null;
+                } else {
+                    playersInfoObserver.postMessage("Movimiento no válido");
+                }
             }
         }
     }

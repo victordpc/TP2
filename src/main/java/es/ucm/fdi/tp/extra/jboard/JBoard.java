@@ -14,7 +14,7 @@ import javax.swing.SwingUtilities;
 public abstract class JBoard extends JComponent {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -4518722262994516431L;
 
@@ -87,7 +87,7 @@ public abstract class JBoard extends JComponent {
 				JBoard.this.mouseClicked(row, col, e.getClickCount(), mouseButton);
 			}
 		});
-		
+
 		_SEPARATOR = getSepPixels();
 		if ( _SEPARATOR < 0 ) _SEPARATOR = 0;
 

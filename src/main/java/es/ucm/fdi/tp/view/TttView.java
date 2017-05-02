@@ -86,7 +86,7 @@ public class TttView extends RectBoardView<TttState, TttAction> {
     public void setGameController(GameController<TttState, TttAction> gameCtrl) {}
 
     protected Color getBackground(int row, int col) {
-        return (row + col) % 2 == 0 ? Color.decode("#212121") : Color.decode("#9E9E9E");
+        return  Color.decode("#424242");//(row + col) % 2 == 0 ? Color.decode("#1565C0") : Color.decode("#64B5F6");
     }
 
     @Override
