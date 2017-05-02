@@ -22,8 +22,10 @@ public class ConsoleController<S extends GameState<S, A>, A extends GameAction<S
         game.start();
         while (!game.getState().isFinished()) {
             // request move
-            A action = players.get(game.getState().getTurn()).requestAction(game.getState());
+            int playerTurnId = game.getState().getTurn();
+            A action = players.get(playerTurnId).requestAction(game.getState());
             game.execute(action);
+            int nextTurn = game.getState().getTurn();
         }
         System.out.print("Ganador: " +players.get(game.getState().getWinner()).getName() + System.getProperty("line.separator"));
     }
