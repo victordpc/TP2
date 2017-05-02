@@ -51,11 +51,11 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
         if (action.getPlayerNumber() == currentState.getTurn()) {
             // apply move
             currentState = action.applyTo(currentState);
-            notifyGameHasChanged();
             if (currentState.isFinished()) {
                 notifyGameHasChanged();
                 notifyGameHasFinished();
             }else {
+                notifyGameHasChanged();
                 notifyInfo();
             }
         }else {

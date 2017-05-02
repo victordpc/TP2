@@ -35,13 +35,17 @@ public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>>
 
     @Override
     public void makeManualMove(A a) {
-        gameTable.execute(a);
+        if (!gameTable.getState().isFinished()) {
+            gameTable.execute(a);
+        }
     }
 
     @Override
     public void makeRandomMove() {
-        List<A> valid = gameTable.getState().validActions(playerId);
-        gameTable.execute(valid.get(random.nextInt(valid.size())));
+        if (!gameTable.getState().isFinished()) {
+            List<A> valid = gameTable.getState().validActions(playerId);
+            gameTable.execute(valid.get(random.nextInt(valid.size())));
+        }
     }
 
     @Override
