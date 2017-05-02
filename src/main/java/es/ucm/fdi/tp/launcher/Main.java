@@ -21,6 +21,7 @@ import es.ucm.fdi.tp.view.*;
 import es.ucm.fdi.tp.view.Controller.ConsoleController;
 import es.ucm.fdi.tp.view.Controller.GameController;
 import es.ucm.fdi.tp.view.Controller.UIController;
+import es.ucm.fdi.tp.was.WolfAndSheepAction;
 import es.ucm.fdi.tp.was.WolfAndSheepState;
 
 import javax.swing.*;
@@ -42,7 +43,7 @@ public class Main {
     public static void main(String[] args) {
         scanner = new Scanner(System.in);
         System.out.println("Introduce nuevo juego: " + System.getProperty("line.separator"));
-        String[] arguments = {"ttt", "gui", "manual", "manual"};//scanner.nextLine().trim().split(" ");
+        String[] arguments = {"was", "gui", "manual", "manual"};//scanner.nextLine().trim().split(" ");
 
         if (arguments.length < 2) {
             System.err.println("El número de parámetros introducidos, es menor al número de parámetros mínimos requeridos para iniciar una partida.");
@@ -96,52 +97,53 @@ public class Main {
     }
 
     private static <S extends GameState<S, A>, A extends GameAction<S, A>> GUIView<S, A> createGUIGame(String gameName, GameController<S, A> gameController, GameState<S, A> gameState) {
+        if (gameName.equalsIgnoreCase(GameName.TTT.toString())) {
+            return (GUIView<S, A>) new TttView(gameController, (TttState) gameState);
+        } else if (gameName.equalsIgnoreCase(GameName.WAS.toString())) {
+            return (GUIView<S, A>) new WasView(gameController, (WolfAndSheepState) gameState);
+        }
         return (GUIView<S, A>) new TttView(gameController, (TttState) gameState);
     }
 
-    private static <S extends GameState<S, A>, A extends GameAction<S, A>> void startGUIMode(String gameType, GameTable<S, A> gameTable, String playerModes[]) {
+    private static <S extends GameState<S, A>, A extends GameAction<S, A>> void startGUIMode(String gameName, GameTable<S, A> gameTable, String playerModes[]) {
         List<GamePlayer> players = loadPlayers(playerModes);
         gameTable.setGamePlayers(players);
-        if (gameType.equalsIgnoreCase(GameName.TTT.toString())) {
-            try {
-                SwingUtilities.invokeAndWait(new Runnable() {
-                    @Override
-                    public void run() {
-                        UIController gameControllerPlayer0 = new UIController(0, null, null, gameTable);
-                        GUIView<S, A> guiViewPlayer0 = (GUIView<S, A>)createGUIGame(GameName.TTT.name(), gameControllerPlayer0, gameTable.getState());
-                        GUIView<S, A> containerViewPlayer0 = new GameContainer<>(guiViewPlayer0, gameControllerPlayer0, gameTable);
-                        containerViewPlayer0.enableWindowMode();
+        try {
+            SwingUtilities.invokeAndWait(new Runnable() {
+                @Override
+                public void run() {
+                    UIController gameControllerPlayer0 = new UIController(0, null, null, gameTable);
+                    GUIView<S, A> guiViewPlayer0 = (GUIView<S, A>) createGUIGame(gameName, gameControllerPlayer0, gameTable.getState());
+                    GUIView<S, A> containerViewPlayer0 = new GameContainer<>(guiViewPlayer0, gameControllerPlayer0, gameTable);
+                    containerViewPlayer0.enableWindowMode();
 
-                        UIController gameControllerPlayer1 = new UIController(1, null, null, gameTable);
-                        GUIView<S, A> guiViewPlayer1 = (GUIView<S, A>)createGUIGame(GameName.TTT.name(), gameControllerPlayer1, gameTable.getState());
-                        GUIView<S, A> containerViewPlayer1 = new GameContainer<>(guiViewPlayer1, gameControllerPlayer1, gameTable);
-                        containerViewPlayer1.enableWindowMode();
-                    }
-                });
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                System.out.println("Some error occurred while creating the view..." + e.getMessage() + " --- ");
-            } catch (InvocationTargetException e) {
-                System.out.println("Some error occurred while creating the view..." + e.getMessage());
-            }
-
-            try {
-                SwingUtilities.invokeAndWait(new Runnable() {
-                    @Override
-                    public void run() {
-                        gameTable.start();
-                    }
-                });
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                System.out.println("Some error occurred while creating the view..." + e.getMessage() + " --- ");
-            } catch (InvocationTargetException e) {
-                System.out.println("Some error occurred while creating the view..." + e.getCause());
-            }
-
-        } else {
-
+                    UIController gameControllerPlayer1 = new UIController(1, null, null, gameTable);
+                    GUIView<S, A> guiViewPlayer1 = (GUIView<S, A>) createGUIGame(gameName, gameControllerPlayer1, gameTable.getState());
+                    GUIView<S, A> containerViewPlayer1 = new GameContainer<>(guiViewPlayer1, gameControllerPlayer1, gameTable);
+                    containerViewPlayer1.enableWindowMode();
+                }
+            });
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            System.out.println("Some error occurred while creating the view..." + e.getMessage() + " --- ");
+        } catch (InvocationTargetException e) {
+            System.out.println("Some error occurred while creating the view..." + e.getMessage());
         }
+
+        try {
+            SwingUtilities.invokeAndWait(new Runnable() {
+                @Override
+                public void run() {
+                    gameTable.start();
+                }
+            });
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            System.out.println("Some error occurred while creating the view..." + e.getMessage() + " --- ");
+        } catch (InvocationTargetException e) {
+            System.out.println("Some error occurred while creating the view..." + e.getCause());
+        }
+
     }
 
     private static GamePlayer createPlayer(String playerType, String playerName) {

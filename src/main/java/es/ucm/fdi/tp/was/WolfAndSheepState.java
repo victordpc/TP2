@@ -19,7 +19,6 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 	 */
 	private final boolean finished;
 
-
 	/**
 	 * Representación del tablero.
 	 */
@@ -131,7 +130,7 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 	 * @param column Colummna en la que se encuentra la posición a evaular.
 	 * @return Devuelve true en caso de que la posición evaluada esté vacía y false en caso contrario.
 	 */
-	private boolean isPositionEmpty(int row, int column) {
+	public boolean isPositionEmpty(int row, int column) {
 		return board[row][column] == EMPTY;
 	}
 
@@ -216,6 +215,10 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 		return sheepCoordinatesList;
 	}
 
+	public int at(int row, int col) {
+		return board[row][col];
+	}
+
 	/**
 	 * @return a copy of the board
 	 */
@@ -226,38 +229,6 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 		}
 		return copy;
 	}
-
-	/**
-	 * Devuelve si la partida ha terminado o no.
-	 * @return Devuelve true en caso de que la partida halla acabado, en caso contrario false.
-	 */
-
-	public WolfAndSheepAction isValidMove(int playerNumber, int row, int colum) {
-		WolfAndSheepAction wolfAndSheepAction = null;
-		if (isFinished()) {
-			return wolfAndSheepAction;
-		}
-		if ((row >= 0 && row <= 7) && (colum >= 0 && colum <= 7)) {
-			if (isPositionEmpty(row, colum)) {
-				Coordinate wolfCoordinate = getWolfCoordinates();
-				if ((row == wolfCoordinate.getX() - 1) && (colum == wolfCoordinate.getY() - 1)) {
-					wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, wolfCoordinate.getX(),
-							wolfCoordinate.getY());
-				} else if ((row == wolfCoordinate.getX() + 1) && (colum == wolfCoordinate.getY() - 1)) {
-					wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, wolfCoordinate.getX(),
-							wolfCoordinate.getY());
-				} else if ((row == wolfCoordinate.getX() - 1) && (colum == wolfCoordinate.getY() + 1) ) {
-					wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, wolfCoordinate.getX(),
-							wolfCoordinate.getY());
-				} else if ((row == wolfCoordinate.getX() + 1) && (colum == wolfCoordinate.getY() + 1)) {
-					wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, wolfCoordinate.getX(),
-							wolfCoordinate.getY());
-				}
-
-			}
-		}
-		return wolfAndSheepAction;
-}
 	
 	@Override
 	public boolean isFinished() {
