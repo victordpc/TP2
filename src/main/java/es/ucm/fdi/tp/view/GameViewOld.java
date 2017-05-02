@@ -2,9 +2,11 @@ package es.ucm.fdi.tp.view;
 
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GameState;
+import es.ucm.fdi.tp.mvc.GameObserver;
+
 import javax.swing.*;
 
-public abstract class GameView<S extends GameState<S, A>, A extends GameAction<S, A>> extends JComponent {
+public abstract class GameViewOld<S extends GameState<S, A>, A extends GameAction<S, A>> extends JComponent implements GameObserver<S, A>{
 
     protected JFrame window;
 

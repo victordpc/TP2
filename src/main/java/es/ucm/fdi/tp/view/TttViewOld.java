@@ -2,23 +2,23 @@ package es.ucm.fdi.tp.view;
 
 import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.extra.jboard.JBoard;
+import es.ucm.fdi.tp.mvc.GameEvent;
 import es.ucm.fdi.tp.ttt.TttAction;
 import es.ucm.fdi.tp.ttt.TttState;
 
-public class TttView extends RectBoardGameView<TttState, TttAction> {
+public class TttViewOld extends RectBoardGameViewOld<TttState, TttAction> {
 
-	private GameController gameController;
+	private static final long serialVersionUID = -1587997524896273708L;
+	private GameController<TttState, TttAction> gameController;
 	private boolean isEnabled;
 	private int rows;
 	private int colums;
 	private int player;
 
-	public TttView(int numPlayer) {
+	public TttViewOld(int numPlayer) {
 		this.player = numPlayer;
-	}
-
-	@Override
-	public void update(GameState state) {
+		this.setTitle("Ejemplo");
+		this.setSize(340, 200);
 
 	}
 
@@ -54,6 +54,18 @@ public class TttView extends RectBoardGameView<TttState, TttAction> {
 
 	@Override
 	protected void createBoardData(int numOfRows, int numOfCols) {
+	}
+
+	@Override
+	public void update(TttState state) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyEvent(GameEvent<TttState, TttAction> e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

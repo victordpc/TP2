@@ -2,13 +2,14 @@ package es.ucm.fdi.tp.view;
 
 import es.ucm.fdi.tp.was.WolfAndSheepState;
 import es.ucm.fdi.tp.base.model.GameState;
+import es.ucm.fdi.tp.mvc.GameEvent;
 import es.ucm.fdi.tp.was.WolfAndSheepAction;;
 
-public class WasView extends RectBoardGameView<WolfAndSheepState, WolfAndSheepAction> {
+public class WasViewOld extends RectBoardGameViewOld<WolfAndSheepState, WolfAndSheepAction> {
 
 	private int player;
 
-	public WasView(int numPlayer) {
+	public WasViewOld(int numPlayer) {
 		this.player = numPlayer;
 	}
 
@@ -49,15 +50,21 @@ public class WasView extends RectBoardGameView<WolfAndSheepState, WolfAndSheepAc
 	}
 
 	@Override
-	public void update(GameState state) {
+	public void setController(GameController gameController) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void setController(GameController gameController) {
+	public void update(WolfAndSheepState state) {
 		// TODO Auto-generated method stub
+		
+	}
 
+	@Override
+	public void notifyEvent(GameEvent<WolfAndSheepState, WolfAndSheepAction> e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
