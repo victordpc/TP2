@@ -92,7 +92,7 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
         if ((originCoordinates != null) && (originCoordinates.isEqual(new Coordinate(row, col)))) {
             return Color.BLUE;
         }else {
-            return (row + col) % 2 == 0 ? Color.LIGHT_GRAY : Color.BLACK;
+            return (row + col) % 2 == 0 ? Color.decode("#934d1a") : Color.decode("#d8b283");
         }
     }
 

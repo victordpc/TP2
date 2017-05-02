@@ -66,9 +66,7 @@ public class TttView extends RectBoardView<TttState, TttAction> {
     }
 
     @Override
-    protected void setPlayersInfoObserver(PlayersInfoObserver observer) {
-
-    }
+    protected void setPlayersInfoObserver(PlayersInfoObserver observer) {}
 
     @Override
     public void setEnabled(boolean enabled) {
@@ -86,6 +84,10 @@ public class TttView extends RectBoardView<TttState, TttAction> {
 
     @Override
     public void setGameController(GameController<TttState, TttAction> gameCtrl) {}
+
+    protected Color getBackground(int row, int col) {
+        return (row + col) % 2 == 0 ? Color.decode("#212121") : Color.decode("#9E9E9E");
+    }
 
     @Override
     protected int getNumCols() {
