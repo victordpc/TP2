@@ -22,7 +22,6 @@ import es.ucm.fdi.tp.view.Controller.ConsoleController;
 import es.ucm.fdi.tp.view.Controller.GameController;
 import es.ucm.fdi.tp.view.Controller.UIController;
 import es.ucm.fdi.tp.was.WolfAndSheepState;
-
 import javax.swing.*;
 
 public class Main {
@@ -31,7 +30,6 @@ public class Main {
      * Scanner que se encargará de recoger los comandos del usuario.
      */
     private static Scanner scanner;
-
 
     /**
      * Inicializa el modelo.
@@ -42,7 +40,7 @@ public class Main {
     public static void main(String[] args) {
         scanner = new Scanner(System.in);
         System.out.println("Introduce nuevo juego: " + System.getProperty("line.separator"));
-        String[] arguments = scanner.nextLine().trim().split(" "); // {"was", "gui", "manual", "manual"};
+        String[] arguments = scanner.nextLine().trim().split(" ");
 
         if (arguments.length < 2) {
             System.err.println("El número de parámetros introducidos, es menor al número de parámetros mínimos requeridos para iniciar una partida.");
@@ -142,7 +140,6 @@ public class Main {
         } catch (InvocationTargetException e) {
             System.out.println("Some error occurred while creating the view..." + e.getCause());
         }
-
     }
 
     private static GamePlayer createPlayer(String playerType, String playerName) {
@@ -164,8 +161,6 @@ public class Main {
      */
     private static List<GamePlayer> loadPlayers(String[] gameSettingsData) {
         List<GamePlayer> players = new ArrayList<>();
-//        players.add(createPlayer("MANUAL", "Jugador 0"));
-//        players.add(createPlayer("MANUAL", "Jugador 1"));
         for (int i = 0; i < gameSettingsData.length; i++) {
             System.out.println(System.getProperty("line.separator") + "Jugador " + (i + 1) + " Introduce tu nombre:");
             String playerName = scanner.nextLine();

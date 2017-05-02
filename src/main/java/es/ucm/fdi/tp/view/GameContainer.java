@@ -23,7 +23,8 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
     private InfoView infoView;
 
     public GameContainer(GUIView<S, A> gameView, GameController gameController, GameObservable<S, A> game) {
-        this.setTitle("Jugador " +gameController.getPlayerId());
+        GamePlayer gamePlayer = (GamePlayer)gameController.getGamePlayers().get(gameController.getPlayerId());
+        this.setTitle("Jugador " +gamePlayer.getName());
         this.setLayout(new BorderLayout(5, 5));
         this.rectBoardView = gameView;
         ((RectBoardView)rectBoardView).setPlayersInfoObserver(this);

@@ -116,7 +116,8 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
     }
 
     private void notifyGameHasFinished() {
-        GameEvent<S, A> event = new GameEvent<>(GameEvent.EventType.Stop, null, currentState, null, "El juego ha terminado, Ganador " +currentState.getWinner());
+        GamePlayer winner = getGamePlayers().get(currentState.getWinner());
+        GameEvent<S, A> event = new GameEvent<>(GameEvent.EventType.Stop, null, currentState, null, "El juego ha terminado, Ganador " +winner.getName());
         for (GameObserver gameObserver : observers) {
             gameObserver.notifyEvent(event);
         }

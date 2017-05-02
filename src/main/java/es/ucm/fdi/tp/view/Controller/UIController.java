@@ -50,8 +50,10 @@ public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>>
 
     @Override
     public void makeSmartMove() {
-        A action = algorithm.chooseAction(playerId, gameTable.getState());
-        gameTable.execute(action);
+        if (!gameTable.getState().isFinished()) {
+            A action = algorithm.chooseAction(playerId, gameTable.getState());
+            gameTable.execute(action);
+        }
     }
 
     @Override
