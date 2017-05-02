@@ -88,6 +88,14 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
     @Override
     public void setGameController(GameController<WolfAndSheepState, WolfAndSheepAction> gameCtrl) {}
 
+    protected Color getBackground(int row, int col) {
+        if ((originCoordinates != null) && (originCoordinates.isEqual(new Coordinate(row, col)))) {
+            return Color.BLUE;
+        }else {
+            return (row + col) % 2 == 0 ? Color.LIGHT_GRAY : Color.BLACK;
+        }
+    }
+
     @Override
     protected int getNumCols() {
         return 8;
@@ -114,6 +122,7 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
             if (originCoordinates == null) {
                 originCoordinates = new Coordinate(row, col);
                 playersInfoObserver.postMessage("Haz click en una celda destino");
+                jBoard.repaint();
             }
         }else if (originCoordinates != null) {
             WolfAndSheepAction newAction = state.isValidMoveForPlayerInCoordinate(originCoordinates, gameController.getPlayerId(), row, col);
@@ -131,6 +140,7 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
         if ((gameController.getPlayerMode() == PlayerType.MANUAL) && (originCoordinates != null) && (keyCode == KeyEvent.VK_ESCAPE)) {
             playersInfoObserver.postMessage("Selección cancelada, elige una nueva ficha de origen");
             originCoordinates = null;
+            jBoard.repaint();
         }
     }
 }

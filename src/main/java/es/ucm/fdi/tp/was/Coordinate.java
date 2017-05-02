@@ -33,4 +33,8 @@ public class Coordinate {
 	public int getY() {
 		return y;
 	}
+
+	public boolean isEqual(Coordinate testCoordinate) {
+		return (this.x == testCoordinate.getX()) && (this.y == testCoordinate.getY());
+	}
 }
