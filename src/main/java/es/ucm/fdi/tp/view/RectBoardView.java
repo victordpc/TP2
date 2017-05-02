@@ -4,6 +4,7 @@ import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.extra.jboard.JBoard;
 import es.ucm.fdi.tp.view.Controller.GameController;
+import es.ucm.fdi.tp.view.InfoPanel.PlayersInfoObserver;
 
 import javax.swing.*;
 import java.awt.*;
@@ -66,6 +67,7 @@ public abstract class RectBoardView<S extends GameState<S, A>, A extends GameAct
         this.add(jBoard, BorderLayout.CENTER);
     }
 
+    protected abstract void setPlayersInfoObserver(PlayersInfoObserver observer);
 
     protected JBoard.Shape getShape(int player) {
         return JBoard.Shape.CIRCLE;

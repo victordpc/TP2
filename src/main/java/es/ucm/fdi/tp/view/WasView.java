@@ -1,8 +1,10 @@
 package es.ucm.fdi.tp.view;
 
 import es.ucm.fdi.tp.extra.jboard.JBoard;
+import es.ucm.fdi.tp.mvc.PlayerType;
 import es.ucm.fdi.tp.view.Controller.GameController;
 import es.ucm.fdi.tp.view.InfoPanel.MessageViewer;
+import es.ucm.fdi.tp.view.InfoPanel.PlayersInfoObserver;
 import es.ucm.fdi.tp.was.Coordinate;
 import es.ucm.fdi.tp.was.WolfAndSheepAction;
 import es.ucm.fdi.tp.was.WolfAndSheepState;
@@ -14,7 +16,7 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
 
     private JComponent jBoard;
     private Coordinate originCoordinates;
-
+    private PlayersInfoObserver playersInfoObserver;
 
     public WasView(GameController gameController, WolfAndSheepState state) {
         super(gameController, state);
@@ -69,6 +71,10 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
         this.add(jBoard, BorderLayout.CENTER);
     }
 
+    @Override
+    protected void setPlayersInfoObserver(PlayersInfoObserver observer) {
+        this.playersInfoObserver = observer;
+    }
 
     @Override
     public void update(WolfAndSheepState state) {
@@ -92,11 +98,6 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
         return 8;
     }
 
-//    @Override
-//    protected Color getBackground(int row, int col) {
-//        return super.getBackground(row, col);
-//    }
-
     @Override
     protected Integer getPosition(int row, int col) {
         int shape = state.at(row, col);
@@ -112,19 +113,23 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
         if (!state.isPositionEmpty(row, col)) {
             if (originCoordinates == null) {
                 originCoordinates = new Coordinate(row, col);
+                playersInfoObserver.postMessage("Haz click en una celda destino");
             }
         }else if (originCoordinates != null) {
             WolfAndSheepAction newAction = state.isValidMoveForPlayerInCoordinate(originCoordinates, gameController.getPlayerId(), row, col);
             if (newAction != null) {
                 gameController.makeManualMove(newAction);
                 originCoordinates = null;
+            }else {
+                playersInfoObserver.postMessage("Movimiento no válido");
             }
         }
     }
 
     @Override
     protected void keyTyped(int keyCode) {
-        if (originCoordinates != null && keyCode == KeyEvent.VK_ESCAPE) {
+        if ((gameController.getPlayerMode() == PlayerType.MANUAL) && (originCoordinates != null) && (keyCode == KeyEvent.VK_ESCAPE)) {
+            playersInfoObserver.postMessage("Selección cancelada, elige una nueva ficha de origen");
             originCoordinates = null;
         }
     }

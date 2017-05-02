@@ -16,6 +16,8 @@ import java.awt.*;
 
 public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>> extends GUIView implements GameObserver<S, A>, PlayersInfoObserver, ControlPanelObservable {
 
+
+
     private GUIView<S, A> rectBoardView;
     private GameController gameController;
     private InfoView infoView;
@@ -24,6 +26,7 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
         this.setTitle("Jugador " +gameController.getPlayerId());
         this.setLayout(new BorderLayout(5, 5));
         this.rectBoardView = gameView;
+        ((RectBoardView)rectBoardView).setPlayersInfoObserver(this);
         this.gameController = gameController;
         game.addObserver(this);
         initGUI();
@@ -80,9 +83,7 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
     }
 
     @Override
-    public void update(GameState state) {
-
-    }
+    public void update(GameState state) {}
 
     @Override
     public void setMessageViewer(MessageViewer messageViewer) {
@@ -97,6 +98,11 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
         GamePlayer gamePlayer =  (GamePlayer)gameController.getGamePlayers().get(player);
         gamePlayer.setPlayerColor(color);
         gameController.notifyInterfaceNeedBeUpdated();
+    }
+
+    @Override
+    public void postMessage(String message) {
+        infoView.addContent(message);
     }
 
     @Override

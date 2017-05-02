@@ -5,6 +5,7 @@ import es.ucm.fdi.tp.ttt.TttAction;
 import es.ucm.fdi.tp.ttt.TttState;
 import es.ucm.fdi.tp.view.Controller.GameController;
 import es.ucm.fdi.tp.view.InfoPanel.MessageViewer;
+import es.ucm.fdi.tp.view.InfoPanel.PlayersInfoObserver;
 
 import javax.swing.*;
 import java.awt.*;
@@ -62,6 +63,11 @@ public class TttView extends RectBoardView<TttState, TttAction> {
             }
         };
         this.add(jBoard, BorderLayout.CENTER);
+    }
+
+    @Override
+    protected void setPlayersInfoObserver(PlayersInfoObserver observer) {
+
     }
 
     @Override

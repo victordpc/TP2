@@ -4,4 +4,5 @@ import java.awt.*;
 
 public interface PlayersInfoObserver {
     void colorChanged(int player, Color color);
+    void postMessage(String message);
 }
