@@ -5,7 +5,12 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 @SuppressWarnings("serial")
 public class BoardExample extends JFrame {
@@ -15,7 +20,7 @@ public class BoardExample extends JFrame {
 
 	private JTextField rows;
 	private JTextField cols;
-	
+
 	private int numOfRows;
 	private int numOfCols;
 
@@ -114,7 +119,6 @@ public class BoardExample extends JFrame {
 		this.setVisible(true);
 	}
 
-
 	private void createBoardData(int numOfRows, int numOfCols) {
 		this.numOfRows = numOfRows;
 		this.numOfCols = numOfCols;
@@ -142,6 +146,7 @@ public class BoardExample extends JFrame {
 
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				new BoardExample();
 			}

@@ -1,8 +1,9 @@
 package es.ucm.fdi.tp.view.InfoPanel;
 
-import java.awt.*;
+import java.awt.Color;
 
 public interface PlayersInfoObserver {
-    void colorChanged(int player, Color color);
-    void postMessage(String message);
+	void colorChanged(int player, Color color);
+
+	void postMessage(String message);
 }

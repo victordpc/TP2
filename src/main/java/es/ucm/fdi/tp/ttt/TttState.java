@@ -14,6 +14,7 @@ public class TttState extends GameState<TttState, TttAction> {
 	final static int EMPTY = -1;
 
 	private static final long serialVersionUID = -2641387354190472377L;
+
 	public static boolean isDraw(int[][] board) {
 		boolean empty = false;
 		for (int i = 0; !empty && i < board.length; i++) {
@@ -25,6 +26,7 @@ public class TttState extends GameState<TttState, TttAction> {
 		}
 		return !empty;
 	}
+
 	public static boolean isWinner(int[][] board, int playerNumber) {
 		boolean won = false;
 		for (int i = 0; !won && i < board.length; i++) {
@@ -35,6 +37,7 @@ public class TttState extends GameState<TttState, TttAction> {
 		}
 		return won || isWinner(board, playerNumber, 0, 0, 1, 1) || isWinner(board, playerNumber, 2, 0, -1, 1);
 	}
+
 	private static boolean isWinner(int[][] board, int playerNumber, int x0, int y0, int dx, int dy) {
 		boolean won = true;
 		for (int i = 0, x = x0, y = y0; won && i < board.length; i++, x += dx, y += dy) {

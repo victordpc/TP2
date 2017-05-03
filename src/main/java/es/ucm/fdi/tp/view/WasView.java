@@ -14,22 +14,28 @@ import java.awt.event.KeyEvent;
 
 public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction> {
 
-    private JComponent jBoard;
-    private Coordinate originCoordinates;
-    private PlayersInfoObserver playersInfoObserver;
+	private static final long serialVersionUID = -3136654431325082580L;
+	private JComponent jBoard;
+	private Coordinate originCoordinates;
+	private PlayersInfoObserver playersInfoObserver;
 
     public WasView(GameController gameController, WolfAndSheepState state) {
         super(gameController, state);
         initUI();
     }
 
-    private void initUI() {
-        this.setLayout(new BorderLayout());
-        jBoard = new JBoard() {
-            @Override
-            protected void keyTyped(int keyCode) {
-                WasView.this.keyTyped(keyCode);
-            }
+	private void initUI() {
+		this.setLayout(new BorderLayout());
+		jBoard = new JBoard() {
+			/**
+			 *
+			 */
+			private static final long serialVersionUID = -4597273473901577673L;
+
+			@Override
+			protected void keyTyped(int keyCode) {
+				WasView.this.keyTyped(keyCode);
+			}
 
             @Override
             protected void mouseClicked(int row, int col, int clickCount, int mouseButton) {
