@@ -126,11 +126,13 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
                     jBoard.repaint();
                 }
             } else if (originCoordinates != null) {
-                WolfAndSheepAction newAction = state.isValidMoveForPlayerInCoordinate(originCoordinates, gameController.getPlayerId(), row, col);
-                if (newAction != null) {
-                    gameController.makeManualMove(newAction);
-                    originCoordinates = null;
-                } else {
+               if (state.at(originCoordinates.getX(), originCoordinates.getY()) == gameController.getPlayerId()) {
+                   WolfAndSheepAction newAction = state.isValidMoveForPlayerInCoordinate(originCoordinates, gameController.getPlayerId(), row, col);
+                   if (newAction != null) {
+                       gameController.makeManualMove(newAction);
+                       originCoordinates = null;
+                   }
+               } else {
                     playersInfoObserver.postMessage("Movimiento no válido");
                 }
             }
