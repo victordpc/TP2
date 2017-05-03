@@ -8,7 +8,9 @@ public class GameError extends RuntimeException {
 
 	/**
 	 * A game error
-	 * @param msg that describes the error
+	 * 
+	 * @param msg
+	 *            that describes the error
 	 */
 	public GameError(String msg) {
 		super(msg);
@@ -16,8 +18,11 @@ public class GameError extends RuntimeException {
 
 	/**
 	 * A game error that wraps an exception
-	 * @param msg that describes the error
-	 * @param cause of the error
+	 * 
+	 * @param msg
+	 *            that describes the error
+	 * @param cause
+	 *            of the error
 	 */
 	public GameError(String msg, Throwable cause) {
 		super(msg, cause);

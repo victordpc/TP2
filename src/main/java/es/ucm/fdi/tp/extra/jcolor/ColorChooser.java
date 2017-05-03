@@ -72,16 +72,18 @@ public class ColorChooser extends JDialog {
 	public void openDialog() {
 		setVisible(true);
 	}
-	
+
 	// override the createRootPane inherited by the JDialog, to create the
 	// rootPane.
 	// create functionality to close the window when "Escape" button is pressed
+	@Override
 	public JRootPane createRootPane() {
 		JRootPane rootPane = new JRootPane();
 		KeyStroke stroke = KeyStroke.getKeyStroke("ESCAPE");
 
 		@SuppressWarnings("serial")
 		Action action = new AbstractAction() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				closeDialog();
 			}

@@ -1,6 +1,6 @@
 package es.ucm.fdi.tp.base.console;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;

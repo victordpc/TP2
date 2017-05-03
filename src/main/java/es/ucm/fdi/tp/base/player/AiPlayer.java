@@ -1,10 +1,10 @@
 package es.ucm.fdi.tp.base.player;
 
+import java.awt.Color;
+
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GamePlayer;
 import es.ucm.fdi.tp.base.model.GameState;
-
-import java.awt.*;
 
 /**
  * A player that can play any game.
@@ -51,6 +51,5 @@ public class AiPlayer implements GamePlayer {
 	public void setPlayerColor(Color newColor) {
 		this.playerColor = newColor;
 	}
-
 
 }
