@@ -19,6 +19,7 @@ import es.ucm.fdi.tp.mvc.GameName;
 import es.ucm.fdi.tp.mvc.GameTable;
 import es.ucm.fdi.tp.mvc.GameType;
 import es.ucm.fdi.tp.mvc.PlayerType;
+import es.ucm.fdi.tp.ttt.TttAction;
 import es.ucm.fdi.tp.ttt.TttState;
 import es.ucm.fdi.tp.view.ConsoleView;
 import es.ucm.fdi.tp.view.GUIView;
@@ -28,6 +29,7 @@ import es.ucm.fdi.tp.view.WasView;
 import es.ucm.fdi.tp.view.Controller.ConsoleController;
 import es.ucm.fdi.tp.view.Controller.GameController;
 import es.ucm.fdi.tp.view.Controller.UIController;
+import es.ucm.fdi.tp.was.WolfAndSheepAction;
 import es.ucm.fdi.tp.was.WolfAndSheepState;
 
 public class Main {
@@ -41,35 +43,36 @@ public class Main {
 	 * Inicializa el modelo. Las vistas. Los controladores. controller.init();
 	 */
 	public static void main(String[] args) {
-		scanner = new Scanner(System.in);
-		System.out.println("Introduce nuevo juego: " + System.getProperty("line.separator"));
-		String[] arguments = scanner.nextLine().trim().split(" "); // {"was",
-																	// "gui",
-																	// "manual",
-																	// "manual"};//
+		// scanner = new Scanner(System.in);
+		// System.out.println("Introduce nuevo juego: " +
+		// System.getProperty("line.separator"));
+		// String[] arguments = scanner.nextLine().trim().split(" "); // {"was",
+		// // "gui",
+		// // "manual",
+		// // "manual"};//
 
-		if (arguments.length < 2) {
+		if (args.length < 2) {
 			System.err.println(
 					"El número de parámetros introducidos, es menor al número de parámetros mínimos requeridos para iniciar una partida.");
 			System.exit(1);
 		}
 
-		GameTable gameTable = createGameModel(arguments[0]);
+		GameTable gameTable = createGameModel(args[0]);
 		if (gameTable == null) {
 			System.err.println("Juego inválido");
 			System.exit(1);
 		}
 
-		String[] otherArgs = Arrays.copyOfRange(arguments, 2, arguments.length);
-		if (arguments[1].equalsIgnoreCase(GameType.CONSOLE.toString())) {
+		String[] otherArgs = Arrays.copyOfRange(args, 2, args.length);
+		if (args[1].equalsIgnoreCase(GameType.CONSOLE.toString())) {
 			startConsoleMode(gameTable, otherArgs);
-		} else if (arguments[1].equalsIgnoreCase(GameType.GUI.toString())) {
-			startGUIMode(arguments[0], gameTable, otherArgs);
+		} else if (args[1].equalsIgnoreCase(GameType.GUI.toString())) {
+			startGUIMode(args[0], gameTable, otherArgs);
 		} else {
-			System.err.println("Invalid view mode: " + arguments[1]);
+			System.err.println("Invalid view mode: " + args[1]);
 			System.exit(1);
 		}
-		scanner.close();
+		// scanner.close();
 	}
 
 	private static GameTable<?, ?> createGameModel(String gameTye) {
@@ -99,23 +102,25 @@ public class Main {
 			GameTable<S, A> gameTable, String playerModes[]) {
 		List<GamePlayer> players = loadPlayers(playerModes);
 		gameTable.setGamePlayers(players);
-		new ConsoleView(gameTable);
-		new ConsoleController(players, gameTable).run();
+		new ConsoleView<S, A>(gameTable);
+		new ConsoleController<S, A>(players, gameTable).run();
 	}
 
 	private static <S extends GameState<S, A>, A extends GameAction<S, A>> GUIView<S, A> createGUIGame(String gameName,
 			GameController<S, A> gameController, GameState<S, A> gameState) {
 		if (gameName.equalsIgnoreCase(GameName.TTT.toString())) {
-			return (GUIView<S, A>) new TttView(gameController, (TttState) gameState);
+			return (GUIView<S, A>) new TttView((GameController<TttState, TttAction>) gameController,
+					(TttState) gameState);
 		} else if (gameName.equalsIgnoreCase(GameName.WAS.toString())) {
-			return (GUIView<S, A>) new WasView(gameController, (WolfAndSheepState) gameState);
+			return (GUIView<S, A>) new WasView((GameController<WolfAndSheepState, WolfAndSheepAction>) gameController,
+					(WolfAndSheepState) gameState);
 		}
-		return (GUIView<S, A>) new TttView(gameController, (TttState) gameState);
+		return (GUIView<S, A>) new TttView((GameController<TttState, TttAction>) gameController, (TttState) gameState);
 	}
 
 	private static <S extends GameState<S, A>, A extends GameAction<S, A>> void startGUIMode(String gameName,
 			GameTable<S, A> gameTable, String playerModes[]) {
-		List<GamePlayer> players = loadPlayers(playerModes);
+		List<GamePlayer> players = loadGuiPlayers(gameTable);
 		if (gameName.equalsIgnoreCase(GameName.TTT.toString())) {
 			players.get(0).setPlayerColor(Color.decode("#FFEB3B"));
 			players.get(1).setPlayerColor(Color.decode("#F44336"));
@@ -129,10 +134,10 @@ public class Main {
 				@Override
 				public void run() {
 					for (int i = 0; i < players.size(); i++) {
-						UIController gameControllerPlayer = new UIController(i, gameTable);
+						UIController<S, A> gameControllerPlayer = new UIController<S, A>(i, gameTable);
 						GUIView<S, A> guiViewPlayer = createGUIGame(gameName, gameControllerPlayer,
 								gameTable.getState());
-						GUIView<S, A> containerViewPlayer = new GameContainer<>(guiViewPlayer, gameControllerPlayer,
+						GUIView<S, A> containerViewPlayer = new GameContainer<S, A>(guiViewPlayer, gameControllerPlayer,
 								gameTable);
 						containerViewPlayer.enableWindowMode();
 					}
@@ -190,6 +195,30 @@ public class Main {
 			System.out.println(System.getProperty("line.separator") + "Jugador " + (i + 1) + " Introduce tu nombre:");
 			String playerName = scanner.nextLine();
 			GamePlayer newPlayer = createPlayer(gameSettingsData[i], playerName);
+			newPlayer.join(i);
+			players.add(newPlayer);
+		}
+		return players;
+	}
+
+	/**
+	 * Crea los jugadores.
+	 *
+	 * @param gameTable
+	 *            commandos introducidos por el usuario.
+	 */
+	private static List<GamePlayer> loadGuiPlayers(GameTable gameTable) {
+		List<GamePlayer> players = new ArrayList<>();
+		/**
+		 * GamePlayer newPlayer = createPlayer("manual", "Player1");
+		 * newPlayer.join(0); players.add(newPlayer); newPlayer =
+		 * createPlayer("manual", "Player2"); newPlayer.join(1);
+		 * players.add(newPlayer);
+		 */
+		for (int i = 0; i < gameTable.getState().getPlayerCount(); i++) {
+			//System.out.println(System.getProperty("line.separator") + "Jugador " + (i + 1) + " Introduce tu nombre:");
+			String playerName = "Jugador" + i;
+			GamePlayer newPlayer = createPlayer(PlayerType.MANUAL.name(), playerName);
 			newPlayer.join(i);
 			players.add(newPlayer);
 		}
