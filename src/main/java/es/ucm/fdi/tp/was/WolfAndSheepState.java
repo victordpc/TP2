@@ -9,7 +9,7 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 
 	private static final long serialVersionUID = 1L;
 	/**
-
+	 * 
 	 * Contiene que jugador (1-2) le toca mover ficha.
 	 */
 	private final int turn;
@@ -18,7 +18,6 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 	 * Define si la partida ha terminado.
 	 */
 	private final boolean finished;
-
 
 	/**
 	 * Representación del tablero.
@@ -89,11 +88,18 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 
 	/**
 	 * Método que evalua si un movimiento es válido para un jugador
-	 * @param playerCoordinates La posición en el tablero en la que se encuentra el jugador.
-	 * @param playerNumber El turno del jugador al que evaluaremos si el movimiento es válido.
-	 * @param row La fila a que pretende moverse el jugador
-	 * @param colum La columna a que pretende moverse el jugador
-	 * @return devuelve una acción en caso de que el movimiento sea válido, si no, devuelve nulo.
+	 * 
+	 * @param playerCoordinates
+	 *            La posición en el tablero en la que se encuentra el jugador.
+	 * @param playerNumber
+	 *            El turno del jugador al que evaluaremos si el movimiento es
+	 *            válido.
+	 * @param row
+	 *            La fila a que pretende moverse el jugador
+	 * @param colum
+	 *            La columna a que pretende moverse el jugador
+	 * @return devuelve una acción en caso de que el movimiento sea válido, si
+	 *         no, devuelve nulo.
 	 */
 	public WolfAndSheepAction isValidMoveForPlayerInCoordinate(Coordinate playerCoordinates, int playerNumber, int row, int colum) {
 		if (isFinished()) {
@@ -103,21 +109,27 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 		WolfAndSheepAction wolfAndSheepAction = null;
 		if ((row >= 0 && row <= 7) && (colum >= 0 && colum <= 7)) {
 			if (isPositionEmpty(row, colum)) {
-				if(playerNumber == 0) {
+				if (playerNumber == 0) {
 					if ((row == playerCoordinates.getX() - 1) && (colum == playerCoordinates.getY() - 1)) {
-						wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, playerCoordinates.getX(), playerCoordinates.getY());
+						wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, playerCoordinates.getX(),
+								playerCoordinates.getY());
 					} else if ((row == playerCoordinates.getX() + 1) && (colum == playerCoordinates.getY() - 1)) {
-						wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, playerCoordinates.getX(), playerCoordinates.getY());
+						wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, playerCoordinates.getX(),
+								playerCoordinates.getY());
 					} else if ((row == playerCoordinates.getX() - 1) && (colum == playerCoordinates.getY() + 1)) {
-						wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, playerCoordinates.getX(), playerCoordinates.getY());
+						wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, playerCoordinates.getX(),
+								playerCoordinates.getY());
 					} else if ((row == playerCoordinates.getX() + 1) && (colum == playerCoordinates.getY() + 1)) {
-						wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, playerCoordinates.getX(), playerCoordinates.getY());
+						wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, playerCoordinates.getX(),
+								playerCoordinates.getY());
 					}
-				}else {
+				} else {
 					if ((row == playerCoordinates.getX() + 1) && (colum == playerCoordinates.getY() - 1)) {
-						wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, playerCoordinates.getX(), playerCoordinates.getY());
+						wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, playerCoordinates.getX(),
+								playerCoordinates.getY());
 					} else if ((row == playerCoordinates.getX() + 1) && (colum == playerCoordinates.getY() + 1)) {
-						wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, playerCoordinates.getX(), playerCoordinates.getY());
+						wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, playerCoordinates.getX(),
+								playerCoordinates.getY());
 					}
 				}
 			}
@@ -127,16 +139,21 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 
 	/**
 	 * Método que evalua si una determinada posición ene el tablero está vacía.
-	 * @param row Fila en la que se encuentra la posición a evaular.
-	 * @param column Colummna en la que se encuentra la posición a evaular.
-	 * @return Devuelve true en caso de que la posición evaluada esté vacía y false en caso contrario.
+	 * 
+	 * @param row
+	 *            Fila en la que se encuentra la posición a evaular.
+	 * @param column
+	 *            Colummna en la que se encuentra la posición a evaular.
+	 * @return Devuelve true en caso de que la posición evaluada esté vacía y
+	 *         false en caso contrario.
 	 */
-	private boolean isPositionEmpty(int row, int column) {
+	public boolean isPositionEmpty(int row, int column) {
 		return board[row][column] == EMPTY;
 	}
 
 	/**
 	 * Devuelve el turno
+	 * 
 	 * @return Devuelve el turno
 	 */
 	@Override
@@ -146,7 +163,9 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 
 	/**
 	 * Crea un listado de las acciones válidas para un determinado jugador
-	 * @param playerNumber Jugador al que se le van a evaluar las acciones.
+	 * 
+	 * @param playerNumber
+	 *            Jugador al que se le van a evaluar las acciones.
 	 * @return el listado de las acciones válidas para el jugador.
 	 */
 	@Override
@@ -172,7 +191,7 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 				for (int j = 0; j < dim; j++) {
 					int index = 0;
 					while (index < 4) {
-						WolfAndSheepAction wolfAndSheepAction = isValidMoveForPlayerInCoordinate(sheepCoordinatesList.get(index), playerNumber, i, j);								
+						WolfAndSheepAction wolfAndSheepAction = isValidMoveForPlayerInCoordinate(sheepCoordinatesList.get(index), playerNumber, i, j);
 						if (wolfAndSheepAction != null) {
 							validActions.add(wolfAndSheepAction);
 						}
@@ -184,8 +203,24 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 		return validActions;
 	}
 
+	public List<Coordinate> getValidMoves(int playerId, Coordinate coordinates) {
+		List<Coordinate> validMoves = new ArrayList<>();
+		if (finished) {
+			return validMoves;
+		}
+		for (int i = 0; i < dim; i++) {
+			for (int j = 0; j < dim; j++) {
+				if (isValidMoveForPlayerInCoordinate(coordinates, playerId, i, j) != null) {
+					validMoves.add(new Coordinate(i, j));
+				}
+			}
+		}
+		return validMoves;
+	}
+
 	/**
 	 * Analiza el tablero en busca de la posición del lobo.
+	 * 
 	 * @return Devuelve las coordenadas del lobo.
 	 */
 	private Coordinate getWolfCoordinates() {
@@ -202,7 +237,9 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 
 	/**
 	 * Analiza el tablero en busca de las posiciones de las ovejas.
-	 * @return devuelve un listado con las coordenas de todas las ovejas en el tablero.
+	 * 
+	 * @return devuelve un listado con las coordenas de todas las ovejas en el
+	 *         tablero.
 	 */
 	private List<Coordinate> getSheepsCoordinates() {
 		List<Coordinate> sheepCoordinatesList = new ArrayList<>();
@@ -216,6 +253,10 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 		return sheepCoordinatesList;
 	}
 
+	public int at(int row, int col) {
+		return board[row][col];
+	}
+
 	/**
 	 * @return a copy of the board
 	 */
@@ -227,38 +268,6 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 		return copy;
 	}
 
-	/**
-	 * Devuelve si la partida ha terminado o no.
-	 * @return Devuelve true en caso de que la partida halla acabado, en caso contrario false.
-	 */
-
-	public WolfAndSheepAction isValidMove(int playerNumber, int row, int colum) {
-		WolfAndSheepAction wolfAndSheepAction = null;
-		if (isFinished()) {
-			return wolfAndSheepAction;
-		}
-		if ((row >= 0 && row <= 7) && (colum >= 0 && colum <= 7)) {
-			if (isPositionEmpty(row, colum)) {
-				Coordinate wolfCoordinate = getWolfCoordinates();
-				if ((row == wolfCoordinate.getX() - 1) && (colum == wolfCoordinate.getY() - 1)) {
-					wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, wolfCoordinate.getX(),
-							wolfCoordinate.getY());
-				} else if ((row == wolfCoordinate.getX() + 1) && (colum == wolfCoordinate.getY() - 1)) {
-					wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, wolfCoordinate.getX(),
-							wolfCoordinate.getY());
-				} else if ((row == wolfCoordinate.getX() - 1) && (colum == wolfCoordinate.getY() + 1) ) {
-					wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, wolfCoordinate.getX(),
-							wolfCoordinate.getY());
-				} else if ((row == wolfCoordinate.getX() + 1) && (colum == wolfCoordinate.getY() + 1)) {
-					wolfAndSheepAction = new WolfAndSheepAction(playerNumber, row, colum, wolfCoordinate.getX(),
-							wolfCoordinate.getY());
-				}
-
-			}
-		}
-		return wolfAndSheepAction;
-}
-	
 	@Override
 	public boolean isFinished() {
 		return finished;
@@ -267,6 +276,7 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 
 	/**
 	 * Devuelve el ganador de la partida.
+	 * 
 	 * @return Devuelve el ganador de la partida.
 	 */
 	@Override
@@ -295,10 +305,15 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 
 	/**
 	 * Evalua si el jugador pasado por parámetro ha ganado.
-	 * @param board tablero actúal.
-	 * @param state Estado actúal de la partida.
-	 * @param playerNumber Jugador a evaluar.
-	 * @return Si el jugador ha ganado la partida devuelve true, en caso contrario false.
+	 * 
+	 * @param board
+	 *            tablero actúal.
+	 * @param state
+	 *            Estado actúal de la partida.
+	 * @param playerNumber
+	 *            Jugador a evaluar.
+	 * @return Si el jugador ha ganado la partida devuelve true, en caso
+	 *         contrario false.
 	 */
 	public static boolean isWinner(int[][] board, WolfAndSheepState state, int playerNumber) {
 		boolean won = false;
@@ -312,8 +327,5 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 		}
 		return won;
 	}
-
-
-
 
 }

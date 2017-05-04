@@ -1,60 +1,131 @@
 package es.ucm.fdi.tp.view;
 
-import es.ucm.fdi.tp.base.model.GameState;
+import java.awt.BorderLayout;
+import java.awt.Color;
+
+import javax.swing.JComponent;
+
 import es.ucm.fdi.tp.extra.jboard.JBoard;
 import es.ucm.fdi.tp.ttt.TttAction;
 import es.ucm.fdi.tp.ttt.TttState;
+import es.ucm.fdi.tp.view.Controller.GameController;
+import es.ucm.fdi.tp.view.InfoPanel.MessageViewer;
+import es.ucm.fdi.tp.view.InfoPanel.PlayersInfoObserver;
 
-public class TttView extends RectBoardGameView<TttState, TttAction> {
+public class TttView extends RectBoardView<TttState, TttAction> {
 
-    private GameController gameController;
-    private boolean isEnabled;
-    private int rows;
-    private int colums;
+	private JComponent jBoard;
 
-    public TttView(int rows, int colums) {
-        this.rows = rows;
-        this.colums = colums;
-    }
+	public TttView(GameController gameController, TttState state) {
+		super(gameController, state);
+		initUI();
+	}
 
-    @Override
-    public void update(GameState state) {
+	private void initUI() {
+		this.setLayout(new BorderLayout());
+		jBoard = new JBoard() {
+			@Override
+			protected void keyTyped(int keyCode) {
+			}
 
-    }
+			@Override
+			protected void mouseClicked(int row, int col, int clickCount, int mouseButton) {
+				if (isEnabled()) {
+					TttView.this.mouseClicked(row, col, clickCount, mouseButton);
+				}
+			}
 
-    @Override
-    public void setController(GameController gameController) {
-        this.gameController = gameController;
-    }
+			@Override
+			protected Shape getShape(int player) {
+				return TttView.this.getShape(player);
+			}
 
+			@Override
+			protected Color getColor(int player) {
+				return gameController.getGamePlayers().get(player).getPlayerColor();
+			}
 
+			@Override
+			protected Integer getPosition(int row, int col) {
+				return TttView.this.getPosition(row, col);
+			}
 
-    @Override
-    protected int getNumCols() {
-        return colums;
-    }
+			@Override
+			protected Color getBackground(int row, int col) {
+				return TttView.this.getBackground(row, col);
+			}
 
-    @Override
-    protected int getNumRows() {
-        return rows;
-    }
+			@Override
+			protected int getNumRows() {
+				return TttView.this.getNumRows();
+			}
 
-    @Override
-    protected Integer getPosition(int row, int col) {
-        return board[row][col];
-    }
+			@Override
+			protected int getNumCols() {
+				return TttView.this.getNumCols();
+			}
+		};
+		this.add(jBoard, BorderLayout.CENTER);
+	}
 
-    @Override
-    protected void mouseClicked(int row, int column, int clickCount, int mouseButton) {
+	@Override
+	protected void setPlayersInfoObserver(PlayersInfoObserver observer) {
+	}
 
-    }
+	@Override
+	public void setEnabled(boolean enabled) {
+		jBoard.setEnabled(enabled);
+	}
 
-    @Override
-    protected void keyTyped(int keyCode) {
+	@Override
+	public void update(TttState state) {
+		this.state = state;
+		jBoard.repaint();
+	}
 
-    }
+	@Override
+	public void setMessageViewer(MessageViewer<TttState, TttAction> infoViewer) {
+	}
 
-    @Override
-    protected void createBoardData(int numOfRows, int numOfCols) {}
+	@Override
+	public void setGameController(GameController<TttState, TttAction> gameCtrl) {
+	}
 
+	@Override
+	protected Color getBackground(int row, int col) {
+		return Color.decode("#424242");// (row + col) % 2 == 0 ?
+										// Color.decode("#1565C0") :
+										// Color.decode("#64B5F6");
+	}
+
+	@Override
+	protected int getNumCols() {
+		return 3;
+	}
+
+	@Override
+	protected int getNumRows() {
+		return 3;
+	}
+
+	@Override
+	protected Integer getPosition(int row, int col) {
+		int shape = state.at(row, col);
+		if (shape != -1) {
+			return shape;
+		} else {
+			return null;
+		}
+	}
+
+	/// QUE SE ILUMINEN LAS CASILLAS VÁLIDAS.
+	@Override
+	protected void mouseClicked(int row, int col, int clickCount, int mouseButton) {
+		TttAction action = new TttAction(gameController.getPlayerId(), row, col);
+		gameController.makeManualMove(action);
+	}
+
+	@Override
+	protected void keyTyped(int keyCode) {
+	}
 }

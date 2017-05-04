@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
@@ -14,7 +15,7 @@ import javax.swing.SwingUtilities;
 public abstract class JBoard extends JComponent {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -4518722262994516431L;
 
@@ -87,14 +88,16 @@ public abstract class JBoard extends JComponent {
 				JBoard.this.mouseClicked(row, col, e.getClickCount(), mouseButton);
 			}
 		});
-		
+
 		_SEPARATOR = getSepPixels();
-		if ( _SEPARATOR < 0 ) _SEPARATOR = 0;
+		if (_SEPARATOR < 0)
+			_SEPARATOR = 0;
 
 		this.setPreferredSize(new Dimension(400, 400));
 		repaint();
 	}
 
+	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		fillBoard(g);
@@ -122,8 +125,8 @@ public abstract class JBoard extends JComponent {
 		int x = col * _CELL_WIDTH;
 		int y = row * _CELL_HEIGHT;
 
-		g.setColor( getBackground(row, col));
-		g.fillRect(x + _SEPARATOR, y + _SEPARATOR, _CELL_WIDTH - 2*_SEPARATOR, _CELL_HEIGHT - 2*_SEPARATOR);
+		g.setColor(getBackground(row, col));
+		g.fillRect(x + _SEPARATOR, y + _SEPARATOR, _CELL_WIDTH - 2 * _SEPARATOR, _CELL_HEIGHT - 2 * _SEPARATOR);
 
 		Integer p = getPosition(row, col);
 
@@ -134,14 +137,18 @@ public abstract class JBoard extends JComponent {
 			g.setColor(c);
 			switch (s) {
 			case CIRCLE:
-				g.fillOval(x + _SEPARATOR+2, y + _SEPARATOR+2, _CELL_WIDTH - 2*_SEPARATOR-4, _CELL_HEIGHT - 2*_SEPARATOR-4);
+				g.fillOval(x + _SEPARATOR + 2, y + _SEPARATOR + 2, _CELL_WIDTH - 2 * _SEPARATOR - 4,
+						_CELL_HEIGHT - 2 * _SEPARATOR - 4);
 				g.setColor(Color.black);
-				g.drawOval(x + _SEPARATOR+2, y + _SEPARATOR+2, _CELL_WIDTH - 2*_SEPARATOR-4, _CELL_HEIGHT - 2*_SEPARATOR-4);
+				g.drawOval(x + _SEPARATOR + 2, y + _SEPARATOR + 2, _CELL_WIDTH - 2 * _SEPARATOR - 4,
+						_CELL_HEIGHT - 2 * _SEPARATOR - 4);
 				break;
 			case RECTANGLE:
-				g.fillRect(x + _SEPARATOR+2, y + _SEPARATOR+2, _CELL_WIDTH - 2*_SEPARATOR-4, _CELL_HEIGHT - 2*_SEPARATOR-4);
+				g.fillRect(x + _SEPARATOR + 2, y + _SEPARATOR + 2, _CELL_WIDTH - 2 * _SEPARATOR - 4,
+						_CELL_HEIGHT - 2 * _SEPARATOR - 4);
 				g.setColor(Color.black);
-				g.drawRect(x + _SEPARATOR+2, y + _SEPARATOR+2, _CELL_WIDTH - 2*_SEPARATOR-4, _CELL_HEIGHT - 2*_SEPARATOR-4);
+				g.drawRect(x + _SEPARATOR + 2, y + _SEPARATOR + 2, _CELL_WIDTH - 2 * _SEPARATOR - 4,
+						_CELL_HEIGHT - 2 * _SEPARATOR - 4);
 				break;
 			default:
 				break;

@@ -1,5 +1,6 @@
 package es.ucm.fdi.tp.base.console;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -18,6 +19,7 @@ public class ConsolePlayer implements GamePlayer {
 	private Scanner in;
 	private String name;
 	private int playerNumber;
+	private Color playerColor = Color.WHITE;
 
 	public ConsolePlayer(String name, Scanner in) {
 		this.name = name;
@@ -59,7 +61,6 @@ public class ConsolePlayer implements GamePlayer {
 			System.out.print("Please type your move index: ");
 			try {
 				int choice = in.nextInt();
-
 				if (choice == 0) {
 					// user wants to exit
 					System.out.println("Game exiting by request of " + name);
@@ -74,5 +75,15 @@ public class ConsolePlayer implements GamePlayer {
 			}
 		}
 		return action;
+	}
+
+	@Override
+	public Color getPlayerColor() {
+		return playerColor;
+	}
+
+	@Override
+	public void setPlayerColor(Color newColor) {
+		this.playerColor = newColor;
 	}
 }

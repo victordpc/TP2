@@ -9,7 +9,14 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellRenderer;
 
 @SuppressWarnings("serial")
@@ -88,8 +95,9 @@ public class ColorChooserExample extends JFrame {
 		});
 		ctrlPabel.add(addName);
 
-		mainPanel.add(new JLabel("Click on a row, in the table above, to chaneg its background color"), BorderLayout.PAGE_END);
-		
+		mainPanel.add(new JLabel("Click on a row, in the table above, to chaneg its background color"),
+				BorderLayout.PAGE_END);
+
 		mainPanel.setOpaque(true);
 		this.setContentPane(mainPanel);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -109,6 +117,7 @@ public class ColorChooserExample extends JFrame {
 
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				new ColorChooserExample();
 			}
