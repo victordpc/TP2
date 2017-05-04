@@ -63,7 +63,7 @@ public class Main {
             System.err.println("Invalid view mode: " + args[1]);
             System.exit(1);
         }
-        scanner.close();
+//        scanner.close();
     }
 
     private static GameTable<?, ?> createGameModel(String gameTye) {

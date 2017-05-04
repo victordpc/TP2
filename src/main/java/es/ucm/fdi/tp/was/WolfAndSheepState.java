@@ -101,8 +101,7 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 	 * @return devuelve una acción en caso de que el movimiento sea válido, si
 	 *         no, devuelve nulo.
 	 */
-	public WolfAndSheepAction isValidMoveForPlayerInCoordinate(Coordinate playerCoordinates, int playerNumber, int row,
-			int colum) {
+	public WolfAndSheepAction isValidMoveForPlayerInCoordinate(Coordinate playerCoordinates, int playerNumber, int row, int colum) {
 		if (isFinished()) {
 			return null;
 		}
@@ -180,8 +179,7 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 			Coordinate wolfCoordinates = getWolfCoordinates();
 			for (int i = 0; i < dim; i++) {
 				for (int j = 0; j < dim; j++) {
-					WolfAndSheepAction wolfAndSheepAction = isValidMoveForPlayerInCoordinate(wolfCoordinates,
-							playerNumber, i, j);
+					WolfAndSheepAction wolfAndSheepAction = isValidMoveForPlayerInCoordinate(wolfCoordinates, playerNumber, i, j);
 					if (wolfAndSheepAction != null) {
 						validActions.add(wolfAndSheepAction);
 					}
@@ -193,8 +191,7 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 				for (int j = 0; j < dim; j++) {
 					int index = 0;
 					while (index < 4) {
-						WolfAndSheepAction wolfAndSheepAction = isValidMoveForPlayerInCoordinate(
-								sheepCoordinatesList.get(index), playerNumber, i, j);
+						WolfAndSheepAction wolfAndSheepAction = isValidMoveForPlayerInCoordinate(sheepCoordinatesList.get(index), playerNumber, i, j);
 						if (wolfAndSheepAction != null) {
 							validActions.add(wolfAndSheepAction);
 						}
@@ -204,6 +201,21 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 			}
 		}
 		return validActions;
+	}
+
+	public List<Coordinate> getValidMoves(int playerId, Coordinate coordinates) {
+		List<Coordinate> validMoves = new ArrayList<>();
+		if (finished) {
+			return validMoves;
+		}
+		for (int i = 0; i < dim; i++) {
+			for (int j = 0; j < dim; j++) {
+				if (isValidMoveForPlayerInCoordinate(coordinates, playerId, i, j) != null) {
+					validMoves.add(new Coordinate(i, j));
+				}
+			}
+		}
+		return validMoves;
 	}
 
 	/**

@@ -11,6 +11,7 @@ import es.ucm.fdi.tp.was.WolfAndSheepState;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.List;
 
 public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction> {
 
@@ -18,6 +19,7 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
 	private JComponent jBoard;
 	private Coordinate originCoordinates;
 	private PlayersInfoObserver playersInfoObserver;
+    private List<Coordinate> validMoves;
 
     public WasView(GameController gameController, WolfAndSheepState state) {
         super(gameController, state);
@@ -97,6 +99,8 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
     protected Color getBackground(int row, int col) {
         if ((originCoordinates != null) && (originCoordinates.isEqual(new Coordinate(row, col)))) {
             return Color.decode("#9E9E9E");
+        }else if (validMoves != null && validMoves.size() > 0 && validMoves.contains(new Coordinate(row, col))){
+            return Color.YELLOW;
         }else {
             return (row + col) % 2 == 0 ? Color.decode("#934d1a") : Color.decode("#d8b283");
         }
@@ -129,6 +133,7 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
                 if (originCoordinates == null) {
                     originCoordinates = new Coordinate(row, col);
                     playersInfoObserver.postMessage("Haz click en una celda destino");
+                    validMoves = state.getValidMoves(gameController.getPlayerId(), originCoordinates);
                     jBoard.repaint();
                 }
             } else if (originCoordinates != null) {
@@ -137,6 +142,7 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
                    if (newAction != null) {
                        gameController.makeManualMove(newAction);
                        originCoordinates = null;
+                       validMoves = null;
                    }
                } else {
                     playersInfoObserver.postMessage("Movimiento no válido");
@@ -151,6 +157,8 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
             playersInfoObserver.postMessage("Selección cancelada, elige una nueva ficha de origen");
             originCoordinates = null;
             jBoard.repaint();
+            this.validMoves = null;
         }
     }
+
 }

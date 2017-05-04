@@ -1,5 +1,7 @@
 package es.ucm.fdi.tp.was;
 
+import javax.swing.plaf.synth.ColorType;
+
 public class Coordinate {
 	/**
 	 * Contiene la fila en la que se encuentra la ficha en el tablero
@@ -36,5 +38,13 @@ public class Coordinate {
 
 	public boolean isEqual(Coordinate testCoordinate) {
 		return (this.x == testCoordinate.getX()) && (this.y == testCoordinate.getY());
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (!(other instanceof Coordinate))
+			return false;
+		Coordinate testCoordinate = (Coordinate) other;
+		return ((this.x == testCoordinate.getX()) && (this.y == testCoordinate.getY()));
 	}
 }

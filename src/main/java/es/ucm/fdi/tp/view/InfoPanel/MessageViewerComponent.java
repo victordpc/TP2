@@ -25,14 +25,11 @@ public class MessageViewerComponent<S extends GameState<S, A>, A extends GameAct
 	}
 
 	@Override
-	public void update(GameState state) {
-	}
+	public void update(GameState state) {}
 
 	@Override
-	public void setMessageViewer(MessageViewer infoViewer) {
-	}
+	public void setMessageViewer(MessageViewer infoViewer) {}
 
 	@Override
-	public void setGameController(GameController gameCtrl) {
-	}
+	public void setGameController(GameController gameCtrl) {}
 }
