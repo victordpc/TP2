@@ -16,7 +16,7 @@ public abstract class GUIView<S extends GameState<S, A>, A extends GameAction<S,
 	public void enableWindowMode() {
 		this.window = new JFrame("");
 		this.window.setContentPane(this);
-		this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.window.setSize(600, 600);
 		window.setVisible(true);
 	}

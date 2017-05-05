@@ -39,10 +39,6 @@ public class Main {
      * controller.init();
      */
     public static void main(String[] args) {
-//        scanner = new Scanner(System.in);
-//        System.out.println("Introduce nuevo juego: " + System.getProperty("line.separator"));
-//        String[] arguments = scanner.nextLine().trim().split(" "); //{"was", "gui", "manual", "manual"};//
-
         if (args.length < 2) {
             System.err.println("El número de parámetros introducidos, es menor al número de parámetros mínimos requeridos para iniciar una partida.");
             System.exit(1);
@@ -63,7 +59,6 @@ public class Main {
             System.err.println("Invalid view mode: " + args[1]);
             System.exit(1);
         }
-//        scanner.close();
     }
 
     private static GameTable<?, ?> createGameModel(String gameTye) {
@@ -169,12 +164,6 @@ public class Main {
 	 */
 	private static List<GamePlayer> loadPlayers(String[] gameSettingsData) {
 		List<GamePlayer> players = new ArrayList<>();
-		/**
-		 * GamePlayer newPlayer = createPlayer("manual", "Player1");
-		 * newPlayer.join(0); players.add(newPlayer); newPlayer =
-		 * createPlayer("manual", "Player2"); newPlayer.join(1);
-		 * players.add(newPlayer);
-		 */
 		for (int i = 0; i < gameSettingsData.length; i++) {
 			System.out.println(System.getProperty("line.separator") + "Jugador " + (i + 1) + " Introduce tu nombre:");
 			String playerName = scanner.nextLine();
@@ -193,14 +182,7 @@ public class Main {
 	 */
 	private static List<GamePlayer> loadGuiPlayers(GameTable gameTable) {
 		List<GamePlayer> players = new ArrayList<>();
-		/**
-		 * GamePlayer newPlayer = createPlayer("manual", "Player1");
-		 * newPlayer.join(0); players.add(newPlayer); newPlayer =
-		 * createPlayer("manual", "Player2"); newPlayer.join(1);
-		 * players.add(newPlayer);
-		 */
 		for (int i = 0; i < gameTable.getState().getPlayerCount(); i++) {
-			//System.out.println(System.getProperty("line.separator") + "Jugador " + (i + 1) + " Introduce tu nombre:");
 			String playerName = "Jugador" + i;
 			GamePlayer newPlayer = createPlayer(PlayerType.MANUAL.name(), playerName);
 			newPlayer.join(i);

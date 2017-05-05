@@ -9,6 +9,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 
@@ -138,10 +139,19 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 				gameController.restartGame();
 				break;
 			case Stop:
-				gameController.stopGame();
+				if (preguntaCerrar()) {
+					gameController.stopGame();
+				}
 				break;
 			}
 		}
+	}
+
+	private boolean preguntaCerrar() {
+		int res = 0;
+		res = JOptionPane.showConfirmDialog(this, "¿Desea cerrar el juego?", "Confirme cierre",
+				JOptionPane.YES_NO_OPTION);
+		return res == JOptionPane.YES_OPTION;
 	}
 
 	private void setUpButtons(PlayerType playerType) {
@@ -151,9 +161,14 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 			randomMoveButton.setEnabled(true);
 			break;
 		case SMART:
+			smartMoveButton.setEnabled(false);
+			randomMoveButton.setEnabled(false);
+			gameController.makeSmartMove();
+			break;
 		case RANDOM:
 			smartMoveButton.setEnabled(false);
 			randomMoveButton.setEnabled(false);
+			gameController.makeRandomMove();
 			break;
 		default:
 			break;
