@@ -15,6 +15,8 @@ import javax.swing.SwingConstants;
 
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GameState;
+import es.ucm.fdi.tp.base.player.RandomPlayer;
+import es.ucm.fdi.tp.base.player.SmartPlayer;
 import es.ucm.fdi.tp.mvc.PlayerType;
 import es.ucm.fdi.tp.view.GUIView;
 import es.ucm.fdi.tp.view.Controller.GameController;
@@ -36,6 +38,10 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 	private JButton randomMoveButton;
 	private JButton smartMoveButton;
 
+	private RandomPlayer randPlayer;
+
+	private SmartPlayer smartPlayer;
+
 	private enum EventType {
 		ComboBoxEvent, ButtonEvent
 	}
@@ -44,9 +50,13 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 		RandomMove, SmartMove, Restart, Stop
 	}
 
-	public ControlPanel(GameController gameController) {
+	public ControlPanel(GameController gameController, int idJugador) {
 		this.gameController = gameController;
 		this.controlPanelObservables = new ArrayList<>();
+		this.randPlayer = new RandomPlayer("dummy");
+		this.randPlayer.join(idJugador);
+		this.smartPlayer = new SmartPlayer("dummy", 5);
+		this.smartPlayer.join(idJugador);
 		initGUI();
 	}
 
@@ -130,10 +140,10 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 		} else {
 			switch (ActionType.valueOf(e.getActionCommand())) {
 			case RandomMove:
-				gameController.makeRandomMove();
+				gameController.makeRandomMove(this.randPlayer);
 				break;
 			case SmartMove:
-				gameController.makeSmartMove();
+				gameController.makeSmartMove(this.smartPlayer);
 				break;
 			case Restart:
 				gameController.restartGame();
@@ -163,12 +173,12 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 		case SMART:
 			smartMoveButton.setEnabled(false);
 			randomMoveButton.setEnabled(false);
-			gameController.makeSmartMove();
+			gameController.makeSmartMove(this.smartPlayer);
 			break;
 		case RANDOM:
 			smartMoveButton.setEnabled(false);
 			randomMoveButton.setEnabled(false);
-			gameController.makeRandomMove();
+			gameController.makeRandomMove(this.randPlayer);
 			break;
 		default:
 			break;

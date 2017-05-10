@@ -14,14 +14,12 @@ import es.ucm.fdi.tp.mvc.PlayerType;
 
 public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>> implements GameController<S, A> {
 
-	private int playerId;
 	private GameTable<S, A> gameTable;
 	private Random random = new Random();
 	protected AiAlgorithm algorithm;
 	private PlayerType playerType;
 
-	public UIController(int playerId, GameTable<S, A> gameTable) {
-		this.playerId = playerId;
+	public UIController(GameTable<S, A> gameTable) {
 		this.playerType = PlayerType.MANUAL;
 		this.gameTable = gameTable;
 		this.algorithm = new MinMax(5);
@@ -35,18 +33,25 @@ public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>>
 	}
 
 	@Override
-	public void makeRandomMove() {
-		if (!gameTable.getState().isFinished()) {
-			List<A> valid = gameTable.getState().validActions(playerId);
+	public void makeRandomMove(GamePlayer jugador) {
+//		if (gameTable.getState().isFinished()) {
+//		} else if (gameTable.getState().getTurn() != jugador.getPlayerNumber()) {
+//			gameTable.noEsTuTurno(jugador.getPlayerNumber());
+//		} else 
+			if (!gameTable.getState().isFinished() && gameTable.getState().getTurn() == jugador.getPlayerNumber()) {
+			List<A> valid = gameTable.getState().validActions(jugador.getPlayerNumber());
 			gameTable.execute(valid.get(random.nextInt(valid.size())));
 		}
 	}
-	
 
 	@Override
-	public void makeSmartMove() {
-		if (!gameTable.getState().isFinished()) {
-			A action = algorithm.chooseAction(playerId, gameTable.getState());
+	public void makeSmartMove(GamePlayer jugador) {
+//		if (gameTable.getState().isFinished()) {
+//		} else if (gameTable.getState().getTurn() != jugador.getPlayerNumber()) {
+//			gameTable.noEsTuTurno(jugador.getPlayerNumber());
+//		} else 
+			if (!gameTable.getState().isFinished() && gameTable.getState().getTurn() == jugador.getPlayerNumber()) {
+			A action = algorithm.chooseAction(jugador.getPlayerNumber(), gameTable.getState());
 			gameTable.execute(action);
 		}
 	}
@@ -63,16 +68,6 @@ public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>>
 
 	@Override
 	public void handleEvent(GameEvent<S, A> e) {
-	}
-
-	@Override
-	public int getPlayerId() {
-		return playerId;
-	}
-
-	@Override
-	public List<GamePlayer> getGamePlayers() {
-		return gameTable.getGamePlayers();
 	}
 
 	@Override

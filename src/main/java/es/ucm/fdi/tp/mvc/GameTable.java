@@ -70,6 +70,10 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
 		notifyGameHasStarted();
 	}
 
+	public void noEsTuTurno(int jugadorQueSeCuela) {
+		notifyErrorHasOcurred("No es tu turno jugador " + jugadorQueSeCuela);
+	}
+
 	public S getState() {
 		return currentState;
 	}

@@ -14,14 +14,11 @@ import es.ucm.fdi.tp.view.InfoPanel.PlayersInfoObserver;
 
 public class TttView extends RectBoardView<TttState, TttAction> {
 
-	private JComponent jBoard;
-
 	public TttView(GameController gameController, TttState state) {
 		super(gameController, state);
-		initUI();
 	}
 
-	private void initUI() {
+	protected void initUI() {
 		this.setLayout(new BorderLayout());
 		jBoard = new JBoard() {
 			@Override
@@ -42,7 +39,7 @@ public class TttView extends RectBoardView<TttState, TttAction> {
 
 			@Override
 			protected Color getColor(int player) {
-				return gameController.getGamePlayers().get(player).getPlayerColor();
+				return TttView.this.getPlayerColor(player);
 			}
 
 			@Override
@@ -121,7 +118,7 @@ public class TttView extends RectBoardView<TttState, TttAction> {
 	/// QUE SE ILUMINEN LAS CASILLAS VÁLIDAS.
 	@Override
 	protected void mouseClicked(int row, int col, int clickCount, int mouseButton) {
-		TttAction action = new TttAction(gameController.getPlayerId(), row, col);
+		TttAction action = new TttAction(this.jugador.getPlayerNumber(), row, col);
 		gameController.makeManualMove(action);
 	}
 

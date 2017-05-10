@@ -11,20 +11,15 @@ import es.ucm.fdi.tp.mvc.PlayerType;
 public interface GameController<S extends GameState<S, A>, A extends GameAction<S, A>> {
 	void makeManualMove(A a);
 
-	void makeRandomMove();
+	void makeRandomMove(GamePlayer jugador);
 
-	void makeSmartMove();
+	void makeSmartMove(GamePlayer jugador);
 
 	void restartGame();
 
 	void stopGame();
 
 	void handleEvent(GameEvent<S, A> e);
-
-	// public void changePlayerMode(PlayerMode p);
-	int getPlayerId();
-
-	List<GamePlayer> getGamePlayers();
 
 	void notifyInterfaceNeedBeUpdated();
 
