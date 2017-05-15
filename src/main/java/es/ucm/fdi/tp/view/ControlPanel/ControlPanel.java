@@ -1,11 +1,14 @@
 package es.ucm.fdi.tp.view.ControlPanel;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -27,6 +30,7 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 	private final String RESTART_ICON_PATH = "/restart.png";
     private final String BRAIN_ICON_PATH = "/brain.png";
     private final String TIMER_ICON_PATH = "/timer.png";
+    private final String STOP_ICON_PATH = "/stop.png";
 
 	private final String[] playerModes = { "Manual", "Random", "Smart" };
 	private List<ControlPanelObservable> controlPanelObservables;
@@ -96,15 +100,30 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 		add(manualMovesToolBar);
 
 		JToolBar smartMovesToolBar = new JToolBar();
+        smartMovesToolBar.setFloatable(false);
+        Border borderLayout = new TitledBorder("Smart Moves") {
+            private Insets customInsets = new Insets(20, 10, 10, 10);
+
+            @Override
+            public Insets getBorderInsets(Component c) {
+                return customInsets;
+            }
+        };
+        smartMovesToolBar.setBorder(borderLayout);
+
         createThreadsSpinner(smartMovesToolBar);
         createTimerSpinner(smartMovesToolBar);
-	}
+        JButton stopButton = new JButton();
+        ImageIcon stopIcon = new ImageIcon(getClass().getResource(STOP_ICON_PATH));
+        stopButton.setIcon(stopIcon);
+        smartMovesToolBar.add(stopButton);
+        add(smartMovesToolBar);
+    }
 
 	private void createThreadsSpinner(JToolBar smartMovesToolBar) {
         ImageIcon smartIcon = new ImageIcon(getClass().getResource(BRAIN_ICON_PATH));
         JLabel smartIconLabel = new JLabel(smartIcon);
         smartMovesToolBar.add(smartIconLabel);
-        add(smartMovesToolBar);
         JLabel titleLabel = new JLabel("threads");
         SpinnerModel spinnerModel = new SpinnerNumberModel(1, 1, null, 1); //default value,lower bound,upper bound,increment by
         JSpinner spinner = new JSpinner(spinnerModel);
@@ -122,7 +141,6 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
         ImageIcon timerIcon = new ImageIcon(getClass().getResource(TIMER_ICON_PATH));
         JLabel timerIconLabel = new JLabel(timerIcon);
         smartMovesToolBar.add(timerIconLabel);
-        add(smartMovesToolBar);
         JLabel titleLabel = new JLabel("ms.");
         double min = 1.0;
         double step = 0.1;
