@@ -11,51 +11,15 @@ import es.ucm.fdi.tp.base.model.GameState;
  */
 public class TttState extends GameState<TttState, TttAction> {
 
-	final static int EMPTY = -1;
-
 	private static final long serialVersionUID = -2641387354190472377L;
 
-	public static boolean isDraw(int[][] board) {
-		boolean empty = false;
-		for (int i = 0; !empty && i < board.length; i++) {
-			for (int j = 0; !empty && j < board.length; j++) {
-				if (board[i][j] == EMPTY) {
-					empty = true;
-				}
-			}
-		}
-		return !empty;
-	}
-
-	public static boolean isWinner(int[][] board, int playerNumber) {
-		boolean won = false;
-		for (int i = 0; !won && i < board.length; i++) {
-			if (isWinner(board, playerNumber, 0, i, 1, 0))
-				won = true;
-			if (isWinner(board, playerNumber, i, 0, 0, 1))
-				won = true;
-		}
-		return won || isWinner(board, playerNumber, 0, 0, 1, 1) || isWinner(board, playerNumber, 2, 0, -1, 1);
-	}
-
-	private static boolean isWinner(int[][] board, int playerNumber, int x0, int y0, int dx, int dy) {
-		boolean won = true;
-		for (int i = 0, x = x0, y = y0; won && i < board.length; i++, x += dx, y += dy) {
-			if (board[y][x] != playerNumber)
-				won = false;
-		}
-		return won;
-	}
-
+	private final int turn;
+	private final boolean finished;
 	private final int[][] board;
-
+	private final int winner;
 	private final int dim;
 
-	private final boolean finished;
-
-	private final int turn;
-
-	private final int winner;
+	final static int EMPTY = -1;
 
 	public TttState(int dim) {
 		super(2);
@@ -84,8 +48,80 @@ public class TttState extends GameState<TttState, TttAction> {
 		this.winner = winner;
 	}
 
+	public boolean isValid(TttAction action) {
+		if (isFinished()) {
+			return false;
+		}
+		return at(action.getRow(), action.getCol()) == EMPTY;
+	}
+
+	public List<TttAction> validActions(int playerNumber) {
+		ArrayList<TttAction> valid = new ArrayList<>();
+		if (finished) {
+			return valid;
+		}
+
+		for (int i = 0; i < dim; i++) {
+			for (int j = 0; j < dim; j++) {
+				if (at(i, j) == EMPTY) {
+					valid.add(new TttAction(playerNumber, i, j));
+				}
+			}
+		}
+
+		return valid;
+	}
+
+	public static boolean isDraw(int[][] board) {
+		boolean empty = false;
+		for (int i = 0; !empty && i < board.length; i++) {
+			for (int j = 0; !empty && j < board.length; j++) {
+				if (board[i][j] == EMPTY) {
+					empty = true;
+				}
+			}
+		}
+		return !empty;
+	}
+
+	private static boolean isWinner(int[][] board, int playerNumber, int x0, int y0, int dx, int dy) {
+		boolean won = true;
+		for (int i = 0, x = x0, y = y0; won && i < board.length; i++, x += dx, y += dy) {
+			if (board[y][x] != playerNumber)
+				won = false;
+		}
+		return won;
+	}
+
+	public static boolean isWinner(int[][] board, int playerNumber) {
+		boolean won = false;
+		for (int i = 0; !won && i < board.length; i++) {
+			if (isWinner(board, playerNumber, 0, i, 1, 0))
+				won = true;
+			if (isWinner(board, playerNumber, i, 0, 0, 1))
+				won = true;
+		}
+		return won || isWinner(board, playerNumber, 0, 0, 1, 1) || isWinner(board, playerNumber, 2, 0, -1, 1);
+	}
+
 	public int at(int row, int col) {
 		return board[row][col];
+	}
+
+	public int getTurn() {
+		return turn;
+	}
+
+	public boolean isFinished() {
+		return finished;
+	}
+
+	public int getWinner() {
+		return winner;
+	}
+
+	public int getDimension() {
+		return dim;
 	}
 
 	/**
@@ -99,28 +135,10 @@ public class TttState extends GameState<TttState, TttAction> {
 	}
 
 	@Override
-	public int getTurn() {
-		return turn;
+	public String getGameDescription() {
+		return "Tic-Tac-Toe " + dim + "x" + dim;
 	}
 
-	@Override
-	public int getWinner() {
-		return winner;
-	}
-
-	@Override
-	public boolean isFinished() {
-		return finished;
-	}
-
-	public boolean isValid(TttAction action) {
-		if (isFinished()) {
-			return false;
-		}
-		return at(action.getRow(), action.getCol()) == EMPTY;
-	}
-
-	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < board.length; i++) {
@@ -131,23 +149,5 @@ public class TttState extends GameState<TttState, TttAction> {
 			sb.append("\n");
 		}
 		return sb.toString();
-	}
-
-	@Override
-	public List<TttAction> validActions(int playerNumber) {
-		ArrayList<TttAction> valid = new ArrayList<>();
-		if (finished) {
-			return valid;
-		}
-
-		for (int i = 0; i < dim; i++) {
-			for (int j = 0; j < dim; j++) {
-				if (at(i, j) == -1) {
-					valid.add(new TttAction(playerNumber, i, j));
-				}
-			}
-		}
-
-		return valid;
 	}
 }

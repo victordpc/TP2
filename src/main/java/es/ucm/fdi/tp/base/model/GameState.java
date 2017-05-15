@@ -1,12 +1,6 @@
 package es.ucm.fdi.tp.base.model;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.List;
 
 /**
@@ -41,7 +35,7 @@ public abstract class GameState<S extends GameState<S, A>, A extends GameAction<
 	/**
 	 * @return the name of the game, by defualt the name of the class
 	 */
-	public String getGameDescreption() {
+	public String getGameDescription() {
 		return this.getClass().getName();
 	}
 

@@ -5,13 +5,9 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JToolBar;
-import javax.swing.SwingConstants;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GameState;
@@ -29,6 +25,9 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 	private final String EXIT_ICON_PATH = "/exit.png";
 	private final String NERD_ICON_PATH = "/nerd.png";
 	private final String RESTART_ICON_PATH = "/restart.png";
+    private final String BRAIN_ICON_PATH = "/brain.png";
+    private final String TIMER_ICON_PATH = "/timer.png";
+
 	private final String[] playerModes = { "Manual", "Random", "Smart" };
 	private List<ControlPanelObservable> controlPanelObservables;
 
@@ -56,46 +55,90 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 		randomMoveButton.setIcon(randomIcon);
 		randomMoveButton.setActionCommand("RandomMove");
 		randomMoveButton.addActionListener(this);
-		JToolBar toolBar = new JToolBar("Still draggable");
-		toolBar.add(randomMoveButton);
-		toolBar.addSeparator(); // añade un separador
+		JToolBar manualMovesToolBar = new JToolBar();
+		manualMovesToolBar.add(randomMoveButton);
+		manualMovesToolBar.addSeparator(); // añade un separador
 
 		smartMoveButton = new JButton();
 		ImageIcon nerdIcon = new ImageIcon(getClass().getResource(NERD_ICON_PATH));
 		smartMoveButton.setIcon(nerdIcon);
 		smartMoveButton.setActionCommand("SmartMove");
 		smartMoveButton.addActionListener(this);
-		toolBar.add(smartMoveButton);
-		toolBar.addSeparator(); // añade un separador
+		manualMovesToolBar.add(smartMoveButton);
+		manualMovesToolBar.addSeparator(); // añade un separador
 
 		JButton restartButton = new JButton();
 		ImageIcon restartIcon = new ImageIcon(getClass().getResource(RESTART_ICON_PATH));
 		restartButton.setIcon(restartIcon);
 		restartButton.setActionCommand("Restart");
 		restartButton.addActionListener(this);
-		toolBar.add(restartButton);
-		toolBar.addSeparator(); // añade un separador
+		manualMovesToolBar.add(restartButton);
+		manualMovesToolBar.addSeparator(); // añade un separador
 
 		JButton exitButton = new JButton();
 		ImageIcon exitIcon = new ImageIcon(getClass().getResource(EXIT_ICON_PATH));
 		exitButton.setIcon(exitIcon);
 		exitButton.setActionCommand("Stop");
 		exitButton.addActionListener(this);
-		toolBar.add(exitButton);
-		toolBar.addSeparator(); // añade un separador
+		manualMovesToolBar.add(exitButton);
+		manualMovesToolBar.addSeparator(); // añade un separador
 
 		JLabel playerModeLabel = new JLabel("Player Mode: ");
-		toolBar.add(playerModeLabel);
+		manualMovesToolBar.add(playerModeLabel);
 		JComboBox playerModeList = new JComboBox(playerModes);
 		playerModeList.setActionCommand("ComboBoxEvent");
 		playerModeList.addActionListener(this);
-		toolBar.add(playerModeList);
-		toolBar.addSeparator(); // añade un separador
+		manualMovesToolBar.add(playerModeList);
+		manualMovesToolBar.addSeparator(); // añade un separador
 
-		toolBar.setFloatable(false); // impide que se pueda mover de su sitio
-		toolBar.setOrientation(SwingConstants.HORIZONTAL);
-		add(toolBar);
+		manualMovesToolBar.setFloatable(false); // impide que se pueda mover de su sitio
+		manualMovesToolBar.setOrientation(SwingConstants.HORIZONTAL);
+		add(manualMovesToolBar);
+
+		JToolBar smartMovesToolBar = new JToolBar();
+        createThreadsSpinner(smartMovesToolBar);
+        createTimerSpinner(smartMovesToolBar);
 	}
+
+	private void createThreadsSpinner(JToolBar smartMovesToolBar) {
+        ImageIcon smartIcon = new ImageIcon(getClass().getResource(BRAIN_ICON_PATH));
+        JLabel smartIconLabel = new JLabel(smartIcon);
+        smartMovesToolBar.add(smartIconLabel);
+        add(smartMovesToolBar);
+        JLabel titleLabel = new JLabel("threads");
+        SpinnerModel spinnerModel = new SpinnerNumberModel(1, 1, null, 1); //default value,lower bound,upper bound,increment by
+        JSpinner spinner = new JSpinner(spinnerModel);
+        spinner.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+//                textField.setText(spinner.getValue().toString());
+            }
+        });
+        smartMovesToolBar.add(spinner);
+        smartMovesToolBar.add(titleLabel);
+    }
+
+    private void createTimerSpinner(JToolBar smartMovesToolBar) {
+        ImageIcon timerIcon = new ImageIcon(getClass().getResource(TIMER_ICON_PATH));
+        JLabel timerIconLabel = new JLabel(timerIcon);
+        smartMovesToolBar.add(timerIconLabel);
+        add(smartMovesToolBar);
+        JLabel titleLabel = new JLabel("ms.");
+        double min = 1.0;
+        double step = 0.1;
+        SpinnerModel spinnerModel = new SpinnerNumberModel(min, min, null, step);
+        JSpinner spinner = new JSpinner(spinnerModel);
+        JSpinner.NumberEditor editor = new JSpinner.NumberEditor(spinner);
+        spinner.setEditor(editor);
+        spinner.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+//                textField.setText(spinner.getValue().toString());
+            }
+        });
+        smartMovesToolBar.add(spinner);
+        smartMovesToolBar.add(titleLabel);
+    }
 
 	public void addControlPanelObserver(ControlPanelObservable newObserver) {
 		controlPanelObservables.add(newObserver);
