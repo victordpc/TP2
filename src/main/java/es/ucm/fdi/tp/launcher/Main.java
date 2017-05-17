@@ -42,7 +42,7 @@ public class Main {
 			System.exit(1);
 		}
 
-		GameTable gameTable = createGameModel(args[0]);
+		GameTable<?, ?> gameTable = createGameModel(args[0]);
 		if (gameTable == null) {
 			System.err.println("Juego inválido");
 			System.exit(1);
@@ -60,7 +60,7 @@ public class Main {
 	}
 
 	private static GameTable<?, ?> createGameModel(String gameTye) {
-		GameState<?, ?> initialGameState = createInitialState(gameTye);
+		GameState initialGameState = createInitialState(gameTye);
 		return new GameTable(initialGameState);
 	}
 
@@ -111,15 +111,15 @@ public class Main {
 			players.get(1).setPlayerColor(Color.decode("#ECEFF1"));
 		}
 		gameTable.setGamePlayers(players);
-		try {
+		try {	
 			SwingUtilities.invokeAndWait(new Runnable() {
 				@Override
 				public void run() {
 					for (int i = 0; i < players.size(); i++) {
-						UIController gameControllerPlayer = new UIController(gameTable);
+						UIController<S, A> gameControllerPlayer = new UIController<S, A>(gameTable);
 						GUIView<S, A> guiViewPlayer = (GUIView<S, A>) createGUIGame(gameName, gameControllerPlayer,
 								gameTable.getState());
-						GUIView<S, A> containerViewPlayer = new GameContainer<>(i, guiViewPlayer, gameControllerPlayer,
+						GUIView<S, A> containerViewPlayer = new GameContainer(i, guiViewPlayer, gameControllerPlayer,
 								gameTable, players);
 						containerViewPlayer.enableWindowMode();
 					}
