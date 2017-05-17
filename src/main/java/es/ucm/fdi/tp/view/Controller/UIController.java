@@ -1,6 +1,5 @@
 package es.ucm.fdi.tp.view.Controller;
 
-import java.util.Random;
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GamePlayer;
 import es.ucm.fdi.tp.base.model.GameState;
@@ -38,8 +37,7 @@ public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>>
 
 	@Override
 	public void makeSmartMove(GamePlayer jugador) {
-		if (!gameTable.getState().isFinished() && gameTable.getState().getTurn() == jugador.getPlayerNumber()
-				&& jugador instanceof SmartPlayer) {
+		if (!gameTable.getState().isFinished() && gameTable.getState().getTurn() == jugador.getPlayerNumber() && jugador instanceof SmartPlayer) {
 			A action = jugador.requestAction(gameTable.getState());
 			gameTable.execute(action);
 		}
