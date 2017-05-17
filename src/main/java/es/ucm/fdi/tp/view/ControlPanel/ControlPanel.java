@@ -14,6 +14,7 @@ import javax.swing.event.ChangeListener;
 
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GameState;
+import es.ucm.fdi.tp.base.player.ConcurrentAiPlayer;
 import es.ucm.fdi.tp.base.player.RandomPlayer;
 import es.ucm.fdi.tp.base.player.SmartPlayer;
 import es.ucm.fdi.tp.mvc.PlayerType;
@@ -40,10 +41,8 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 	// Buttons
 	private JButton randomMoveButton;
 	private JButton smartMoveButton;
-
 	private RandomPlayer randPlayer;
-
-	private SmartPlayer smartPlayer;
+	private ConcurrentAiPlayer concurrentAiPlayer;
 
 	private enum EventType {
 		ComboBoxEvent, ButtonEvent
@@ -58,9 +57,11 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 		this.controlPanelObservables = new ArrayList<>();
 		this.randPlayer = new RandomPlayer("dummy");
 		this.randPlayer.join(idJugador);
-		this.smartPlayer = new SmartPlayer("dummy", 5);
-		this.smartPlayer.join(idJugador);
-		initGUI();
+		this.concurrentAiPlayer = new ConcurrentAiPlayer("Jugador " + idJugador);
+		this.concurrentAiPlayer.join(idJugador);
+        this.concurrentAiPlayer.setMaxThreads(1);
+        this.concurrentAiPlayer.setTimeout(1000);
+        initGUI();
 	}
 
 	private void initGUI() {
@@ -141,7 +142,8 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
         spinner.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-//                textField.setText(spinner.getValue().toString());
+                int threads = Integer.parseInt(spinner.getValue().toString());
+                concurrentAiPlayer.setMaxThreads(threads);
             }
         });
         smartMovesToolBar.add(spinner);
@@ -153,16 +155,16 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
         JLabel timerIconLabel = new JLabel(timerIcon);
         smartMovesToolBar.add(timerIconLabel);
         JLabel titleLabel = new JLabel("ms.");
-        double min = 1.0;
-        double step = 0.1;
-        SpinnerModel spinnerModel = new SpinnerNumberModel(min, min, null, step);
+        double value = 1000;
+        SpinnerModel spinnerModel = new SpinnerNumberModel(value, value, null, value);
         JSpinner spinner = new JSpinner(spinnerModel);
         JSpinner.NumberEditor editor = new JSpinner.NumberEditor(spinner);
         spinner.setEditor(editor);
         spinner.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-//                textField.setText(spinner.getValue().toString());
+                int timeOut = Integer.parseInt(spinner.getValue().toString());
+                concurrentAiPlayer.setTimeout(timeOut);
             }
         });
         smartMovesToolBar.add(spinner);
@@ -180,16 +182,13 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 	}
 
 	@Override
-	public void update(GameState state) {
-	}
+	public void update(GameState state) {}
 
 	@Override
-	public void setMessageViewer(MessageViewer infoViewer) {
-	}
+	public void setMessageViewer(MessageViewer infoViewer) {}
 
 	@Override
-	public void setGameController(GameController gameCtrl) {
-	}
+	public void setGameController(GameController gameCtrl) {}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -205,7 +204,7 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 				gameController.makeRandomMove(this.randPlayer);
 				break;
 			case SmartMove:
-				gameController.makeSmartMove(this.smartPlayer);
+				gameController.makeSmartMove(this.concurrentAiPlayer);
 				break;
 			case Restart:
 				gameController.restartGame();
@@ -235,7 +234,7 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 		case SMART:
 			smartMoveButton.setEnabled(false);
 			randomMoveButton.setEnabled(false);
-			gameController.makeSmartMove(this.smartPlayer);
+			gameController.makeSmartMove(this.concurrentAiPlayer);
 			break;
 		case RANDOM:
 			smartMoveButton.setEnabled(false);
