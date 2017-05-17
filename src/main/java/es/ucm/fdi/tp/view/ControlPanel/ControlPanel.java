@@ -125,7 +125,8 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
         JLabel smartIconLabel = new JLabel(smartIcon);
         smartMovesToolBar.add(smartIconLabel);
         JLabel titleLabel = new JLabel("threads");
-        SpinnerModel spinnerModel = new SpinnerNumberModel(1, 1, null, 1); //default value,lower bound,upper bound,increment by
+        int processors = Runtime.getRuntime().availableProcessors();
+        SpinnerModel spinnerModel = new SpinnerNumberModel(1, 1, processors, 1); //default value,lower bound,upper bound,increment by
         JSpinner spinner = new JSpinner(spinnerModel);
         spinner.addChangeListener(new ChangeListener() {
             @Override

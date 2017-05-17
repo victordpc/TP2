@@ -41,7 +41,7 @@ public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>>
 			gameTable.execute(valid.get(random.nextInt(valid.size())));
 		}
 	}
-	
+
 
 	@Override
 	public void makeSmartMove() {
