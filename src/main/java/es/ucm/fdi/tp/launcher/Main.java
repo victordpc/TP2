@@ -27,61 +27,60 @@ import javax.swing.*;
 
 public class Main {
 
-    /**
-     * Scanner que se encargará de recoger los comandos del usuario.
-     */
-    private static Scanner scanner;
+	/**
+	 * Scanner que se encargará de recoger los comandos del usuario.
+	 */
+	private static Scanner scanner;
 
-    /**
-     * Inicializa el modelo.
-     * Las vistas.
-     * Los controladores.
-     * controller.init();
-     */
-    public static void main(String[] args) {
-        if (args.length < 2) {
-            System.err.println("El número de parámetros introducidos, es menor al número de parámetros mínimos requeridos para iniciar una partida.");
-            System.exit(1);
-        }
+	/**
+	 * Inicializa el modelo. Las vistas. Los controladores. controller.init();
+	 */
+	public static void main(String[] args) {
+		if (args.length < 2) {
+			System.err.println(
+					"El número de parámetros introducidos, es menor al número de parámetros mínimos requeridos para iniciar una partida.");
+			System.exit(1);
+		}
 
-        GameTable gameTable = createGameModel(args[0]);
-        if (gameTable == null) {
-            System.err.println("Juego inválido");
-            System.exit(1);
-        }
+		GameTable<?, ?> gameTable = createGameModel(args[0]);
+		if (gameTable == null) {
+			System.err.println("Juego inválido");
+			System.exit(1);
+		}
 
-        String[] otherArgs = Arrays.copyOfRange(args, 2, args.length);
-        if (args[1].equalsIgnoreCase(GameType.CONSOLE.toString())) {
-            startConsoleMode(gameTable, otherArgs);
-        } else if (args[1].equalsIgnoreCase(GameType.GUI.toString())) {
-            startGUIMode(args[0], gameTable, otherArgs);
-        } else {
-            System.err.println("Invalid view mode: " + args[1]);
-            System.exit(1);
-        }
-    }
+		String[] otherArgs = Arrays.copyOfRange(args, 2, args.length);
+		if (args[1].equalsIgnoreCase(GameType.CONSOLE.toString())) {
+			startConsoleMode(gameTable, otherArgs);
+		} else if (args[1].equalsIgnoreCase(GameType.GUI.toString())) {
+			startGUIMode(args[0], gameTable, otherArgs);
+		} else {
+			System.err.println("Invalid view mode: " + args[1]);
+			System.exit(1);
+		}
+	}
 
-    private static GameTable<?, ?> createGameModel(String gameTye) {
-        GameState<?, ?> initialGameState = createInitialState(gameTye);
-        return new GameTable(initialGameState);
-    }
+	private static GameTable<?, ?> createGameModel(String gameTye) {
+		GameState initialGameState = createInitialState(gameTye);
+		return new GameTable(initialGameState);
+	}
 
-    /**
-     * Crea el estado inicial para el juego que quiere jugar el usuario.
-     *
-     * @param gameName Nombre el juego.
-     * @return Devuelve un juego en su estado inicial si el parámetro
-     * introducido es correcto, devuelve nulo en caso contrario.
-     */
-    private static GameState<?, ?> createInitialState(String gameName) {
-        GameState<?, ?> initialState = null;
-        if (gameName.equalsIgnoreCase(GameName.TTT.toString())) {
-            initialState = new TttState(3);
-        } else if (gameName.equalsIgnoreCase(GameName.WAS.toString())) {
-            initialState = new WolfAndSheepState(8);
-        }
-        return initialState;
-    }
+	/**
+	 * Crea el estado inicial para el juego que quiere jugar el usuario.
+	 *
+	 * @param gameName
+	 *            Nombre el juego.
+	 * @return Devuelve un juego en su estado inicial si el parámetro
+	 *         introducido es correcto, devuelve nulo en caso contrario.
+	 */
+	private static GameState<?, ?> createInitialState(String gameName) {
+		GameState<?, ?> initialState = null;
+		if (gameName.equalsIgnoreCase(GameName.TTT.toString())) {
+			initialState = new TttState(3);
+		} else if (gameName.equalsIgnoreCase(GameName.WAS.toString())) {
+			initialState = new WolfAndSheepState(8);
+		}
+		return initialState;
+	}
 
 	private static <S extends GameState<S, A>, A extends GameAction<S, A>> void startConsoleMode(
 			GameTable<S, A> gameTable, String playerModes[]) {
@@ -91,70 +90,74 @@ public class Main {
 		new ConsoleController<S, A>(players, gameTable).run();
 	}
 
-    private static <S extends GameState<S, A>, A extends GameAction<S, A>> GUIView<S, A> createGUIGame(String gameName, GameController<S, A> gameController, GameState<S, A> gameState) {
-        if (gameName.equalsIgnoreCase(GameName.TTT.toString())) {
-            return (GUIView<S, A>) new TttView(gameController, (TttState) gameState);
-        } else if (gameName.equalsIgnoreCase(GameName.WAS.toString())) {
-            return (GUIView<S, A>) new WasView(gameController, (WolfAndSheepState) gameState);
-        }
-        return (GUIView<S, A>) new TttView(gameController, (TttState) gameState);
-    }
+	private static <S extends GameState<S, A>, A extends GameAction<S, A>> GUIView<S, A> createGUIGame(String gameName,
+			GameController<S, A> gameController, GameState<S, A> gameState) {
+		if (gameName.equalsIgnoreCase(GameName.TTT.toString())) {
+			return (GUIView<S, A>) new TttView(gameController, (TttState) gameState);
+		} else if (gameName.equalsIgnoreCase(GameName.WAS.toString())) {
+			return (GUIView<S, A>) new WasView(gameController, (WolfAndSheepState) gameState);
+		}
+		return (GUIView<S, A>) new TttView(gameController, (TttState) gameState);
+	}
 
-    private static <S extends GameState<S, A>, A extends GameAction<S, A>> void startGUIMode(String gameName, GameTable<S, A> gameTable, String playerModes[]) {
-        List<GamePlayer> players = loadGuiPlayers(gameTable);
-        if (gameName.equalsIgnoreCase(GameName.TTT.toString())) {
-            players.get(0).setPlayerColor(Color.decode("#FFEB3B"));
-            players.get(1).setPlayerColor(Color.decode("#F44336"));
-        }else if (gameName.equalsIgnoreCase(GameName.WAS.toString())) {
-            players.get(0).setPlayerColor(Color.decode("#424242"));
-            players.get(1).setPlayerColor(Color.decode("#ECEFF1"));
-        }
-        gameTable.setGamePlayers(players);
-        try {
-            SwingUtilities.invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
-                    for (int i = 0; i < players.size(); i++) {
-                        UIController gameControllerPlayer = new UIController(i, gameTable);
-                        GUIView<S, A> guiViewPlayer = (GUIView<S, A>) createGUIGame(gameName, gameControllerPlayer, gameTable.getState());
-                        GUIView<S, A> containerViewPlayer = new GameContainer<>(guiViewPlayer, gameControllerPlayer, gameTable);
-                        containerViewPlayer.enableWindowMode();
-                    }
-                }
-            });
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            System.out.println("Some error occurred while creating the view..." + e.getMessage() + " --- ");
-        } catch (InvocationTargetException e) {
-            System.out.println("Some error occurred while creating the view..." + e.getMessage());
-        }
+	private static <S extends GameState<S, A>, A extends GameAction<S, A>> void startGUIMode(String gameName,
+			GameTable<S, A> gameTable, String playerModes[]) {
+		List<GamePlayer> players = loadGuiPlayers(gameTable);
+		if (gameName.equalsIgnoreCase(GameName.TTT.toString())) {
+			players.get(0).setPlayerColor(Color.decode("#FFEB3B"));
+			players.get(1).setPlayerColor(Color.decode("#F44336"));
+		} else if (gameName.equalsIgnoreCase(GameName.WAS.toString())) {
+			players.get(0).setPlayerColor(Color.decode("#424242"));
+			players.get(1).setPlayerColor(Color.decode("#ECEFF1"));
+		}
+		gameTable.setGamePlayers(players);
+		try {	
+			SwingUtilities.invokeAndWait(new Runnable() {
+				@Override
+				public void run() {
+					for (int i = 0; i < players.size(); i++) {
+						UIController<S, A> gameControllerPlayer = new UIController<S, A>(gameTable);
+						GUIView<S, A> guiViewPlayer = (GUIView<S, A>) createGUIGame(gameName, gameControllerPlayer,
+								gameTable.getState());
+						GUIView<S, A> containerViewPlayer = new GameContainer(i, guiViewPlayer, gameControllerPlayer,
+								gameTable, players);
+						containerViewPlayer.enableWindowMode();
+					}
+				}
+			});
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			System.out.println("Some error occurred while creating the view..." + e.getMessage() + " --- ");
+		} catch (InvocationTargetException e) {
+			System.out.println("Some error occurred while creating the view..." + e.getMessage());
+		}
 
-        try {
-            SwingUtilities.invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
-                    gameTable.start();
-                }
-            });
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            System.out.println("Some error occurred while creating the view..." + e.getMessage() + " --- ");
-        } catch (InvocationTargetException e) {
-            System.out.println("Some error occurred while creating the view..." + e.getCause());
-        }
-    }
+		try {
+			SwingUtilities.invokeAndWait(new Runnable() {
+				@Override
+				public void run() {
+					gameTable.start();
+				}
+			});
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			System.out.println("Some error occurred while creating the view..." + e.getMessage() + " --- ");
+		} catch (InvocationTargetException e) {
+			System.out.println("Some error occurred while creating the view..." + e.getCause());
+		}
+	}
 
-    private static GamePlayer createPlayer(String playerType, String playerName) {
-        GamePlayer newGamePlayer;
-        if (playerType.equalsIgnoreCase(PlayerType.MANUAL.toString())) {
-            newGamePlayer = new ConsolePlayer(playerName, new Scanner(System.in));
-        } else if (playerType.equalsIgnoreCase(PlayerType.SMART.toString())) {
-            newGamePlayer = new SmartPlayer(playerName, 5);
-        } else {
-            newGamePlayer = new RandomPlayer(playerName);
-        }
-        return newGamePlayer;
-    }
+	private static GamePlayer createPlayer(String playerType, String playerName) {
+		GamePlayer newGamePlayer;
+		if (playerType.equalsIgnoreCase(PlayerType.MANUAL.toString())) {
+			newGamePlayer = new ConsolePlayer(playerName, new Scanner(System.in));
+		} else if (playerType.equalsIgnoreCase(PlayerType.SMART.toString())) {
+			newGamePlayer = new SmartPlayer(playerName, 5);
+		} else {
+			newGamePlayer = new RandomPlayer(playerName);
+		}
+		return newGamePlayer;
+	}
 
 	/**
 	 * Crea los jugadores.

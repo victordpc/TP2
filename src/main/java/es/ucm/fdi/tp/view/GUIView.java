@@ -13,6 +13,11 @@ public abstract class GUIView<S extends GameState<S, A>, A extends GameAction<S,
 
 	protected JFrame window;
 
+	public void disableWindowMode() {
+		window.dispose();
+		window = null;
+	}
+
 	public void enableWindowMode() {
 		this.window = new JFrame("");
 		this.window.setContentPane(this);
@@ -21,14 +26,13 @@ public abstract class GUIView<S extends GameState<S, A>, A extends GameAction<S,
 		window.setVisible(true);
 	}
 
-	public void disableWindowMode() {
-		window.dispose();
-		window = null;
-	}
-
 	public JFrame getWindow() {
 		return window;
 	}
+
+	public abstract void setGameController(GameController<S, A> gameCtrl);
+
+	public abstract void setMessageViewer(MessageViewer<S, A> messageViewer);
 
 	public void setTitle(String newTitle) {
 		if (window != null) {
@@ -39,8 +43,4 @@ public abstract class GUIView<S extends GameState<S, A>, A extends GameAction<S,
 	}
 
 	public abstract void update(S state);
-
-	public abstract void setMessageViewer(MessageViewer<S, A> messageViewer);
-
-	public abstract void setGameController(GameController<S, A> gameCtrl);
 }

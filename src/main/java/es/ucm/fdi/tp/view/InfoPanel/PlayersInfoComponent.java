@@ -66,6 +66,8 @@ public class PlayersInfoComponent<S extends GameState<S, A>, A extends GameActio
 		};
 
 		table.setToolTipText("Click on a row to change the color of a player");
+		
+
 		table.addMouseListener(new java.awt.event.MouseAdapter() {
 			@Override
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
