@@ -3,6 +3,7 @@ package es.ucm.fdi.tp.view;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GameState;
@@ -10,7 +11,7 @@ import es.ucm.fdi.tp.view.Controller.GameController;
 import es.ucm.fdi.tp.view.InfoPanel.MessageViewer;
 
 public abstract class GUIView<S extends GameState<S, A>, A extends GameAction<S, A>> extends JPanel {
-
+	private static final long serialVersionUID = 6447917098288880320L;
 	protected JFrame window;
 
 	public void disableWindowMode() {
@@ -21,7 +22,7 @@ public abstract class GUIView<S extends GameState<S, A>, A extends GameAction<S,
 	public void enableWindowMode() {
 		this.window = new JFrame("");
 		this.window.setContentPane(this);
-		this.window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		this.window.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		this.window.setSize(800, 800);
 		window.setVisible(true);
 	}

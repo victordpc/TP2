@@ -17,19 +17,6 @@ public abstract class PlayersInfoViewer<S extends GameState<S, A>, A extends Gam
 		playersInfoObserverList.add(observer);
 	}
 
-	protected void notifyObservers(int player, Color color) {
-		for (PlayersInfoObserver observer : playersInfoObserverList) {
-			observer.colorChanged(player, color);
-		}
-	}
-
-	public void setPlayersInfoViewer(PlayersInfoViewer<S, A> playersInfoViewer) {
-	}
-
-	abstract public void setNumberOfPlayer(int i);
-
-	abstract public void updateColors();
-
 	/**
 	 * Used to consult the color assigned to a player
 	 * 
@@ -39,8 +26,14 @@ public abstract class PlayersInfoViewer<S extends GameState<S, A>, A extends Gam
 	 */
 	abstract public Color getPlayerColor(int playerId);
 
+	protected void notifyObservers(int player, Color color) {
+		for (PlayersInfoObserver observer : playersInfoObserverList) {
+			observer.colorChanged(player, color);
+		}
+	}
+
 	@Override
-	public void update(GameState state) {
+	public void setGameController(GameController gameCtrl) {
 
 	}
 
@@ -48,8 +41,15 @@ public abstract class PlayersInfoViewer<S extends GameState<S, A>, A extends Gam
 	public void setMessageViewer(MessageViewer messageViewer) {
 	}
 
+	abstract public void setNumberOfPlayer(int i);
+
+	public void setPlayersInfoViewer(PlayersInfoViewer<S, A> playersInfoViewer) {
+	}
+
 	@Override
-	public void setGameController(GameController gameCtrl) {
+	public void update(GameState state) {
 
 	}
+
+	abstract public void updateColors();
 }

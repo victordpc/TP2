@@ -14,8 +14,8 @@ public class AiPlayer implements GamePlayer {
 	protected AiAlgorithm algorithm;
 
 	protected String name;
-	protected int playerNumber;
 	protected Color playerColor = Color.GRAY;
+	protected int playerNumber;
 
 	public AiPlayer(String name, AiAlgorithm algorithm) {
 		this.name = name;
@@ -25,6 +25,11 @@ public class AiPlayer implements GamePlayer {
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public Color getPlayerColor() {
+		return playerColor;
 	}
 
 	@Override
@@ -40,11 +45,6 @@ public class AiPlayer implements GamePlayer {
 	@Override
 	public <S extends GameState<S, A>, A extends GameAction<S, A>> A requestAction(S state) {
 		return algorithm.chooseAction(playerNumber, state);
-	}
-
-	@Override
-	public Color getPlayerColor() {
-		return playerColor;
 	}
 
 	@Override

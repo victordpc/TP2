@@ -24,13 +24,40 @@ public class Utils {
 	public final static ExecutorService worker = Executors.newCachedThreadPool();
 
 	/**
-	 * Reads an image from a file inside the current classpath.
+	 * Generates an iterator for generating random colors. It generates the same
+	 * sequences of colors over different runs since it always uses the same
+	 * seed.
 	 * 
-	 * @return the image; can be displayed and used in ImageIcons.
+	 * 
+	 * @return An iterator for generating random colors.
 	 */
-	public static Image loadImage(String path) {
-		URL imgUrl = Utils.class.getClassLoader().getResource(path);
-		return Toolkit.getDefaultToolkit().createImage(imgUrl);
+
+	public static Iterator<Color> colorsGenerator() {
+
+		Iterator<Color> i = new Iterator<Color>() {
+			// since we use a fixed seed, we always get the same sequence of
+			// colors
+			//
+			private Random r = new Random(314159265);
+
+			@Override
+			public boolean hasNext() {
+				return true;
+			}
+
+			@Override
+			public Color next() {
+				return new Color(r.nextInt(256), r.nextInt(256), r.nextInt(256));
+			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException("read-only iterator");
+			}
+		};
+
+		return i;
+
 	}
 
 	/**
@@ -54,40 +81,13 @@ public class Utils {
 	}
 
 	/**
-	 * Generates an iterator for generating random colors. It generates the same
-	 * sequences of colors over different runs since it always uses the same
-	 * seed.
+	 * Reads an image from a file inside the current classpath.
 	 * 
-	 * 
-	 * @return An iterator for generating random colors.
+	 * @return the image; can be displayed and used in ImageIcons.
 	 */
-
-	public static Iterator<Color> colorsGenerator() {
-
-		Iterator<Color> i = new Iterator<Color>() {
-			// since we use a fixed seed, we always get the same sequence of
-			// colors
-			//
-			private Random r = new Random(314159265);
-
-			@Override
-			public Color next() {
-				return new Color(r.nextInt(256), r.nextInt(256), r.nextInt(256));
-			}
-
-			@Override
-			public boolean hasNext() {
-				return true;
-			}
-
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException("read-only iterator");
-			}
-		};
-
-		return i;
-
+	public static Image loadImage(String path) {
+		URL imgUrl = Utils.class.getClassLoader().getResource(path);
+		return Toolkit.getDefaultToolkit().createImage(imgUrl);
 	}
 
 }

@@ -14,13 +14,15 @@ import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.view.GUIView;
 
-public abstract class MessageViewer<S extends GameState<S, A>, A extends GameAction<S, A>> extends GUIView {
-
+public abstract class MessageViewer<S extends GameState<S, A>, A extends GameAction<S, A>> extends GUIView<S, A> {
+	private static final long serialVersionUID = -8469633839929847551L;
 	protected JTextArea textArea;
 
 	public MessageViewer() {
 		initGUI();
 	}
+
+	abstract public void addContent(String msg);
 
 	private void initGUI() {
 		textArea = new JTextArea(15, 20);
@@ -32,6 +34,7 @@ public abstract class MessageViewer<S extends GameState<S, A>, A extends GameAct
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setPreferredSize(new Dimension(200, 200));
 		Border borderLayout = new TitledBorder("Status Messages") {
+			private static final long serialVersionUID = -7913001001191324649L;
 			private Insets customInsets = new Insets(20, 10, 10, 10);
 
 			@Override
@@ -43,8 +46,6 @@ public abstract class MessageViewer<S extends GameState<S, A>, A extends GameAct
 		scrollPane.setBackground(null);
 		add(scrollPane);
 	}
-
-	abstract public void addContent(String msg);
 
 	abstract public void setContent(String msg);
 }

@@ -1,6 +1,5 @@
 package es.ucm.fdi.tp.view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.List;
 
@@ -21,9 +20,9 @@ public abstract class RectBoardView<S extends GameState<S, A>, A extends GameAct
 	private static final long serialVersionUID = 5811685384437753352L;
 	protected GameController<S, A> gameController;
 	protected JComponent jBoard;
-	protected S state;
-	protected List<GamePlayer> listaJugadores;
 	protected GamePlayer jugador;
+	protected List<GamePlayer> listaJugadores;
+	protected S state;
 
 	public RectBoardView(GameController<S, A> gameController, S state) {
 		this.gameController = gameController;
@@ -59,10 +58,10 @@ public abstract class RectBoardView<S extends GameState<S, A>, A extends GameAct
 
 	protected abstract void mouseClicked(int row, int col, int clickCount, int mouseButton);
 
-	protected abstract void setPlayersInfoObserver(PlayersInfoObserver observer);
-
-	public void setListPlayers(List<GamePlayer> jugadores,GamePlayer jugadorActual) {
+	public void setListPlayers(List<GamePlayer> jugadores, GamePlayer jugadorActual) {
 		this.listaJugadores = jugadores;
-		this.jugador=jugadorActual;
+		this.jugador = jugadorActual;
 	}
+
+	protected abstract void setPlayersInfoObserver(PlayersInfoObserver observer);
 }

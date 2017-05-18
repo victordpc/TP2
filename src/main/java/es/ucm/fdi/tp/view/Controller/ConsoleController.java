@@ -9,8 +9,8 @@ import es.ucm.fdi.tp.mvc.GameTable;
 
 public class ConsoleController<S extends GameState<S, A>, A extends GameAction<S, A>> implements Runnable {
 
-	private List<GamePlayer> players;
 	private GameTable<S, A> game;
+	private List<GamePlayer> players;
 
 	public ConsoleController(List<GamePlayer> players, GameTable<S, A> game) {
 		this.players = players;
@@ -25,7 +25,7 @@ public class ConsoleController<S extends GameState<S, A>, A extends GameAction<S
 			int playerTurnId = game.getState().getTurn();
 			A action = players.get(playerTurnId).requestAction(game.getState());
 			game.execute(action);
-			int nextTurn = game.getState().getTurn();
+			// int nextTurn = game.getState().getTurn();
 		}
 		System.out.print("Ganador: " + players.get(game.getState().getWinner()).getName()
 				+ System.getProperty("line.separator"));
