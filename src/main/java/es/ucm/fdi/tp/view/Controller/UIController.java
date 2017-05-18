@@ -1,6 +1,5 @@
 package es.ucm.fdi.tp.view.Controller;
 
-import java.util.Random;
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GamePlayer;
 import es.ucm.fdi.tp.base.model.GameState;
@@ -18,6 +17,20 @@ public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>>
 	public UIController(GameTable<S, A> gameTable) {
 		this.playerType = PlayerType.MANUAL;
 		this.gameTable = gameTable;
+	}
+
+	@Override
+	public void changePlayerMode(PlayerType playerMode) {
+		this.playerType = playerMode;
+	}
+
+	@Override
+	public PlayerType getPlayerMode() {
+		return playerType;
+	}
+
+	@Override
+	public void handleEvent(GameEvent<S, A> e) {
 	}
 
 	@Override
@@ -46,6 +59,11 @@ public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>>
 	}
 
 	@Override
+	public void notifyInterfaceNeedBeUpdated() {
+		gameTable.notifyInterfaceNeedBeUpdated();
+	}
+
+	@Override
 	public void restartGame() {
 		gameTable.restartGame();
 	}
@@ -53,24 +71,5 @@ public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>>
 	@Override
 	public void stopGame() {
 		System.exit(0);
-	}
-
-	@Override
-	public void handleEvent(GameEvent<S, A> e) {
-	}
-
-	@Override
-	public void notifyInterfaceNeedBeUpdated() {
-		gameTable.notifyInterfaceNeedBeUpdated();
-	}
-
-	@Override
-	public PlayerType getPlayerMode() {
-		return playerType;
-	}
-
-	@Override
-	public void changePlayerMode(PlayerType playerMode) {
-		this.playerType = playerMode;
 	}
 }

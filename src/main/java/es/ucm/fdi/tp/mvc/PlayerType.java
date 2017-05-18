@@ -6,8 +6,8 @@ package es.ucm.fdi.tp.mvc;
 public enum PlayerType {
 	/** Define el tipo de jugador por consola. */
 	MANUAL,
-	/** Define el tipo de jugador por inteligente. */
-	SMART,
 	/** Define el tipo de jugador por aleatorio. */
-	RANDOM
+	RANDOM,
+	/** Define el tipo de jugador por inteligente. */
+	SMART
 }

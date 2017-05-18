@@ -21,8 +21,8 @@ public class ColorChooser extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
-	JColorChooser colorChooser;
 	Color color;
+	JColorChooser colorChooser;
 
 	public ColorChooser(JFrame parent, String title, Color initColor) {
 		super(parent, title);
@@ -65,14 +65,6 @@ public class ColorChooser extends JDialog {
 		dispose();
 	}
 
-	public void setSelectedColorDialog(Color c) {
-		colorChooser.setColor(c);
-	}
-
-	public void openDialog() {
-		setVisible(true);
-	}
-
 	// override the createRootPane inherited by the JDialog, to create the
 	// rootPane.
 	// create functionality to close the window when "Escape" button is pressed
@@ -96,6 +88,14 @@ public class ColorChooser extends JDialog {
 
 	public Color getColor() {
 		return color;
+	}
+
+	public void openDialog() {
+		setVisible(true);
+	}
+
+	public void setSelectedColorDialog(Color c) {
+		colorChooser.setColor(c);
 	}
 
 }
