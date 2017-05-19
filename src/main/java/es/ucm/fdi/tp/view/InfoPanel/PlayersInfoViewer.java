@@ -9,8 +9,8 @@ import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.view.GUIView;
 import es.ucm.fdi.tp.view.Controller.GameController;
 
-public abstract class PlayersInfoViewer<S extends GameState<S, A>, A extends GameAction<S, A>> extends GUIView {
-
+public abstract class PlayersInfoViewer<S extends GameState<S, A>, A extends GameAction<S, A>> extends GUIView<S, A> {
+	private static final long serialVersionUID = 8207252960325652993L;
 	protected List<PlayersInfoObserver> playersInfoObserverList = new ArrayList<>();
 
 	public void addObserver(PlayersInfoObserver observer) {
@@ -33,12 +33,12 @@ public abstract class PlayersInfoViewer<S extends GameState<S, A>, A extends Gam
 	}
 
 	@Override
-	public void setGameController(GameController gameCtrl) {
+	public void setGameController(GameController<S, A> gameCtrl) {
 
 	}
 
 	@Override
-	public void setMessageViewer(MessageViewer messageViewer) {
+	public void setMessageViewer(MessageViewer<S, A> messageViewer) {
 	}
 
 	abstract public void setNumberOfPlayer(int i);
@@ -47,7 +47,7 @@ public abstract class PlayersInfoViewer<S extends GameState<S, A>, A extends Gam
 	}
 
 	@Override
-	public void update(GameState state) {
+	public void update(S state) {
 
 	}
 

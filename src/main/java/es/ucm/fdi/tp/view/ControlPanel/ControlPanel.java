@@ -43,26 +43,21 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 		ButtonEvent, ComboBoxEvent
 	}
 
-	private final String BRAIN_ICON_PATH = "/brain.png";
 	private List<ControlPanelObservable> controlPanelObservables;
 	private final String DICE_ICON_PATH = "/dice.png";
 	private final String EXIT_ICON_PATH = "/exit.png";
-	private GameController<S, A> gameController;
 	private final String NERD_ICON_PATH = "/nerd.png";
-
-	// Buttons
-	private JButton randomMoveButton;
-
-	private RandomPlayer randPlayer;
 	private final String RESTART_ICON_PATH = "/restart.png";
-
-	private JButton smartMoveButton;
-
-	private SmartPlayer smartPlayer;
-
 	private final String STOP_ICON_PATH = "/stop.png";
-
+	private final String BRAIN_ICON_PATH = "/brain.png";
 	private final String TIMER_ICON_PATH = "/timer.png";
+
+	private GameController<S, A> gameController;
+
+	private JButton randomMoveButton;
+	private JButton smartMoveButton;
+	private RandomPlayer randPlayer;
+	private SmartPlayer smartPlayer;
 
 	public ControlPanel(GameController<S, A> gameController, int idJugador) {
 		this.gameController = gameController;
@@ -111,18 +106,8 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 		smartMovesToolBar.add(smartIconLabel);
 		JLabel titleLabel = new JLabel("threads");
 		int processors = Runtime.getRuntime().availableProcessors();
-		SpinnerModel spinnerModel = new SpinnerNumberModel(1, 1, processors, 1); // default
-																					// value,lower
-																					// bound,upper
-																					// bound,increment
-																					// by
+		SpinnerModel spinnerModel = new SpinnerNumberModel(1, 1, processors, 1);
 		JSpinner spinner = new JSpinner(spinnerModel);
-		spinner.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				// textField.setText(spinner.getValue().toString());
-			}
-		});
 		smartMovesToolBar.add(spinner);
 		smartMovesToolBar.add(titleLabel);
 	}
@@ -132,18 +117,13 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 		JLabel timerIconLabel = new JLabel(timerIcon);
 		smartMovesToolBar.add(timerIconLabel);
 		JLabel titleLabel = new JLabel("ms.");
-		double min = 1.0;
-		double step = 0.1;
-		SpinnerModel spinnerModel = new SpinnerNumberModel(min, min, null, step);
+		double min = 500;
+		double max = 5000;
+		double step = 500;
+		SpinnerModel spinnerModel = new SpinnerNumberModel(min, min, max, step);
 		JSpinner spinner = new JSpinner(spinnerModel);
 		JSpinner.NumberEditor editor = new JSpinner.NumberEditor(spinner);
 		spinner.setEditor(editor);
-		spinner.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				// textField.setText(spinner.getValue().toString());
-			}
-		});
 		smartMovesToolBar.add(spinner);
 		smartMovesToolBar.add(titleLabel);
 	}
@@ -198,9 +178,6 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 		JToolBar smartMovesToolBar = new JToolBar();
 		smartMovesToolBar.setFloatable(false);
 		Border borderLayout = new TitledBorder("Smart Moves") {
-			/**
-			 * 
-			 */
 			private static final long serialVersionUID = 5519939568486362218L;
 			private Insets customInsets = new Insets(20, 10, 10, 10);
 
@@ -214,10 +191,25 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 		createThreadsSpinner(smartMovesToolBar);
 		createTimerSpinner(smartMovesToolBar);
 		JButton stopButton = new JButton();
+		stopButton.setEnabled(false);
 		ImageIcon stopIcon = new ImageIcon(getClass().getResource(STOP_ICON_PATH));
 		stopButton.setIcon(stopIcon);
+
+		stopButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ControlPanel.this.stopThreads();
+			}
+		});
+
 		smartMovesToolBar.add(stopButton);
 		add(smartMovesToolBar);
+	}
+
+	protected void stopThreads() {
+		// TODO Auto-generated method stub
+
 	}
 
 	private void notifyPlayerModeHasChanged(PlayerType playerType) {

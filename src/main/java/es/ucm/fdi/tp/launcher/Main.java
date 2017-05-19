@@ -6,9 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-
 import javax.swing.SwingUtilities;
-
 import es.ucm.fdi.tp.base.console.ConsolePlayer;
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GamePlayer;
