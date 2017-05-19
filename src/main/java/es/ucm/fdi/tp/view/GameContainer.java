@@ -51,7 +51,7 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
 	}
 
 	public void initGUI() {
-		ControlPanel controlPanel = new ControlPanel(gameController,this.gamePlayer.getPlayerNumber());
+		ControlPanel controlPanel = new ControlPanel(gameController, this.gamePlayer.getPlayerNumber());
 		controlPanel.setBackground(Color.decode("#eeeeee"));
 		controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.X_AXIS));
 		controlPanel.addControlPanelObserver(this);
