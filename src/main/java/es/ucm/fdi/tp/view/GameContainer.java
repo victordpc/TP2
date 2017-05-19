@@ -90,16 +90,6 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
 			infoView.repaintPlayersInfoViewer();
 			if (e.getState().getTurn() == this.gamePlayer.getPlayerNumber()) {
 				if (gameController.getPlayerMode() == PlayerType.RANDOM) {
-					try {
-						synchronized(this) {
-					        wait(1000);
-					      }			
-					} catch (InterruptedException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (Exception e2) {
-						e2.printStackTrace();
-					}
 					gameController.makeRandomMove(randPlayer);
 				} else if (gameController.getPlayerMode() == PlayerType.SMART) {
 					gameController.makeSmartMove(smartPlayer);
