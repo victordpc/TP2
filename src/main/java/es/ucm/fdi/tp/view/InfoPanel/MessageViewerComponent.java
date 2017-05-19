@@ -4,7 +4,8 @@ import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.view.Controller.GameController;
 
-public class MessageViewerComponent<S extends GameState<S, A>, A extends GameAction<S, A>> extends MessageViewer {
+public class MessageViewerComponent<S extends GameState<S, A>, A extends GameAction<S, A>> extends MessageViewer<S, A> {
+	private static final long serialVersionUID = 1962500266199361838L;
 
 	public MessageViewerComponent() {
 		super();
@@ -25,11 +26,14 @@ public class MessageViewerComponent<S extends GameState<S, A>, A extends GameAct
 	}
 
 	@Override
-	public void update(GameState state) {}
+	public void setGameController(GameController<S, A> gameCtrl) {
+	}
 
 	@Override
-	public void setMessageViewer(MessageViewer infoViewer) {}
+	public void setMessageViewer(MessageViewer<S, A> infoViewer) {
+	}
 
 	@Override
-	public void setGameController(GameController gameCtrl) {}
+	public void update(S state) {
+	}
 }

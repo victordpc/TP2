@@ -23,6 +23,20 @@ public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>>
 	}
 
 	@Override
+	public void changePlayerMode(PlayerType playerMode) {
+		this.playerType = playerMode;
+	}
+
+	@Override
+	public PlayerType getPlayerMode() {
+		return playerType;
+	}
+
+	@Override
+	public void handleEvent(GameEvent<S, A> e) {
+	}
+
+	@Override
 	public void makeManualMove(A a) {
 		if (!gameTable.getState().isFinished()) {
 			gameTable.execute(a);
@@ -52,6 +66,11 @@ public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>>
 	}
 
 	@Override
+	public void notifyInterfaceNeedBeUpdated() {
+		gameTable.notifyInterfaceNeedBeUpdated();
+	}
+
+	@Override
 	public void restartGame() {
 		gameTable.restartGame();
 	}
@@ -59,24 +78,5 @@ public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>>
 	@Override
 	public void stopGame() {
 		System.exit(0);
-	}
-
-	@Override
-	public void handleEvent(GameEvent<S, A> e) {
-	}
-
-	@Override
-	public void notifyInterfaceNeedBeUpdated() {
-		gameTable.notifyInterfaceNeedBeUpdated();
-	}
-
-	@Override
-	public PlayerType getPlayerMode() {
-		return playerType;
-	}
-
-	@Override
-	public void changePlayerMode(PlayerType playerMode) {
-		this.playerType = playerMode;
 	}
 }

@@ -18,8 +18,8 @@ public class ConsolePlayer implements GamePlayer {
 
 	private Scanner in;
 	private String name;
-	private int playerNumber;
 	private Color playerColor = Color.WHITE;
+	private int playerNumber;
 
 	public ConsolePlayer(String name, Scanner in) {
 		this.name = name;
@@ -30,6 +30,11 @@ public class ConsolePlayer implements GamePlayer {
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public Color getPlayerColor() {
+		return playerColor;
 	}
 
 	@Override
@@ -75,11 +80,6 @@ public class ConsolePlayer implements GamePlayer {
 			}
 		}
 		return action;
-	}
-
-	@Override
-	public Color getPlayerColor() {
-		return playerColor;
 	}
 
 	@Override

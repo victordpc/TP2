@@ -5,11 +5,11 @@ package es.ucm.fdi.tp.mvc;
  */
 public enum GameType {
 	/**
-	 * Define el tipo de interfaz de la partida.
-	 */
-	GUI,
-	/**
 	 * Define el tipo de jugador por consola.
 	 */
-	CONSOLE;
+	CONSOLE,
+	/**
+	 * Define el tipo de interfaz de la partida.
+	 */
+	GUI;
 }

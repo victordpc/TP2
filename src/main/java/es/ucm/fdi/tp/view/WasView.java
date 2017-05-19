@@ -1,5 +1,12 @@
 package es.ucm.fdi.tp.view;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.event.KeyEvent;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+
 import es.ucm.fdi.tp.extra.jboard.JBoard;
 import es.ucm.fdi.tp.mvc.PlayerType;
 import es.ucm.fdi.tp.view.Controller.GameController;
@@ -8,21 +15,19 @@ import es.ucm.fdi.tp.view.InfoPanel.PlayersInfoObserver;
 import es.ucm.fdi.tp.was.Coordinate;
 import es.ucm.fdi.tp.was.WolfAndSheepAction;
 import es.ucm.fdi.tp.was.WolfAndSheepState;
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.util.List;
 
-public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction> {
+public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction> implements Observer {
 
 	private static final long serialVersionUID = -3136654431325082580L;
 	private Coordinate originCoordinates;
 	private PlayersInfoObserver playersInfoObserver;
 	private List<Coordinate> validMoves;
 
-	public WasView(GameController gameController, WolfAndSheepState state) {
+	public WasView(GameController<WolfAndSheepState, WolfAndSheepAction> gameController, WolfAndSheepState state) {
 		super(gameController, state);
 	}
 
+	@Override
 	protected Color getBackground(int row, int col) {
 		if ((originCoordinates != null) && (originCoordinates.isEqual(new Coordinate(row, col)))) {
 			return Color.decode("#9E9E9E");
@@ -44,6 +49,11 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
 	}
 
 	@Override
+	protected Color getPlayerColor(int id) {
+		return this.playersInfoObserver.getColorPlayer(id);
+	}
+
+	@Override
 	protected Integer getPosition(int row, int col) {
 		int shape = state.at(row, col);
 		if (shape != -1) {
@@ -53,6 +63,7 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
 		}
 	}
 
+	@Override
 	protected void initUI() {
 		this.setLayout(new BorderLayout());
 		jBoard = new JBoard() {
@@ -154,6 +165,10 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
 	@Override
 	protected void setPlayersInfoObserver(PlayersInfoObserver observer) {
 		this.playersInfoObserver = observer;
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
 	}
 
 	@Override

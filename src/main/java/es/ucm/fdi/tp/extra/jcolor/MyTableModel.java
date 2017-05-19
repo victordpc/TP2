@@ -22,14 +22,19 @@ class MyTableModel extends AbstractTableModel {
 		names.add("George S. Winston");
 	}
 
-	@Override
-	public String getColumnName(int col) {
-		return colNames[col];
+	public void addName(String name) {
+		names.add(name);
+		refresh();
 	}
 
 	@Override
 	public int getColumnCount() {
 		return colNames.length;
+	}
+
+	@Override
+	public String getColumnName(int col) {
+		return colNames[col];
 	}
 
 	@Override
@@ -44,11 +49,6 @@ class MyTableModel extends AbstractTableModel {
 		} else {
 			return names.get(rowIndex);
 		}
-	}
-
-	public void addName(String name) {
-		names.add(name);
-		refresh();
 	}
 
 	public void refresh() {
