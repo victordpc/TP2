@@ -22,17 +22,16 @@ import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.extra.jcolor.ColorChooser;
 import es.ucm.fdi.tp.mvc.PlayerModel;
 
-public class PlayersInfoComponent<S extends GameState<S, A>, A extends GameAction<S, A>>
-		extends PlayersInfoViewer<S, A> {
+public class PlayersInfoComponent<S extends GameState<S, A>, A extends GameAction<S, A>> extends PlayersInfoViewer<S, A> {
 	private static final long serialVersionUID = 1636020027918664845L;
 	private ColorChooser colorChooser;
 	private Map<Integer, Color> colors; // Line -> Color
 	private List<GamePlayer> gamePlayers;
 	private PlayerModel playerModel;
-	private PlayersInfoObserver playersInfoObserver;
+	private PlayerInfoObserver playerInfoObserver;
 
-	public PlayersInfoComponent(List<GamePlayer> gamePlayers, PlayersInfoObserver playersInfoObserver) {
-		this.playersInfoObserver = playersInfoObserver;
+	public PlayersInfoComponent(List<GamePlayer> gamePlayers, PlayerInfoObserver playerInfoObserver) {
+		this.playerInfoObserver = playerInfoObserver;
 		this.gamePlayers = gamePlayers;
 		List<String> playerNames = new ArrayList<>();
 		for (GamePlayer gamePlayer : gamePlayers) {
@@ -52,7 +51,7 @@ public class PlayersInfoComponent<S extends GameState<S, A>, A extends GameActio
 			colors.put(row, colorChooser.getColor());
 			repaint();
 		}
-		playersInfoObserver.colorChanged(row, colorChooser.getColor());
+		playerInfoObserver.colorChanged(row, colorChooser.getColor());
 	}
 
 	@Override

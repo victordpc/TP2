@@ -5,18 +5,17 @@ import es.ucm.fdi.tp.base.model.GamePlayer;
 import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.base.player.ConcurrentAiPlayer;
 import es.ucm.fdi.tp.base.player.RandomPlayer;
-import es.ucm.fdi.tp.base.player.SmartPlayer;
-import es.ucm.fdi.tp.mvc.GameEvent;
 import es.ucm.fdi.tp.mvc.GameTable;
 import es.ucm.fdi.tp.mvc.PlayerType;
+import es.ucm.fdi.tp.view.InfoPanel.PlayerInfoObserver;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>> implements GameController<S, A> {
 
 	private GameTable<S, A> gameTable;
 	private PlayerType playerType;
+    private PlayerInfoObserver playerInfoObserver;
 
 	public UIController(GameTable<S, A> gameTable) {
 		this.playerType = PlayerType.MANUAL;
@@ -33,11 +32,12 @@ public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>>
 		return playerType;
 	}
 
-	@Override
-	public void handleEvent(GameEvent<S, A> e) {
-	}
+    @Override
+    public void setPlayerInfoObserver(PlayerInfoObserver playerInfoObserver) {
+	    this.playerInfoObserver = playerInfoObserver;
+    }
 
-	@Override
+    @Override
 	public void makeManualMove(A a) {
         if (!gameTable.getState().isFinished() && gameTable.getState().getTurn() == a.getPlayerNumber()) {
 			gameTable.execute(a);

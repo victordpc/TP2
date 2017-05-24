@@ -22,6 +22,7 @@ import es.ucm.fdi.tp.ttt.TttState;
 import es.ucm.fdi.tp.view.ConsoleView;
 import es.ucm.fdi.tp.view.GUIView;
 import es.ucm.fdi.tp.view.GameContainer;
+import es.ucm.fdi.tp.view.InfoPanel.PlayerInfoObserver;
 import es.ucm.fdi.tp.view.TttView;
 import es.ucm.fdi.tp.view.WasView;
 import es.ucm.fdi.tp.view.Controller.ConsoleController;
@@ -171,10 +172,9 @@ public class Main {
 				public void run() {
 					for (int i = 0; i < players.size(); i++) {
 						UIController<S, A> gameControllerPlayer = new UIController<S, A>(gameTable);
-						GUIView<S, A> guiViewPlayer = createGUIGame(gameName, gameControllerPlayer,
-								gameTable.getState());
-						GUIView<S, A> containerViewPlayer = new GameContainer<S, A>(i, guiViewPlayer,
-								gameControllerPlayer, gameTable, players);
+						GUIView<S, A> guiViewPlayer = createGUIGame(gameName, gameControllerPlayer, gameTable.getState());
+						GUIView<S, A> containerViewPlayer = new GameContainer<S, A>(i, guiViewPlayer, gameControllerPlayer, gameTable, players);
+						gameControllerPlayer.setPlayerInfoObserver((PlayerInfoObserver)containerViewPlayer);
 						containerViewPlayer.enableWindowMode();
 					}
 				}

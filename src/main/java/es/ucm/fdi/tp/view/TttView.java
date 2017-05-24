@@ -8,7 +8,7 @@ import es.ucm.fdi.tp.ttt.TttAction;
 import es.ucm.fdi.tp.ttt.TttState;
 import es.ucm.fdi.tp.view.Controller.GameController;
 import es.ucm.fdi.tp.view.InfoPanel.MessageViewer;
-import es.ucm.fdi.tp.view.InfoPanel.PlayersInfoObserver;
+import es.ucm.fdi.tp.view.InfoPanel.PlayerInfoObserver;
 
 public class TttView extends RectBoardView<TttState, TttAction> {
 	private static final long serialVersionUID = 3367678913075958511L;
@@ -98,7 +98,6 @@ public class TttView extends RectBoardView<TttState, TttAction> {
 	protected void keyTyped(int keyCode) {
 	}
 
-	/// QUE SE ILUMINEN LAS CASILLAS VÁLIDAS.
 	@Override
 	protected void mouseClicked(int row, int col, int clickCount, int mouseButton) {
 		TttAction action = new TttAction(this.jugador.getPlayerNumber(), row, col);
@@ -119,7 +118,7 @@ public class TttView extends RectBoardView<TttState, TttAction> {
 	}
 
 	@Override
-	protected void setPlayersInfoObserver(PlayersInfoObserver observer) {
+	protected void setPlayerInfoObserver(PlayerInfoObserver observer) {
 	}
 
 	@Override

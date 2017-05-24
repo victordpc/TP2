@@ -3,15 +3,12 @@ package es.ucm.fdi.tp.view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.List;
-
 import javax.swing.BoxLayout;
-
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GamePlayer;
 import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.base.player.ConcurrentAiPlayer;
 import es.ucm.fdi.tp.base.player.RandomPlayer;
-import es.ucm.fdi.tp.base.player.SmartPlayer;
 import es.ucm.fdi.tp.mvc.GameEvent;
 import es.ucm.fdi.tp.mvc.GameObservable;
 import es.ucm.fdi.tp.mvc.GameObserver;
@@ -21,9 +18,9 @@ import es.ucm.fdi.tp.view.ControlPanel.ControlPanelObservable;
 import es.ucm.fdi.tp.view.Controller.GameController;
 import es.ucm.fdi.tp.view.InfoPanel.InfoView;
 import es.ucm.fdi.tp.view.InfoPanel.MessageViewer;
-import es.ucm.fdi.tp.view.InfoPanel.PlayersInfoObserver;
+import es.ucm.fdi.tp.view.InfoPanel.PlayerInfoObserver;
 
-public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>> extends GUIView<S, A> implements GameObserver<S, A>, PlayersInfoObserver, ControlPanelObservable {
+public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>> extends GUIView<S, A> implements GameObserver<S, A>, PlayerInfoObserver, ControlPanelObservable {
 
     private static final long serialVersionUID = 2977574295953072934L;
     private GameController<S, A> gameController;
@@ -48,7 +45,7 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
         this.setLayout(new BorderLayout(5, 5));
         this.rectBoardView = gameView;
         ((RectBoardView<S, A>) rectBoardView).setListPlayers(this.listaJugadores, this.gamePlayer);
-        ((RectBoardView<S, A>) rectBoardView).setPlayersInfoObserver(this);
+        ((RectBoardView<S, A>) rectBoardView).setPlayerInfoObserver(this);
         this.gameController = gameController;
         game.addObserver(this);
         initGUI();

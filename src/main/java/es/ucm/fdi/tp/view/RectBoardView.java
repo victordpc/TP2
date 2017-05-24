@@ -10,7 +10,7 @@ import es.ucm.fdi.tp.base.model.GamePlayer;
 import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.extra.jboard.JBoard;
 import es.ucm.fdi.tp.view.Controller.GameController;
-import es.ucm.fdi.tp.view.InfoPanel.PlayersInfoObserver;
+import es.ucm.fdi.tp.view.InfoPanel.PlayerInfoObserver;
 
 public abstract class RectBoardView<S extends GameState<S, A>, A extends GameAction<S, A>> extends GUIView<S, A> {
 
@@ -23,6 +23,7 @@ public abstract class RectBoardView<S extends GameState<S, A>, A extends GameAct
 	protected GamePlayer jugador;
 	protected List<GamePlayer> listaJugadores;
 	protected S state;
+	protected PlayerInfoObserver playerInfoObserver;
 
 	public RectBoardView(GameController<S, A> gameController, S state) {
 		this.gameController = gameController;
@@ -39,7 +40,7 @@ public abstract class RectBoardView<S extends GameState<S, A>, A extends GameAct
 	protected abstract int getNumRows();
 
 	protected Color getPlayerColor(int id) {
-		return this.listaJugadores.get(id).getPlayerColor();
+		return this.playerInfoObserver.getColorPlayer(id);
 	}
 
 	protected abstract Integer getPosition(int row, int col);
@@ -63,5 +64,7 @@ public abstract class RectBoardView<S extends GameState<S, A>, A extends GameAct
 		this.jugador = jugadorActual;
 	}
 
-	protected abstract void setPlayersInfoObserver(PlayersInfoObserver observer);
+	protected void setPlayerInfoObserver(PlayerInfoObserver observer) {
+		this.playerInfoObserver = observer;
+	}
 }

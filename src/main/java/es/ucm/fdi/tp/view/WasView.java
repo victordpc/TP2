@@ -11,7 +11,7 @@ import es.ucm.fdi.tp.extra.jboard.JBoard;
 import es.ucm.fdi.tp.mvc.PlayerType;
 import es.ucm.fdi.tp.view.Controller.GameController;
 import es.ucm.fdi.tp.view.InfoPanel.MessageViewer;
-import es.ucm.fdi.tp.view.InfoPanel.PlayersInfoObserver;
+import es.ucm.fdi.tp.view.InfoPanel.PlayerInfoObserver;
 import es.ucm.fdi.tp.was.Coordinate;
 import es.ucm.fdi.tp.was.WolfAndSheepAction;
 import es.ucm.fdi.tp.was.WolfAndSheepState;
@@ -20,7 +20,6 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
 
 	private static final long serialVersionUID = -3136654431325082580L;
 	private Coordinate originCoordinates;
-	private PlayersInfoObserver playersInfoObserver;
 	private List<Coordinate> validMoves;
 
 	public WasView(GameController<WolfAndSheepState, WolfAndSheepAction> gameController, WolfAndSheepState state) {
@@ -46,11 +45,6 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
 	@Override
 	protected int getNumRows() {
 		return 8;
-	}
-
-	@Override
-	protected Color getPlayerColor(int id) {
-		return this.playersInfoObserver.getColorPlayer(id);
 	}
 
 	@Override
@@ -119,9 +113,8 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
 
 	@Override
 	protected void keyTyped(int keyCode) {
-		if ((gameController.getPlayerMode() == PlayerType.MANUAL) && (originCoordinates != null)
-				&& (keyCode == KeyEvent.VK_ESCAPE)) {
-			playersInfoObserver.postMessage("Selección cancelada, elige una nueva ficha de origen");
+		if ((gameController.getPlayerMode() == PlayerType.MANUAL) && (originCoordinates != null) && (keyCode == KeyEvent.VK_ESCAPE)) {
+			playerInfoObserver.postMessage("Selección cancelada, elige una nueva ficha de origen");
 			originCoordinates = null;
 			jBoard.repaint();
 			this.validMoves = null;
@@ -134,7 +127,7 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
 			if (!state.isPositionEmpty(row, col)) {
 				if (originCoordinates == null) {
 					originCoordinates = new Coordinate(row, col);
-					playersInfoObserver.postMessage("Haz click en una celda destino");
+					playerInfoObserver.postMessage("Haz click en una celda destino");
 					validMoves = state.getValidMoves(this.jugador.getPlayerNumber(), originCoordinates);
 					jBoard.repaint();
 				}
@@ -148,7 +141,7 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
 						validMoves = null;
 					}
 				} else {
-					playersInfoObserver.postMessage("Movimiento no válido");
+					playerInfoObserver.postMessage("Movimiento no válido");
 				}
 			}
 		}
@@ -160,11 +153,6 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
 
 	@Override
 	public void setMessageViewer(MessageViewer<WolfAndSheepState, WolfAndSheepAction> messageViewer) {
-	}
-
-	@Override
-	protected void setPlayersInfoObserver(PlayersInfoObserver observer) {
-		this.playersInfoObserver = observer;
 	}
 
 	@Override
