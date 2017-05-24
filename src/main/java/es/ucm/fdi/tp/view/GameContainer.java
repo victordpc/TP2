@@ -94,6 +94,8 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
 					gameController.makeRandomMove(randPlayer);
 				} else if (gameController.getPlayerMode() == PlayerType.SMART) {
 					gameController.makeSmartMove(concurrentAiPlayer);
+					int evaulation = ((ConcurrentAiPlayer) concurrentAiPlayer).getEvaluationCount();
+					System.out.println("Evaluation count ");
 				}
 			}
 			break;

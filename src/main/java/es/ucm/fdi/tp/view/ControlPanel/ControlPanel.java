@@ -44,7 +44,6 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 		ButtonEvent, ComboBoxEvent
 	}
 
-	private List<ControlPanelObservable> controlPanelObservables;
 	private final String DICE_ICON_PATH = "/dice.png";
 	private final String EXIT_ICON_PATH = "/exit.png";
 	private final String NERD_ICON_PATH = "/nerd.png";
@@ -54,30 +53,22 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 	private final String TIMER_ICON_PATH = "/timer.png";
 
 	private GameController<S, A> gameController;
+    private List<ControlPanelObservable> controlPanelObservables;
 
 	private JButton randomMoveButton;
 	private JButton smartMoveButton;
 	private RandomPlayer randPlayer;
-	private SmartPlayer smartPlayer;
-
-    private final String RESTART_ICON_PATH = "/restart.png";
-    private final String STOP_ICON_PATH = "/stop.png";
-    private final String TIMER_ICON_PATH = "/timer.png";
-
-	// Buttons
-	private JButton randomMoveButton;
     private ConcurrentAiPlayer concurrentAiPlayer;
-	private RandomPlayer randPlayer;
-
-	private JButton smartMoveButton;
+    private JSpinner threadsSpinner;
+    private JSpinner timeOutSpinner;
 
 	public ControlPanel(GameController<S, A> gameController, int idJugador) {
 		this.gameController = gameController;
 		this.controlPanelObservables = new ArrayList<>();
 		this.randPlayer = new RandomPlayer("dummy");
 		this.randPlayer.join(idJugador);
-		this.smartPlayer = new SmartPlayer("dummy", 5);
-		this.smartPlayer.join(idJugador);
+		this.concurrentAiPlayer = new ConcurrentAiPlayer("Jugador "+idJugador);
+		this.concurrentAiPlayer.join(idJugador);
 		initGUI();
 	}
 
@@ -94,7 +85,11 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 				gameController.makeRandomMove(this.randPlayer);
 				break;
 			case SmartMove:
-				gameController.makeSmartMove(this.smartPlayer);
+                int threads = Integer.parseInt(threadsSpinner.getValue().toString());
+                concurrentAiPlayer.setMaxThreads(threads);
+                double timeOut = Double.parseDouble(timeOutSpinner.getValue().toString());
+                concurrentAiPlayer.setTimeout((int)timeOut);
+				gameController.makeSmartMove(this.concurrentAiPlayer);
 				break;
 			case Restart:
 				gameController.restartGame();
@@ -119,8 +114,8 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 		JLabel titleLabel = new JLabel("threads");
 		int processors = Runtime.getRuntime().availableProcessors();
 		SpinnerModel spinnerModel = new SpinnerNumberModel(1, 1, processors, 1);
-		JSpinner spinner = new JSpinner(spinnerModel);
-		smartMovesToolBar.add(spinner);
+		threadsSpinner = new JSpinner(spinnerModel);
+		smartMovesToolBar.add(threadsSpinner);
 		smartMovesToolBar.add(titleLabel);
 	}
 
@@ -133,10 +128,10 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 		double max = 5000;
 		double step = 500;
 		SpinnerModel spinnerModel = new SpinnerNumberModel(min, min, max, step);
-		JSpinner spinner = new JSpinner(spinnerModel);
-		JSpinner.NumberEditor editor = new JSpinner.NumberEditor(spinner);
-		spinner.setEditor(editor);
-		smartMovesToolBar.add(spinner);
+		timeOutSpinner = new JSpinner(spinnerModel);
+		JSpinner.NumberEditor editor = new JSpinner.NumberEditor(timeOutSpinner);
+        timeOutSpinner.setEditor(editor);
+		smartMovesToolBar.add(timeOutSpinner);
 		smartMovesToolBar.add(titleLabel);
 	}
 
@@ -208,7 +203,6 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 		stopButton.setIcon(stopIcon);
 
 		stopButton.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				ControlPanel.this.stopThreads();
@@ -219,10 +213,7 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 		add(smartMovesToolBar);
 	}
 
-	protected void stopThreads() {
-		// TODO Auto-generated method stub
-
-	}
+	protected void stopThreads() {}
 
 	private void notifyPlayerModeHasChanged(PlayerType playerType) {
 		for (ControlPanelObservable controlPanelObservable : controlPanelObservables) {
@@ -237,12 +228,10 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 	}
 
 	@Override
-	public void setGameController(GameController<S, A> gameCtrl) {
-	}
+	public void setGameController(GameController<S, A> gameCtrl) {}
 
 	@Override
-	public void setMessageViewer(MessageViewer<S, A> infoViewer) {
-	}
+	public void setMessageViewer(MessageViewer<S, A> infoViewer) {}
 
 	private void setUpButtons(PlayerType playerType) {
 		switch (playerType) {
@@ -253,7 +242,11 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 		case SMART:
 			smartMoveButton.setEnabled(false);
 			randomMoveButton.setEnabled(false);
-			gameController.makeSmartMove(this.concurrentAiPlayer);
+            int threads = Integer.parseInt(threadsSpinner.getValue().toString());
+            concurrentAiPlayer.setMaxThreads(threads);
+            int timeOut = Integer.parseInt(timeOutSpinner.getValue().toString());
+            concurrentAiPlayer.setTimeout(timeOut);
+            gameController.makeSmartMove(this.concurrentAiPlayer);
 			break;
 		case RANDOM:
 			smartMoveButton.setEnabled(false);

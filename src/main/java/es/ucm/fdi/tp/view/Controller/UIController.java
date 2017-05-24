@@ -60,7 +60,9 @@ public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>>
                 (jugador.getClass())
         );
 		if (!gameTable.getState().isFinished() && gameTable.getState().getTurn() == jugador.getPlayerNumber() && jugador instanceof ConcurrentAiPlayer) {
-			A action = jugador.requestAction(gameTable.getState());
+
+            A action = jugador.requestAction(gameTable.getState());
+			int evaulation = ((ConcurrentAiPlayer) jugador).getEvaluationCount();
 			gameTable.execute(action);
 		}
 	}
