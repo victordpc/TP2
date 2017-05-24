@@ -9,6 +9,7 @@ import javax.swing.BoxLayout;
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GamePlayer;
 import es.ucm.fdi.tp.base.model.GameState;
+import es.ucm.fdi.tp.base.player.ConcurrentAiPlayer;
 import es.ucm.fdi.tp.base.player.RandomPlayer;
 import es.ucm.fdi.tp.base.player.SmartPlayer;
 import es.ucm.fdi.tp.mvc.GameEvent;
@@ -29,7 +30,7 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
 	private GameController<S, A> gameController;
 	GamePlayer gamePlayer;
 	GamePlayer randPlayer;
-	GamePlayer smartPlayer;
+	GamePlayer concurrentAiPlayer;
 	private InfoView<S, A> infoView;
 	List<GamePlayer> listaJugadores;
 	private GUIView<S, A> rectBoardView;
@@ -40,8 +41,8 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
 		this.gamePlayer = jugadores.get(idPlayer);
 		this.randPlayer = new RandomPlayer("dummy");
 		this.randPlayer.join(this.gamePlayer.getPlayerNumber());
-		this.smartPlayer = new SmartPlayer("dummy", 5);
-		this.smartPlayer.join(this.gamePlayer.getPlayerNumber());
+		this.concurrentAiPlayer = new ConcurrentAiPlayer("Jugador: "+idPlayer);
+		this.concurrentAiPlayer.join(this.gamePlayer.getPlayerNumber());
 
 		this.setTitle("Jugador " + this.gamePlayer.getName());
 		this.setLayout(new BorderLayout(5, 5));
@@ -102,7 +103,7 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
 					}
 					gameController.makeRandomMove(randPlayer);
 				} else if (gameController.getPlayerMode() == PlayerType.SMART) {
-					gameController.makeSmartMove(smartPlayer);
+					gameController.makeSmartMove(concurrentAiPlayer);
 				}
 			}
 			break;
