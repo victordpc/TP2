@@ -44,12 +44,22 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 		ButtonEvent, ComboBoxEvent
 	}
 
-	private final String BRAIN_ICON_PATH = "/brain.png";
 	private List<ControlPanelObservable> controlPanelObservables;
 	private final String DICE_ICON_PATH = "/dice.png";
 	private final String EXIT_ICON_PATH = "/exit.png";
-	private GameController<S, A> gameController;
 	private final String NERD_ICON_PATH = "/nerd.png";
+	private final String RESTART_ICON_PATH = "/restart.png";
+	private final String STOP_ICON_PATH = "/stop.png";
+	private final String BRAIN_ICON_PATH = "/brain.png";
+	private final String TIMER_ICON_PATH = "/timer.png";
+
+	private GameController<S, A> gameController;
+
+	private JButton randomMoveButton;
+	private JButton smartMoveButton;
+	private RandomPlayer randPlayer;
+	private SmartPlayer smartPlayer;
+
     private final String RESTART_ICON_PATH = "/restart.png";
     private final String STOP_ICON_PATH = "/stop.png";
     private final String TIMER_ICON_PATH = "/timer.png";
@@ -66,15 +76,68 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 		this.controlPanelObservables = new ArrayList<>();
 		this.randPlayer = new RandomPlayer("dummy");
 		this.randPlayer.join(idJugador);
-		this.concurrentAiPlayer = new ConcurrentAiPlayer("Jugador " + idJugador);
-		this.concurrentAiPlayer.join(idJugador);
-        this.concurrentAiPlayer.setMaxThreads(1);
-        this.concurrentAiPlayer.setTimeout(1000);
-        initGUI();
+		this.smartPlayer = new SmartPlayer("dummy", 5);
+		this.smartPlayer.join(idJugador);
+		initGUI();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getActionCommand() == EventType.ComboBoxEvent.toString()) {
+			JComboBox<PlayerType> cb = (JComboBox<PlayerType>) e.getSource();
+			PlayerType playerType = (PlayerType) cb.getSelectedItem();
+			notifyPlayerModeHasChanged(playerType);
+			setUpButtons(playerType);
+		} else {
+			switch (ActionType.valueOf(e.getActionCommand())) {
+			case RandomMove:
+				gameController.makeRandomMove(this.randPlayer);
+				break;
+			case SmartMove:
+				gameController.makeSmartMove(this.smartPlayer);
+				break;
+			case Restart:
+				gameController.restartGame();
+				break;
+			case Stop:
+				if (preguntaCerrar()) {
+					gameController.stopGame();
+				}
+				break;
+			}
+		}
 	}
 
 	public void addControlPanelObserver(ControlPanelObservable newObserver) {
 		controlPanelObservables.add(newObserver);
+	}
+
+	private void createThreadsSpinner(JToolBar smartMovesToolBar) {
+		ImageIcon smartIcon = new ImageIcon(getClass().getResource(BRAIN_ICON_PATH));
+		JLabel smartIconLabel = new JLabel(smartIcon);
+		smartMovesToolBar.add(smartIconLabel);
+		JLabel titleLabel = new JLabel("threads");
+		int processors = Runtime.getRuntime().availableProcessors();
+		SpinnerModel spinnerModel = new SpinnerNumberModel(1, 1, processors, 1);
+		JSpinner spinner = new JSpinner(spinnerModel);
+		smartMovesToolBar.add(spinner);
+		smartMovesToolBar.add(titleLabel);
+	}
+
+	private void createTimerSpinner(JToolBar smartMovesToolBar) {
+		ImageIcon timerIcon = new ImageIcon(getClass().getResource(TIMER_ICON_PATH));
+		JLabel timerIconLabel = new JLabel(timerIcon);
+		smartMovesToolBar.add(timerIconLabel);
+		JLabel titleLabel = new JLabel("ms.");
+		double min = 500;
+		double max = 5000;
+		double step = 500;
+		SpinnerModel spinnerModel = new SpinnerNumberModel(min, min, max, step);
+		JSpinner spinner = new JSpinner(spinnerModel);
+		JSpinner.NumberEditor editor = new JSpinner.NumberEditor(spinner);
+		spinner.setEditor(editor);
+		smartMovesToolBar.add(spinner);
+		smartMovesToolBar.add(titleLabel);
 	}
 
 	private void initGUI() {
@@ -127,9 +190,6 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 		JToolBar smartMovesToolBar = new JToolBar();
 		smartMovesToolBar.setFloatable(false);
 		Border borderLayout = new TitledBorder("Smart Moves") {
-			/**
-			 *
-			 */
 			private static final long serialVersionUID = 5519939568486362218L;
 			private Insets customInsets = new Insets(20, 10, 10, 10);
 
@@ -143,83 +203,30 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 		createThreadsSpinner(smartMovesToolBar);
 		createTimerSpinner(smartMovesToolBar);
 		JButton stopButton = new JButton();
+		stopButton.setEnabled(false);
 		ImageIcon stopIcon = new ImageIcon(getClass().getResource(STOP_ICON_PATH));
 		stopButton.setIcon(stopIcon);
+
+		stopButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ControlPanel.this.stopThreads();
+			}
+		});
+
 		smartMovesToolBar.add(stopButton);
 		add(smartMovesToolBar);
 	}
 
-	private void createThreadsSpinner(JToolBar smartMovesToolBar) {
-        ImageIcon smartIcon = new ImageIcon(getClass().getResource(BRAIN_ICON_PATH));
-        JLabel smartIconLabel = new JLabel(smartIcon);
-        smartMovesToolBar.add(smartIconLabel);
-        JLabel titleLabel = new JLabel("threads");
-        int processors = Runtime.getRuntime().availableProcessors();
-        SpinnerModel spinnerModel = new SpinnerNumberModel(1, 1, processors, 1); //default value,lower bound,upper bound,increment by
-        JSpinner spinner = new JSpinner(spinnerModel);
-        spinner.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                int threads = Integer.parseInt(spinner.getValue().toString());
-                concurrentAiPlayer.setMaxThreads(threads);
-            }
-        });
-        smartMovesToolBar.add(spinner);
-        smartMovesToolBar.add(titleLabel);
-    }
+	protected void stopThreads() {
+		// TODO Auto-generated method stub
 
-    private void createTimerSpinner(JToolBar smartMovesToolBar) {
-        ImageIcon timerIcon = new ImageIcon(getClass().getResource(TIMER_ICON_PATH));
-        JLabel timerIconLabel = new JLabel(timerIcon);
-        smartMovesToolBar.add(timerIconLabel);
-        JLabel titleLabel = new JLabel("ms.");
-        double value = 1000;
-        SpinnerModel spinnerModel = new SpinnerNumberModel(value, value, null, value);
-        JSpinner spinner = new JSpinner(spinnerModel);
-        JSpinner.NumberEditor editor = new JSpinner.NumberEditor(spinner);
-        spinner.setEditor(editor);
-        spinner.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                int timeOut = Integer.parseInt(spinner.getValue().toString());
-                concurrentAiPlayer.setTimeout(timeOut);
-            }
-        });
-        smartMovesToolBar.add(spinner);
-        smartMovesToolBar.add(titleLabel);
-    }
+	}
 
 	private void notifyPlayerModeHasChanged(PlayerType playerType) {
 		for (ControlPanelObservable controlPanelObservable : controlPanelObservables) {
 			controlPanelObservable.playerModeHasChange(playerType);
-		}
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equalsIgnoreCase(EventType.ComboBoxEvent.toString())) {
-			JComboBox cb = (JComboBox) e.getSource();
-			String playerMode = (String) cb.getSelectedItem();
-			PlayerType playerType = PlayerType.valueOf(playerMode.toUpperCase());
-			notifyPlayerModeHasChanged(playerType);
-			setUpButtons(playerType);
-		} else {
-			switch (ActionType.valueOf(e.getActionCommand())) {
-			case RandomMove:
-				gameController.makeRandomMove(this.randPlayer);
-				break;
-			case SmartMove:
-				gameController.makeSmartMove(this.concurrentAiPlayer);
-				break;
-			case Restart:
-				gameController.restartGame();
-				break;
-			case Stop:
-				if (preguntaCerrar()) {
-					gameController.stopGame();
-				}
-				break;
-			}
 		}
 	}
 
