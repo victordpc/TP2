@@ -10,6 +10,7 @@ import es.ucm.fdi.tp.mvc.GameEvent;
 import es.ucm.fdi.tp.mvc.GameTable;
 import es.ucm.fdi.tp.mvc.PlayerType;
 
+import javax.swing.*;
 import java.awt.*;
 
 public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>> implements GameController<S, A> {
@@ -38,15 +39,14 @@ public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>>
 
 	@Override
 	public void makeManualMove(A a) {
-		if (!gameTable.getState().isFinished()) {
+        if (!gameTable.getState().isFinished() && gameTable.getState().getTurn() == a.getPlayerNumber()) {
 			gameTable.execute(a);
 		}
 	}
 
 	@Override
 	public void makeRandomMove(GamePlayer jugador) {
-		if (!gameTable.getState().isFinished() && gameTable.getState().getTurn() == jugador.getPlayerNumber()
-				&& jugador instanceof RandomPlayer) {
+		if (!gameTable.getState().isFinished() && gameTable.getState().getTurn() == jugador.getPlayerNumber() && jugador instanceof RandomPlayer) {
 			A action = jugador.requestAction(gameTable.getState());
 			gameTable.execute(action);
 		}
@@ -60,10 +60,14 @@ public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>>
                 (jugador.getClass())
         );
 		if (!gameTable.getState().isFinished() && gameTable.getState().getTurn() == jugador.getPlayerNumber() && jugador instanceof ConcurrentAiPlayer) {
-
             A action = jugador.requestAction(gameTable.getState());
-			int evaulation = ((ConcurrentAiPlayer) jugador).getEvaluationCount();
-			gameTable.execute(action);
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    int evaulation = ((ConcurrentAiPlayer) jugador).getEvaluationCount();
+                    gameTable.execute(action);
+                }
+            });
 		}
 	}
 

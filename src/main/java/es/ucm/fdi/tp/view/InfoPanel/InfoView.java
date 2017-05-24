@@ -56,7 +56,6 @@ public class InfoView<S extends GameState<S, A>, A extends GameAction<S, A>> ext
 	}
 
 	@Override
-	public void update(S state) {
-	}
+	public void update(S state) {}
 
 }
