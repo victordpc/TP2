@@ -10,6 +10,7 @@ import es.ucm.fdi.tp.mvc.PlayerType;
 import es.ucm.fdi.tp.view.InfoPanel.PlayerInfoObserver;
 
 import javax.swing.*;
+import java.util.Date;
 
 public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>> implements GameController<S, A> {
 
@@ -54,17 +55,18 @@ public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>>
 
 	@Override
 	public void makeSmartMove(GamePlayer jugador) {
-        System.out.println("!gameTable.getState().isFinished() " +gameTable.getState().isFinished() + " -- " +
-                gameTable.getState().getTurn() + " -- "+
-                jugador.getPlayerNumber() + " -- "+
-                (jugador.getClass())
-        );
 		if (!gameTable.getState().isFinished() && gameTable.getState().getTurn() == jugador.getPlayerNumber() && jugador instanceof ConcurrentAiPlayer) {
-            A action = jugador.requestAction(gameTable.getState());
+			Date startedDate = new Date();
+			A action = jugador.requestAction(gameTable.getState());
+			Date finishDate = new Date();
+			int processTime = (int) (finishDate.getTime() - startedDate.getTime());
+			int totalNodes = ((ConcurrentAiPlayer) jugador).getEvaluationCount();
+			int nodesByMs = totalNodes / processTime;
+			String resultMessage = String.format("%d nodes in %d ms (%d n/ms) value = ", totalNodes, processTime, nodesByMs);
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    int evaulation = ((ConcurrentAiPlayer) jugador).getEvaluationCount();
+                    playerInfoObserver.postMessage(resultMessage);
                     gameTable.execute(action);
                 }
             });
