@@ -1,7 +1,6 @@
 package es.ucm.fdi.tp.view.ControlPanel;
 
-import java.awt.Component;
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -47,6 +46,8 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
     private ConcurrentAiPlayer concurrentAiPlayer;
     private JSpinner threadsSpinner;
     private JSpinner timeOutSpinner;
+    private JButton stopSmartMoveButton;
+    private JLabel smartIconLabel;
 
     public ControlPanel(GameController<S, A> gameController, int idJugador) {
         this.gameController = gameController;
@@ -117,19 +118,20 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 
         createThreadsSpinner(smartMovesToolBar);
         createTimerSpinner(smartMovesToolBar);
-        JButton stopButton = new JButton();
-        stopButton.setEnabled(false);
+        stopSmartMoveButton = new JButton();
+        stopSmartMoveButton.setEnabled(false);
         ImageIcon stopIcon = new ImageIcon(getClass().getResource("/stop.png"));
-        stopButton.setIcon(stopIcon);
+        stopSmartMoveButton.setIcon(stopIcon);
 
-        stopButton.addActionListener(new ActionListener() {
+        stopSmartMoveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ControlPanel.this.stopThreads();
+                ControlPanel.this.notifyStopSmartPlayerMove();
+                ControlPanel.this.setUpSmartPlayerAction(false);
             }
         });
 
-        smartMovesToolBar.add(stopButton);
+        smartMovesToolBar.add(stopSmartMoveButton);
         add(smartMovesToolBar);
     }
 
@@ -162,7 +164,8 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 
     private void createThreadsSpinner(JToolBar smartMovesToolBar) {
         ImageIcon smartIcon = new ImageIcon(getClass().getResource("/brain.png"));
-        JLabel smartIconLabel = new JLabel(smartIcon);
+        smartIconLabel = new JLabel(smartIcon);
+        smartIconLabel.setOpaque(true);
         smartMovesToolBar.add(smartIconLabel);
         JLabel titleLabel = new JLabel("threads");
         int processors = Runtime.getRuntime().availableProcessors();
@@ -186,9 +189,6 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
         timeOutSpinner.setEditor(editor);
         smartMovesToolBar.add(timeOutSpinner);
         smartMovesToolBar.add(titleLabel);
-    }
-
-    protected void stopThreads() {
     }
 
     private boolean preguntaCerrar() {
@@ -229,6 +229,12 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
         }
     }
 
+    protected void notifyStopSmartPlayerMove() {
+        for (ControlPanelObservable controlPanelObservable : controlPanelObservables) {
+            controlPanelObservable.stopSmartPlayerAction();
+        }
+    }
+
     public int getConcurrentPlayerThreads() {
         return Integer.parseInt(threadsSpinner.getValue().toString());
     }
@@ -236,6 +242,17 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
     public int getConcurrentPlayerTimeOut() {
         return (int) Double.parseDouble(timeOutSpinner.getValue().toString());
     }
+
+    public void setUpSmartPlayerAction(Boolean isThinking) {
+        stopSmartMoveButton.setEnabled(isThinking);
+        if (isThinking) {
+            smartIconLabel.setBackground(Color.yellow);
+        }
+        smartIconLabel.setOpaque(isThinking);
+        smartIconLabel.repaint();
+    }
+
+
 
     @Override
     public void update(S state) {}

@@ -5,4 +5,5 @@ import es.ucm.fdi.tp.mvc.PlayerType;
 public interface ControlPanelObservable {
 	void playerModeHasChange(PlayerType newPlayerMode);
 	void makeAutomaticMove(PlayerType playerType);
+	void stopSmartPlayerAction();
 }

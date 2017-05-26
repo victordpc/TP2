@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.List;
 import javax.swing.BoxLayout;
+
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GamePlayer;
 import es.ucm.fdi.tp.base.model.GameState;
@@ -62,7 +63,6 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
     }
 
     public void initGUI() {
-
         controlPanel = new ControlPanel<S, A>(gameController, this.gamePlayer.getPlayerNumber());
         controlPanel.setBackground(Color.decode("#eeeeee"));
         controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.X_AXIS));
@@ -81,16 +81,15 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
                 infoView.setContent(e.toString());
                 rectBoardView.update(e.getState());
                 infoView.repaintPlayersInfoViewer();
+                makeAutomaticMove();
                 break;
             case Change:
                 rectBoardView.update(e.getState());
                 infoView.repaintPlayersInfoViewer();
                 if (e.getState().getTurn() == this.gamePlayer.getPlayerNumber()) {
-                    if (gameController.getPlayerMode() == PlayerType.RANDOM) {
-                        makeRandomMove();
-                    } else if (gameController.getPlayerMode() == PlayerType.SMART) {
-                        makeSmartMove();
-                    }
+                    makeAutomaticMove();
+                }else {
+                    controlPanel.setUpSmartPlayerAction(false);
                 }
                 break;
             case Info:
@@ -127,13 +126,26 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
         }
     }
 
-    @Override
-    public void makeAutomaticMove(PlayerType playerType){
-        if (playerType == PlayerType.RANDOM) {
+    private void makeAutomaticMove() {
+        if (gameController.getPlayerMode() == PlayerType.RANDOM) {
             makeRandomMove();
-        }else {
+        } else if (gameController.getPlayerMode() == PlayerType.SMART) {
             makeSmartMove();
         }
+    }
+
+    @Override
+    public void makeAutomaticMove(PlayerType playerType) {
+        if (playerType == PlayerType.RANDOM) {
+            makeRandomMove();
+        } else {
+            makeSmartMove();
+        }
+    }
+
+    @Override
+    public void stopSmartPlayerAction() {
+        concurrentAIThread.interrupt();
     }
 
     private void makeRandomMove() {
@@ -141,6 +153,7 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
     }
 
     private void makeSmartMove() {
+        controlPanel.setUpSmartPlayerAction(true);
         concurrentAiPlayer.setMaxThreads(controlPanel.getConcurrentPlayerThreads());
         concurrentAiPlayer.setTimeout(controlPanel.getConcurrentPlayerTimeOut());
         concurrentAIThread = new Thread() {
@@ -149,7 +162,6 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
             }
         };
         concurrentAIThread.start();
-
     }
 
     @Override

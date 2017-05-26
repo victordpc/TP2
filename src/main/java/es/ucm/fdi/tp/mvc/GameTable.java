@@ -31,20 +31,21 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
 		observers.add(o);
 	}
 
-	// NOTIFICAR DE ERRORES,
 	public void execute(A action) {
-		if (action.getPlayerNumber() == currentState.getTurn()) {
-			// apply move
-			currentState = action.applyTo(currentState);
-			if (currentState.isFinished()) {
-				notifyGameHasChanged();
-				notifyGameHasFinished();
+		if (action != null) {
+			if (action.getPlayerNumber() == currentState.getTurn()) {
+				// apply move
+				currentState = action.applyTo(currentState);
+				if (currentState.isFinished()) {
+					notifyGameHasChanged();
+					notifyGameHasFinished();
+				} else {
+					notifyGameHasChanged();
+					notifyInfo();
+				}
 			} else {
-				notifyGameHasChanged();
-				notifyInfo();
+				notifyErrorHasOcurred("No es tu turno jugador " + action.getPlayerNumber());
 			}
-		} else {
-			notifyErrorHasOcurred("No es tu turno jugador " + action.getPlayerNumber());
 		}
 	}
 

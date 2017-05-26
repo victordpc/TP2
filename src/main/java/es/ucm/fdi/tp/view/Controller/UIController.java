@@ -62,7 +62,8 @@ public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>>
 			int processTime = (int) (finishDate.getTime() - startedDate.getTime());
 			int totalNodes = ((ConcurrentAiPlayer) jugador).getEvaluationCount();
 			int nodesByMs = totalNodes / processTime;
-			String resultMessage = String.format("%d nodes in %d ms (%d n/ms) value = ", totalNodes, processTime, nodesByMs);
+			double value = ((ConcurrentAiPlayer) jugador).getValue();
+			String resultMessage = String.format("%d nodes in %d ms (%d n/ms) value = %.4f", totalNodes, processTime, nodesByMs, value);
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
