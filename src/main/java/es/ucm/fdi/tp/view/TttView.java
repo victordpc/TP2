@@ -118,10 +118,6 @@ public class TttView extends RectBoardView<TttState, TttAction> {
 	}
 
 	@Override
-	protected void setPlayerInfoObserver(PlayerInfoObserver observer) {
-	}
-
-	@Override
 	public void update(TttState state) {
 		this.state = state;
 		jBoard.repaint();
