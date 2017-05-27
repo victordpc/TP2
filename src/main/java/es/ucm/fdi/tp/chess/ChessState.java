@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.chess.ChessAction.Special;
 import es.ucm.fdi.tp.chess.ChessBoard.Piece;
+import es.ucm.fdi.tp.was.Coordinate;
 
 /**
  * A chess state. Implements all rules except for move-repetition and overly
@@ -188,8 +189,7 @@ public class ChessState extends GameState<ChessState, ChessAction> {
 		}
 	}
 
-	protected void addPawnAction(int turn, int row, int col, int dstRow, int dstCol, int queenRow,
-			ArrayList<ChessAction> as) {
+	protected void addPawnAction(int turn, int row, int col, int dstRow, int dstCol, int queenRow, ArrayList<ChessAction> as) {
 		if (row != queenRow) {
 			as.add(new ChessAction(turn, row, col, dstRow, dstCol));
 		} else {
@@ -351,8 +351,7 @@ public class ChessState extends GameState<ChessState, ChessAction> {
 		return valid.contains(action);
 	}
 
-	protected void pawnActions(byte p, int turn, int row, int col, ArrayList<ChessAction> as, int dy, int queenRow,
-			int doubleRow, int passantRow) {
+	protected void pawnActions(byte p, int turn, int row, int col, ArrayList<ChessAction> as, int dy, int queenRow, int doubleRow, int passantRow) {
 
 		// advance?
 		if (empty(board.get(row + dy, col))) {
@@ -448,5 +447,22 @@ public class ChessState extends GameState<ChessState, ChessAction> {
 	public List<ChessAction> validActions(int playerNumber) {
 		return valid;
 	}
+
+	public List<Coordinate> getValidMoves(int playerId, Coordinate originCoordinate) {
+		List<Coordinate> validMoves = new ArrayList<>();
+		if (finished) {
+			return validMoves;
+		}
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				ChessAction action = new ChessAction(playerId, originCoordinate.getX(), originCoordinate.getY(), i, j);
+				if (isValid(action)) {
+					validMoves.add(new Coordinate(i, j));
+				}
+			}
+		}
+		return validMoves;
+	}
+
 
 }

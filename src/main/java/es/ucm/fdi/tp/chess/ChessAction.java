@@ -31,8 +31,7 @@ public class ChessAction implements GameAction<ChessState, ChessAction> {
 		}
 	}
 
-	protected static final Special[] QUEENING_SPECIALS = new Special[] { Special.QueenQ, Special.QueenR, Special.QueenB,
-			Special.QueenN };
+	protected static final Special[] QUEENING_SPECIALS = new Special[] { Special.QueenQ, Special.QueenR, Special.QueenB, Special.QueenN };
 	private boolean check;
 	private int dstCol;
 	private int dstRow;

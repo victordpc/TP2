@@ -150,6 +150,12 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
 	}
 
 	@Override
+	protected void resetValidMoves() {
+		validMoves = null;
+		originCoordinates = null;
+	}
+
+	@Override
 	public void setGameController(GameController<WolfAndSheepState, WolfAndSheepAction> gameCtrl) {
 	}
 
@@ -160,11 +166,4 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
 	@Override
 	public void update(Observable o, Object arg) {
 	}
-
-	@Override
-	public void update(WolfAndSheepState state) {
-		this.state = state;
-		jBoard.repaint();
-	}
-
 }

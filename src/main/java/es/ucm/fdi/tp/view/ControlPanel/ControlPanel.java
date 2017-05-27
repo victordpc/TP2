@@ -141,7 +141,6 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
             JComboBox<PlayerType> cb = (JComboBox<PlayerType>) e.getSource();
             PlayerType playerType = (PlayerType) cb.getSelectedItem();
             notifyPlayerModeHasChanged(playerType);
-            setUpButtons(playerType);
         } else {
             switch (ActionType.valueOf(e.getActionCommand())) {
                 case RandomMove:

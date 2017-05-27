@@ -79,6 +79,7 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
         switch (e.getType()) {
             case Start:
                 infoView.setContent(e.toString());
+                ((RectBoardView)rectBoardView).resetValidMoves();
                 rectBoardView.update(e.getState());
                 infoView.repaintPlayersInfoViewer();
                 makeAutomaticMove();

@@ -116,10 +116,4 @@ public class TttView extends RectBoardView<TttState, TttAction> {
 	@Override
 	public void setMessageViewer(MessageViewer<TttState, TttAction> infoViewer) {
 	}
-
-	@Override
-	public void update(TttState state) {
-		this.state = state;
-		jBoard.repaint();
-	}
 }
