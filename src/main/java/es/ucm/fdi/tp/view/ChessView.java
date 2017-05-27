@@ -154,8 +154,8 @@ public class ChessView extends RectBoardView<ChessState, ChessAction> {
                 validMoves = state.getValidMoves(this.jugador.getPlayerNumber(), originCoordinates);
                 jBoard.repaint();
             } else if (originCoordinates != null) {
-                int originPlayerId = getPosition(originCoordinates.getX(), originCoordinates.getY());
-                if (originPlayerId == jugador.getPlayerNumber()) {
+                Integer originPlayerId = getPosition(originCoordinates.getX(), originCoordinates.getY());
+                if (originPlayerId != null && originPlayerId== jugador.getPlayerNumber()) {
                     ChessAction newAction = new ChessAction(jugador.getPlayerNumber(), originCoordinates.getX(), originCoordinates.getY(), row, col);
                     if (state.isValid(newAction)) {
                         gameController.makeManualMove(newAction);
