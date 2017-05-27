@@ -13,18 +13,17 @@ import es.ucm.fdi.tp.base.model.GamePlayer;
 import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.base.player.RandomPlayer;
 import es.ucm.fdi.tp.base.player.SmartPlayer;
+import es.ucm.fdi.tp.chess.ChessAction;
+import es.ucm.fdi.tp.chess.ChessBoard;
+import es.ucm.fdi.tp.chess.ChessState;
 import es.ucm.fdi.tp.mvc.GameName;
 import es.ucm.fdi.tp.mvc.GameTable;
 import es.ucm.fdi.tp.mvc.GameType;
 import es.ucm.fdi.tp.mvc.PlayerType;
 import es.ucm.fdi.tp.ttt.TttAction;
 import es.ucm.fdi.tp.ttt.TttState;
-import es.ucm.fdi.tp.view.ConsoleView;
-import es.ucm.fdi.tp.view.GUIView;
-import es.ucm.fdi.tp.view.GameContainer;
+import es.ucm.fdi.tp.view.*;
 import es.ucm.fdi.tp.view.InfoPanel.PlayerInfoObserver;
-import es.ucm.fdi.tp.view.TttView;
-import es.ucm.fdi.tp.view.WasView;
 import es.ucm.fdi.tp.view.Controller.ConsoleController;
 import es.ucm.fdi.tp.view.Controller.GameController;
 import es.ucm.fdi.tp.view.Controller.UIController;
@@ -43,16 +42,14 @@ public class Main {
 		return new GameTable(initialGameState);
 	}
 
-	private static <S extends GameState<S, A>, A extends GameAction<S, A>> GUIView<S, A> createGUIGame(String gameName,
-			GameController<S, A> gameController, GameState<S, A> gameState) {
+	private static <S extends GameState<S, A>, A extends GameAction<S, A>> GUIView<S, A> createGUIGame(String gameName, GameController<S, A> gameController, GameState<S, A> gameState) {
 		if (gameName.equalsIgnoreCase(GameName.TTT.toString())) {
-			return (GUIView<S, A>) new TttView((GameController<TttState, TttAction>) gameController,
-					(TttState) gameState);
+			return (GUIView<S, A>) new TttView((GameController<TttState, TttAction>) gameController, (TttState) gameState);
 		} else if (gameName.equalsIgnoreCase(GameName.WAS.toString())) {
-			return (GUIView<S, A>) new WasView((GameController<WolfAndSheepState, WolfAndSheepAction>) gameController,
-					(WolfAndSheepState) gameState);
-		}
-		return (GUIView<S, A>) new TttView((GameController<TttState, TttAction>) gameController, (TttState) gameState);
+			return (GUIView<S, A>) new WasView((GameController<WolfAndSheepState, WolfAndSheepAction>) gameController, (WolfAndSheepState) gameState);
+		}else {
+            return (GUIView<S, A>) new ChessView((GameController<ChessState, ChessAction>) gameController, (ChessState) gameState);
+        }
 	}
 
 	/**
@@ -69,6 +66,8 @@ public class Main {
 			initialState = new TttState(3);
 		} else if (gameName.equalsIgnoreCase(GameName.WAS.toString())) {
 			initialState = new WolfAndSheepState(8);
+		}else {
+			initialState = new ChessState();
 		}
 		return initialState;
 	}
@@ -140,7 +139,7 @@ public class Main {
 		if (args[1].equalsIgnoreCase(GameType.CONSOLE.toString())) {
 			startConsoleMode(gameTable, otherArgs);
 		} else if (args[1].equalsIgnoreCase(GameType.GUI.toString())) {
-			startGUIMode(args[0], gameTable, otherArgs);
+			startGUIMode(args[0], gameTable);
 		} else {
 			System.err.println("Invalid view mode: " + args[1]);
 			System.exit(1);
@@ -155,8 +154,7 @@ public class Main {
 		new ConsoleController<S, A>(players, gameTable).run();
 	}
 
-	private static <S extends GameState<S, A>, A extends GameAction<S, A>> void startGUIMode(String gameName,
-			GameTable<S, A> gameTable, String playerModes[]) {
+	private static <S extends GameState<S, A>, A extends GameAction<S, A>> void startGUIMode(String gameName, GameTable<S, A> gameTable) {
 		List<GamePlayer> players = loadGuiPlayers(gameTable);
 		if (gameName.equalsIgnoreCase(GameName.TTT.toString())) {
 			players.get(0).setPlayerColor(Color.decode("#FFEB3B"));
@@ -164,6 +162,9 @@ public class Main {
 		} else if (gameName.equalsIgnoreCase(GameName.WAS.toString())) {
 			players.get(0).setPlayerColor(Color.decode("#424242"));
 			players.get(1).setPlayerColor(Color.decode("#ECEFF1"));
+		}else {
+			players.get(0).setPlayerColor(Color.decode("#3CBCEF"));
+			players.get(1).setPlayerColor(Color.decode("#A71F5D"));
 		}
 		gameTable.setGamePlayers(players);
 		try {

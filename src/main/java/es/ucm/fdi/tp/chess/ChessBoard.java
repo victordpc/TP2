@@ -7,6 +7,7 @@ package es.ucm.fdi.tp.chess;
  */
 public class ChessBoard {
 
+
 	/**
 	 * Symbolic pieces. Encapsulates most piece operations.
 	 */
@@ -111,7 +112,7 @@ public class ChessBoard {
 			{ 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } };
 	protected final static int DIM = 8;
 	protected static int DIM_WITH_BORDERS = 2 + 8 + 2;
-	protected static final byte EMPTY = 0x10;
+	public static final byte EMPTY = 0x10;
 
 	private static final int[][] KNIGHT_JUMPS = new int[][] { { 1, 2 }, { 1, -2 }, { -1, 2 }, { -1, -2 }, { 2, 1 },
 			{ 2, -1 }, { -2, 1 }, { -2, -1 } };

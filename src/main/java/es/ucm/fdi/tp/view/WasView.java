@@ -1,7 +1,6 @@
 package es.ucm.fdi.tp.view;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.Observable;
@@ -23,7 +22,7 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
 	private List<Coordinate> validMoves;
 
 	public WasView(GameController<WolfAndSheepState, WolfAndSheepAction> gameController, WolfAndSheepState state) {
-		super(gameController, state);
+		super(gameController, state, false);
 	}
 
 	@Override
@@ -95,6 +94,9 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
 			protected Shape getShape(int player) {
 				return WasView.this.getShape(player);
 			}
+
+			@Override
+			protected Image getImage(int row, int col) {return null;}
 
 			@Override
 			protected void keyTyped(int keyCode) {

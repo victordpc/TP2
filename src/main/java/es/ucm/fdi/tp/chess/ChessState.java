@@ -21,10 +21,9 @@ import es.ucm.fdi.tp.chess.ChessBoard.Piece;
  * @author mfreire
  */
 public class ChessState extends GameState<ChessState, ChessAction> {
+	
 	private static final long serialVersionUID = 1625085984570128665L;
-
 	public static final int BLACK = 1;
-
 	protected static final int CASTLE_DONE = 4;
 	protected static final int CASTLE_LONG = 2;
 	protected static final int CASTLE_SHORT = 1;
@@ -323,7 +322,7 @@ public class ChessState extends GameState<ChessState, ChessAction> {
 
 	@Override
 	public String getGameDescription() {
-		return "Chess";
+		return "chess";
 	}
 
 	@Override

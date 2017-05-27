@@ -1,6 +1,6 @@
 package es.ucm.fdi.tp.view;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.List;
 
 import javax.swing.JComponent;
@@ -24,10 +24,12 @@ public abstract class RectBoardView<S extends GameState<S, A>, A extends GameAct
 	protected List<GamePlayer> listaJugadores;
 	protected S state;
 	protected PlayerInfoObserver playerInfoObserver;
+    protected Boolean hasImages;
 
-	public RectBoardView(GameController<S, A> gameController, S state) {
+	public RectBoardView(GameController<S, A> gameController, S state, Boolean hasImages) {
 		this.gameController = gameController;
 		this.state = state;
+		this.hasImages = hasImages;
 		initUI();
 	}
 
@@ -53,6 +55,10 @@ public abstract class RectBoardView<S extends GameState<S, A>, A extends GameAct
 		return JBoard.Shape.CIRCLE;
 	}
 
+    protected Image getImage(int row, int col) {
+	    return null;
+    }
+
 	protected abstract void initUI();
 
 	protected abstract void keyTyped(int keyCode);
@@ -67,4 +73,5 @@ public abstract class RectBoardView<S extends GameState<S, A>, A extends GameAct
 	protected void setPlayerInfoObserver(PlayerInfoObserver observer) {
 		this.playerInfoObserver = observer;
 	}
+
 }
