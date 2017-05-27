@@ -42,7 +42,6 @@ public abstract class JBoard extends JComponent {
         if (p != null) {
             Color c = getColor(p);
             Shape s = getShape(p);
-
             g.setColor(c);
             switch (s) {
                 case CIRCLE:
@@ -56,6 +55,9 @@ public abstract class JBoard extends JComponent {
                     g.drawRect(x + _SEPARATOR + 2, y + _SEPARATOR + 2, _CELL_WIDTH - 2 * _SEPARATOR - 4, _CELL_HEIGHT - 2 * _SEPARATOR - 4);
                     break;
                 case IMAGE:
+                    g.fillOval(x + _SEPARATOR + 2, y + _SEPARATOR + 2, _CELL_WIDTH - 2 * _SEPARATOR - 4, _CELL_HEIGHT - 2 * _SEPARATOR - 4);
+                    g.setColor(Color.black);
+                    g.drawOval(x + _SEPARATOR + 2, y + _SEPARATOR + 2, _CELL_WIDTH - 2 * _SEPARATOR - 4, _CELL_HEIGHT - 2 * _SEPARATOR - 4);
                     Image pieceImage = getImage(row, col);
                     if (pieceImage != null) {
                         int positionX = (x + _SEPARATOR + 10);

@@ -123,13 +123,16 @@ public class ChessView extends RectBoardView<ChessState, ChessAction> {
         return null;
     }
 
+    // Player Id
     @Override
     protected Integer getPosition(int row, int col) {
-        int shape = state.at(row, col);
-        if (shape != ChessBoard.EMPTY) {
-            return shape;
-        } else {
+        byte piceByte = state.getBoard().get(row, col);
+        if (ChessBoard.empty(piceByte)) {
             return null;
+        }else if (ChessBoard.black(piceByte)) {
+            return 0;
+        }else {
+            return 1;
         }
     }
 
@@ -140,5 +143,17 @@ public class ChessView extends RectBoardView<ChessState, ChessAction> {
     @Override
     protected void mouseClicked(int row, int col, int clickCount, int mouseButton) {
 
+    }
+
+    private boolean isDigit(char ch) {
+        return ch >= '0' && ch <= '9';
+    }
+
+    private boolean isLowerCase(char ch) {
+        return ch >= 'a' && ch <= 'z';
+    }
+
+    private boolean isUpperCase(char ch) {
+        return ch >= 'A' && ch <= 'Z';
     }
 }
