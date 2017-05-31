@@ -101,7 +101,9 @@ public class TttView extends RectBoardView<TttState, TttAction> {
 	@Override
 	protected void mouseClicked(int row, int col, int clickCount, int mouseButton) {
 		TttAction action = new TttAction(this.jugador.getPlayerNumber(), row, col);
-		gameController.makeManualMove(action);
+		if (state.isPositionEmpty(row, col)) {
+			gameController.makeManualMove(action);
+		}
 	}
 
 	@Override

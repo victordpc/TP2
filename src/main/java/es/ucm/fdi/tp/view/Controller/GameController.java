@@ -7,22 +7,24 @@ import es.ucm.fdi.tp.mvc.PlayerType;
 import es.ucm.fdi.tp.view.InfoPanel.PlayerInfoObserver;
 
 public interface GameController<S extends GameState<S, A>, A extends GameAction<S, A>> {
-	void changePlayerMode(PlayerType playerMode);
+    void changePlayerMode(PlayerType playerMode);
 
-	PlayerType getPlayerMode();
+    PlayerType getPlayerMode();
 
-	void makeManualMove(A a);
+    void makeManualMove(A a);
 
-	void makeRandomMove(GamePlayer jugador);
+    void makeRandomMove(GamePlayer jugador);
 
-	void makeSmartMove(GamePlayer jugador);
+    void makeSmartMove(GamePlayer jugador);
 
-	void notifyInterfaceNeedBeUpdated();
+    void notifyInterfaceNeedBeUpdated();
 
-	void restartGame();
+    void restartGame();
 
-	void stopGame();
+    void stopGame();
 
-	void setPlayerInfoObserver(PlayerInfoObserver playerInfoObserver);
+    void setPlayerInfoObserver(PlayerInfoObserver playerInfoObserver);
+
+    public int getPlayerIdTurn();
 
 }

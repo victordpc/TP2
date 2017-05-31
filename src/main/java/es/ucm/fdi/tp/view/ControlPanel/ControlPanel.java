@@ -253,7 +253,6 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
     }
 
 
-
     @Override
     public void update(S state) {}
 

@@ -88,4 +88,9 @@ public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>>
 	public void stopGame() {
 		System.exit(0);
 	}
+
+	@Override
+	public int getPlayerIdTurn() {
+	    return gameTable.getState().getTurn();
+    }
 }

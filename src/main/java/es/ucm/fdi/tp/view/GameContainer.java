@@ -79,7 +79,7 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
         switch (e.getType()) {
             case Start:
                 infoView.setContent(e.toString());
-                ((RectBoardView)rectBoardView).resetValidMoves();
+                ((RectBoardView) rectBoardView).resetValidMoves();
                 rectBoardView.update(e.getState());
                 infoView.repaintPlayersInfoViewer();
                 makeAutomaticMove();
@@ -89,12 +89,12 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
                 infoView.repaintPlayersInfoViewer();
                 if (e.getState().getTurn() == this.gamePlayer.getPlayerNumber()) {
                     makeAutomaticMove();
-                }else {
+                } else {
                     controlPanel.setUpSmartPlayerAction(false);
                 }
                 break;
             case Info:
-                if (e.getState().getTurn() == this.gamePlayer.getPlayerNumber()) {
+                if (e.getState().getTurn() == this.gamePlayer.getPlayerNumber() && !e.getState().isFinished()) {
                     infoView.addContent("Tu turno");
                 } else {
                     infoView.addContent("Turno del jugador " + e.getState().getTurn());
@@ -155,7 +155,9 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
     }
 
     private void makeSmartMove() {
-        controlPanel.setUpSmartPlayerAction(true);
+        if (gameController.getPlayerIdTurn() == gamePlayer.getPlayerNumber()) {
+            controlPanel.setUpSmartPlayerAction(true);
+        }
         concurrentAiPlayer.setMaxThreads(controlPanel.getConcurrentPlayerThreads());
         concurrentAiPlayer.setTimeout(controlPanel.getConcurrentPlayerTimeOut());
         concurrentAIThread = new Thread() {
@@ -164,6 +166,7 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
             }
         };
         concurrentAIThread.start();
+
     }
 
     @Override
@@ -172,11 +175,14 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
     }
 
     @Override
-    public void setGameController(GameController<S, A> gameCtrl) {}
+    public void setGameController(GameController<S, A> gameCtrl) {
+    }
 
     @Override
-    public void setMessageViewer(MessageViewer<S, A> messageViewer) {}
+    public void setMessageViewer(MessageViewer<S, A> messageViewer) {
+    }
 
     @Override
-    public void update(S state) {}
+    public void update(S state) {
+    }
 }
