@@ -121,6 +121,7 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
             case SMART:
             case RANDOM:
                 rectBoardView.setEnabled(false);
+                makeAutomaticMove();
                 break;
             default:
                 break;
