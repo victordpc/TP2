@@ -48,6 +48,7 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
     private JSpinner timeOutSpinner;
     private JButton stopSmartMoveButton;
     private JLabel smartIconLabel;
+    private String RESOURCES_PATH = "src/main/resources/";
 
     public ControlPanel(GameController<S, A> gameController, int idJugador) {
         this.gameController = gameController;
@@ -59,7 +60,7 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 
     private void initGUI() {
         randomMoveButton = new JButton();
-        ImageIcon randomIcon = new ImageIcon(getClass().getResource("/dice.png"));
+        ImageIcon randomIcon = new ImageIcon(RESOURCES_PATH+"dice.png");
         randomMoveButton.setIcon(randomIcon);
         randomMoveButton.setActionCommand("RandomMove");
         randomMoveButton.addActionListener(this);
@@ -68,7 +69,7 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
         manualMovesToolBar.addSeparator(); // añade un separador
 
         smartMoveButton = new JButton();
-        ImageIcon nerdIcon = new ImageIcon(getClass().getResource("/nerd.png"));
+        ImageIcon nerdIcon = new ImageIcon(RESOURCES_PATH+"/nerd.png");
         smartMoveButton.setIcon(nerdIcon);
         smartMoveButton.setActionCommand("SmartMove");
         smartMoveButton.addActionListener(this);
@@ -76,7 +77,7 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
         manualMovesToolBar.addSeparator(); // añade un separador
 
         JButton restartButton = new JButton();
-        ImageIcon restartIcon = new ImageIcon(getClass().getResource("/restart.png"));
+        ImageIcon restartIcon = new ImageIcon(RESOURCES_PATH+"/restart.png");
         restartButton.setIcon(restartIcon);
         restartButton.setActionCommand("Restart");
         restartButton.addActionListener(this);
@@ -84,7 +85,7 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
         manualMovesToolBar.addSeparator(); // añade un separador
 
         JButton exitButton = new JButton();
-        ImageIcon exitIcon = new ImageIcon(getClass().getResource("/exit.png"));
+        ImageIcon exitIcon = new ImageIcon(RESOURCES_PATH+"/exit.png");
         exitButton.setIcon(exitIcon);
         exitButton.setActionCommand("Stop");
         exitButton.addActionListener(this);
@@ -120,7 +121,7 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
         createTimerSpinner(smartMovesToolBar);
         stopSmartMoveButton = new JButton();
         stopSmartMoveButton.setEnabled(false);
-        ImageIcon stopIcon = new ImageIcon(getClass().getResource("/stop.png"));
+        ImageIcon stopIcon = new ImageIcon(RESOURCES_PATH+"/stop.png");
         stopSmartMoveButton.setIcon(stopIcon);
 
         stopSmartMoveButton.addActionListener(new ActionListener() {
@@ -162,7 +163,7 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
     }
 
     private void createThreadsSpinner(JToolBar smartMovesToolBar) {
-        ImageIcon smartIcon = new ImageIcon(getClass().getResource("/brain.png"));
+        ImageIcon smartIcon = new ImageIcon(RESOURCES_PATH+"/brain.png");
         smartIconLabel = new JLabel(smartIcon);
         smartIconLabel.setOpaque(true);
         smartMovesToolBar.add(smartIconLabel);
@@ -175,7 +176,7 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
     }
 
     private void createTimerSpinner(JToolBar smartMovesToolBar) {
-        ImageIcon timerIcon = new ImageIcon(getClass().getResource("/timer.png"));
+        ImageIcon timerIcon = new ImageIcon(RESOURCES_PATH+"/timer.png");
         JLabel timerIconLabel = new JLabel(timerIcon);
         smartMovesToolBar.add(timerIconLabel);
         JLabel titleLabel = new JLabel("ms.");

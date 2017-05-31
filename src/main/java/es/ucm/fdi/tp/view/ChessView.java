@@ -11,12 +11,14 @@ import es.ucm.fdi.tp.was.Coordinate;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.io.IOException;
 
 public class ChessView extends RectBoardView<ChessState, ChessAction> {
 
     private Coordinate originCoordinates;
     private java.util.List<Coordinate> validMoves;
+    private String RESOURCES_PATH = "src/main/resources/";
 
     public ChessView(GameController<ChessState, ChessAction> gameController, ChessState state) {
         super(gameController, state, true);
@@ -115,7 +117,7 @@ public class ChessView extends RectBoardView<ChessState, ChessAction> {
         byte piceByte = state.getBoard().get(row, col);
         String iconName = ChessBoard.Piece.iconName(piceByte);
         try {
-            Image image = ImageIO.read(getClass().getResource("/chess/" + iconName));
+            Image image = ImageIO.read(new File(RESOURCES_PATH+"/chess/" + iconName));
             return image;
         } catch (IOException e) {
             e.printStackTrace();
