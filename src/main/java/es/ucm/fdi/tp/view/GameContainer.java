@@ -10,6 +10,7 @@ import es.ucm.fdi.tp.base.model.GamePlayer;
 import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.base.player.ConcurrentAiPlayer;
 import es.ucm.fdi.tp.base.player.RandomPlayer;
+import es.ucm.fdi.tp.base.player.SmartPlayer;
 import es.ucm.fdi.tp.mvc.GameEvent;
 import es.ucm.fdi.tp.mvc.GameObservable;
 import es.ucm.fdi.tp.mvc.GameObserver;
@@ -26,22 +27,22 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
     private static final long serialVersionUID = 2977574295953072934L;
     private GameController<S, A> gameController;
     private GamePlayer gamePlayer;
-    private GamePlayer randPlayer;
-    private ConcurrentAiPlayer concurrentAiPlayer;
+    private RandomPlayer randPlayer;
+    private SmartPlayer smartPlayer;
     private InfoView<S, A> infoView;
     private List<GamePlayer> listaJugadores;
     private GUIView<S, A> rectBoardView;
-    private Thread concurrentAIThread;
     private ControlPanel<S, A> controlPanel;
+    private int playerId;
 
-    public GameContainer(int idPlayer, GUIView<S, A> gameView, GameController<S, A> gameController, GameObservable<S, A> game, List<GamePlayer> jugadores) {
+    public GameContainer(int playerId, GUIView<S, A> gameView, GameController<S, A> gameController, GameObservable<S, A> game, List<GamePlayer> jugadores) {
+        this.playerId = playerId;
         this.listaJugadores = jugadores;
-        this.gamePlayer = jugadores.get(idPlayer);
+        this.gamePlayer = jugadores.get(playerId);
         this.randPlayer = new RandomPlayer("dummy");
         this.randPlayer.join(this.gamePlayer.getPlayerNumber());
-        this.concurrentAiPlayer = new ConcurrentAiPlayer("Jugador: " + idPlayer);
-        this.concurrentAiPlayer.join(this.gamePlayer.getPlayerNumber());
-
+        this.smartPlayer = new SmartPlayer("Jugador: " + playerId, 5);
+        this.smartPlayer.join(this.gamePlayer.getPlayerNumber());
         this.setTitle("Jugador " + this.gamePlayer.getName());
         this.setLayout(new BorderLayout(5, 5));
         this.rectBoardView = gameView;
@@ -63,7 +64,7 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
     }
 
     public void initGUI() {
-        controlPanel = new ControlPanel<S, A>(gameController, this.gamePlayer.getPlayerNumber());
+        controlPanel = new ControlPanel<S, A>(gameController, playerId);
         controlPanel.setBackground(Color.decode("#eeeeee"));
         controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.X_AXIS));
         controlPanel.addControlPanelObserver(this);
@@ -89,8 +90,6 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
                 infoView.repaintPlayersInfoViewer();
                 if (e.getState().getTurn() == this.gamePlayer.getPlayerNumber()) {
                     makeAutomaticMove();
-                }else {
-                    controlPanel.setUpSmartPlayerAction(false);
                 }
                 break;
             case Info:
@@ -112,7 +111,7 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
     }
 
     @Override
-    public void playerModeHasChange(PlayerType newPlayerMode) {
+    public void playerModeHasChange(PlayerType newPlayerMode, int playerId) {
         gameController.changePlayerMode(newPlayerMode);
         switch (newPlayerMode) {
             case MANUAL:
@@ -145,25 +144,12 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
         }
     }
 
-    @Override
-    public void stopSmartPlayerAction() {
-        concurrentAIThread.interrupt();
-    }
-
     private void makeRandomMove() {
         gameController.makeRandomMove(randPlayer);
     }
 
     private void makeSmartMove() {
-        controlPanel.setUpSmartPlayerAction(true);
-        concurrentAiPlayer.setMaxThreads(controlPanel.getConcurrentPlayerThreads());
-        concurrentAiPlayer.setTimeout(controlPanel.getConcurrentPlayerTimeOut());
-        concurrentAIThread = new Thread() {
-            public void run() {
-                gameController.makeSmartMove(concurrentAiPlayer);
-            }
-        };
-        concurrentAIThread.start();
+        gameController.makeSmartMove(smartPlayer);
     }
 
     @Override

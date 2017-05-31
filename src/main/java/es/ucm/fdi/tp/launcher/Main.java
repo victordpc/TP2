@@ -13,9 +13,6 @@ import es.ucm.fdi.tp.base.model.GamePlayer;
 import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.base.player.RandomPlayer;
 import es.ucm.fdi.tp.base.player.SmartPlayer;
-import es.ucm.fdi.tp.chess.ChessAction;
-import es.ucm.fdi.tp.chess.ChessBoard;
-import es.ucm.fdi.tp.chess.ChessState;
 import es.ucm.fdi.tp.mvc.GameName;
 import es.ucm.fdi.tp.mvc.GameTable;
 import es.ucm.fdi.tp.mvc.GameType;
@@ -45,11 +42,9 @@ public class Main {
 	private static <S extends GameState<S, A>, A extends GameAction<S, A>> GUIView<S, A> createGUIGame(String gameName, GameController<S, A> gameController, GameState<S, A> gameState) {
 		if (gameName.equalsIgnoreCase(GameName.TTT.toString())) {
 			return (GUIView<S, A>) new TttView((GameController<TttState, TttAction>) gameController, (TttState) gameState);
-		} else if (gameName.equalsIgnoreCase(GameName.WAS.toString())) {
+		} else /**if (gameName.equalsIgnoreCase(GameName.WAS.toString()))*/ {
 			return (GUIView<S, A>) new WasView((GameController<WolfAndSheepState, WolfAndSheepAction>) gameController, (WolfAndSheepState) gameState);
-		}else {
-            return (GUIView<S, A>) new ChessView((GameController<ChessState, ChessAction>) gameController, (ChessState) gameState);
-        }
+		}
 	}
 
 	/**
@@ -67,7 +62,7 @@ public class Main {
 		} else if (gameName.equalsIgnoreCase(GameName.WAS.toString())) {
 			initialState = new WolfAndSheepState(8);
 		}else {
-			initialState = new ChessState();
+//			initialState = new ChessState();
 		}
 		return initialState;
 	}
