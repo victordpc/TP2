@@ -6,11 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="p5_mfreire" />
+        <module name="P5" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="p5_mfreire" target="1.8" />
+      <module name="P5" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

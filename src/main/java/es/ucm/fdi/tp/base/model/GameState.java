@@ -20,53 +20,24 @@ public abstract class GameState<S extends GameState<S, A>, A extends GameAction<
 
 	private static final long serialVersionUID = -3154723370370038046L;
 
+	/**
+	 * @param file
+	 *            written in a previous call to <code>save()</code>
+	 */
+	public static GameState<?, ?> load(File file) throws IOException {
+		FileInputStream fin = new FileInputStream(file);
+		try (ObjectInputStream ois = new ObjectInputStream(fin)) {
+			return (GameState<?, ?>) ois.readObject();
+		} catch (ClassNotFoundException cnfe) {
+			throw new IOException("Error loading from '" + file.getAbsolutePath() + "':", cnfe);
+		}
+	}
+
 	protected int playerCount;
 
 	public GameState(int playerCount) {
 		this.playerCount = playerCount;
 	}
-
-	/**
-	 * @return the current number of players
-	 */
-	public int getPlayerCount() {
-		return playerCount;
-	}
-
-	/**
-	 * @return the index of a player with valid actions
-	 */
-	public abstract int getTurn();
-
-	/**
-	 * @return the name of the game, by defualt the name of the class
-	 */
-	public String getGameDescreption() {
-		return this.getClass().getName();
-	}
-
-	/**
-	 * lists valid actions for a player.
-	 * 
-	 * @param playerNumber
-	 *            to generate actions for
-	 * @return a list of all valid actions for the specified player
-	 */
-	public abstract List<A> validActions(int playerNumber);
-
-	/**
-	 * @return true if game has finished (and therefore, there is a winner or a
-	 *         draw)
-	 */
-	public abstract boolean isFinished();
-
-	/**
-	 * returns the playerNumber of the winner, if any.
-	 *
-	 * @return -1 if no winner (not finished or draw); 0 if first player won, 1
-	 *         if second player, and so on.
-	 */
-	public abstract int getWinner();
 
 	/**
 	 * Evaluates how close playerNumber is to winning (1) or losing (-1). A draw
@@ -85,6 +56,39 @@ public abstract class GameState<S extends GameState<S, A>, A extends GameAction<
 	}
 
 	/**
+	 * @return the name of the game, by defualt the name of the class
+	 */
+	public String getGameDescription() {
+		return this.getClass().getName();
+	}
+
+	/**
+	 * @return the current number of players
+	 */
+	public int getPlayerCount() {
+		return playerCount;
+	}
+
+	/**
+	 * @return the index of a player with valid actions
+	 */
+	public abstract int getTurn();
+
+	/**
+	 * returns the playerNumber of the winner, if any.
+	 *
+	 * @return -1 if no winner (not finished or draw); 0 if first player won, 1
+	 *         if second player, and so on.
+	 */
+	public abstract int getWinner();
+
+	/**
+	 * @return true if game has finished (and therefore, there is a winner or a
+	 *         draw)
+	 */
+	public abstract boolean isFinished();
+
+	/**
 	 * @param file
 	 *            to save to; can later be loaded via <code>load</code>
 	 */
@@ -98,15 +102,11 @@ public abstract class GameState<S extends GameState<S, A>, A extends GameAction<
 	}
 
 	/**
-	 * @param file
-	 *            written in a previous call to <code>save()</code>
+	 * lists valid actions for a player.
+	 * 
+	 * @param playerNumber
+	 *            to generate actions for
+	 * @return a list of all valid actions for the specified player
 	 */
-	public static GameState<?, ?> load(File file) throws IOException {
-		FileInputStream fin = new FileInputStream(file);
-		try (ObjectInputStream ois = new ObjectInputStream(fin)) {
-			return (GameState<?, ?>) ois.readObject();
-		} catch (ClassNotFoundException cnfe) {
-			throw new IOException("Error loading from '" + file.getAbsolutePath() + "':", cnfe);
-		}
-	}
+	public abstract List<A> validActions(int playerNumber);
 }

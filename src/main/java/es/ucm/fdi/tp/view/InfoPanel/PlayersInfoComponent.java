@@ -22,17 +22,16 @@ import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.extra.jcolor.ColorChooser;
 import es.ucm.fdi.tp.mvc.PlayerModel;
 
-public class PlayersInfoComponent<S extends GameState<S, A>, A extends GameAction<S, A>>
-		extends PlayersInfoViewer<S, A> {
-
-	private PlayerModel playerModel;
-	private Map<Integer, Color> colors; // Line -> Color
+public class PlayersInfoComponent<S extends GameState<S, A>, A extends GameAction<S, A>> extends PlayersInfoViewer<S, A> {
+	private static final long serialVersionUID = 1636020027918664845L;
 	private ColorChooser colorChooser;
-	private PlayersInfoObserver playersInfoObserver;
+	private Map<Integer, Color> colors; // Line -> Color
 	private List<GamePlayer> gamePlayers;
+	private PlayerModel playerModel;
+	private PlayerInfoObserver playerInfoObserver;
 
-	public PlayersInfoComponent(List<GamePlayer> gamePlayers, PlayersInfoObserver playersInfoObserver) {
-		this.playersInfoObserver = playersInfoObserver;
+	public PlayersInfoComponent(List<GamePlayer> gamePlayers, PlayerInfoObserver playerInfoObserver) {
+		this.playerInfoObserver = playerInfoObserver;
 		this.gamePlayers = gamePlayers;
 		List<String> playerNames = new ArrayList<>();
 		for (GamePlayer gamePlayer : gamePlayers) {
@@ -43,6 +42,21 @@ public class PlayersInfoComponent<S extends GameState<S, A>, A extends GameActio
 		loadColors();
 		colorChooser = new ColorChooser(new JFrame(), "Choose Line Color", Color.BLACK);
 		initGUI();
+	}
+
+	private void changeColor(int row) {
+		colorChooser.setSelectedColorDialog(colors.get(row));
+		colorChooser.openDialog();
+		if (colorChooser.getColor() != null) {
+			colors.put(row, colorChooser.getColor());
+			repaint();
+		}
+		playerInfoObserver.colorChanged(row, colorChooser.getColor());
+	}
+
+	@Override
+	public Color getPlayerColor(int playerId) {
+		return colors.get(playerId);
 	}
 
 	private void initGUI() {
@@ -66,11 +80,12 @@ public class PlayersInfoComponent<S extends GameState<S, A>, A extends GameActio
 		};
 
 		table.setToolTipText("Click on a row to change the color of a player");
+
 		table.addMouseListener(new java.awt.event.MouseAdapter() {
 			@Override
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
-				int row = table.rowAtPoint(evt.getPoint());
-				int col = table.columnAtPoint(evt.getPoint());
+				int row = table.getSelectedRow();
+				int col = table.getSelectedColumn();
 				if (row >= 0 && col >= 0) {
 					changeColor(row);
 				}
@@ -81,6 +96,7 @@ public class PlayersInfoComponent<S extends GameState<S, A>, A extends GameActio
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setPreferredSize(new Dimension(200, 200));
 		Border borderLayout = new TitledBorder("Player Information") {
+			private static final long serialVersionUID = -2650256186504305435L;
 			private Insets customInsets = new Insets(20, 10, 10, 10);
 
 			@Override
@@ -100,28 +116,13 @@ public class PlayersInfoComponent<S extends GameState<S, A>, A extends GameActio
 	}
 
 	@Override
-	public void updateColors() {
-		loadColors();
-		repaint();
-	}
-
-	private void changeColor(int row) {
-		colorChooser.setSelectedColorDialog(colors.get(row));
-		colorChooser.openDialog();
-		if (colorChooser.getColor() != null) {
-			colors.put(row, colorChooser.getColor());
-			repaint();
-		}
-		playersInfoObserver.colorChanged(row, colorChooser.getColor());
-	}
-
-	@Override
 	public void setNumberOfPlayer(int i) {
 
 	}
 
 	@Override
-	public Color getPlayerColor(int playerId) {
-		return colors.get(playerId);
+	public void updateColors() {
+		// loadColors();
+		repaint();
 	}
 }

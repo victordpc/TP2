@@ -98,6 +98,15 @@ public class TttState extends GameState<TttState, TttAction> {
 		return copy;
 	}
 
+	public int getDimension() {
+		return dim;
+	}
+
+	@Override
+	public String getGameDescription() {
+		return "Tic-Tac-Toe " + dim + "x" + dim;
+	}
+
 	@Override
 	public int getTurn() {
 		return turn;
@@ -142,7 +151,7 @@ public class TttState extends GameState<TttState, TttAction> {
 
 		for (int i = 0; i < dim; i++) {
 			for (int j = 0; j < dim; j++) {
-				if (at(i, j) == -1) {
+				if (at(i, j) == EMPTY) {
 					valid.add(new TttAction(playerNumber, i, j));
 				}
 			}

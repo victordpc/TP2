@@ -1,54 +1,82 @@
 package es.ucm.fdi.tp.view.Controller;
 
-import java.util.List;
-import java.util.Random;
-
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GamePlayer;
 import es.ucm.fdi.tp.base.model.GameState;
-import es.ucm.fdi.tp.base.player.AiAlgorithm;
-import es.ucm.fdi.tp.base.player.MinMax;
-import es.ucm.fdi.tp.mvc.GameEvent;
+import es.ucm.fdi.tp.base.player.ConcurrentAiPlayer;
+import es.ucm.fdi.tp.base.player.RandomPlayer;
 import es.ucm.fdi.tp.mvc.GameTable;
 import es.ucm.fdi.tp.mvc.PlayerType;
+import es.ucm.fdi.tp.view.InfoPanel.PlayerInfoObserver;
+
+import javax.swing.*;
+import java.util.Date;
 
 public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>> implements GameController<S, A> {
 
-	private int playerId;
 	private GameTable<S, A> gameTable;
-	private Random random = new Random();
-	protected AiAlgorithm algorithm;
 	private PlayerType playerType;
+    private PlayerInfoObserver playerInfoObserver;
 
-	public UIController(int playerId, GameTable<S, A> gameTable) {
-		this.playerId = playerId;
+	public UIController(GameTable<S, A> gameTable) {
 		this.playerType = PlayerType.MANUAL;
 		this.gameTable = gameTable;
-		this.algorithm = new MinMax(5);
 	}
 
 	@Override
+	public void changePlayerMode(PlayerType playerMode) {
+		this.playerType = playerMode;
+	}
+
+	@Override
+	public PlayerType getPlayerMode() {
+		return playerType;
+	}
+
+    @Override
+    public void setPlayerInfoObserver(PlayerInfoObserver playerInfoObserver) {
+	    this.playerInfoObserver = playerInfoObserver;
+    }
+
+    @Override
 	public void makeManualMove(A a) {
-		if (!gameTable.getState().isFinished()) {
+        if (!gameTable.getState().isFinished() && gameTable.getState().getTurn() == a.getPlayerNumber()) {
 			gameTable.execute(a);
 		}
 	}
 
 	@Override
-	public void makeRandomMove() {
-		if (!gameTable.getState().isFinished()) {
-			List<A> valid = gameTable.getState().validActions(playerId);
-			gameTable.execute(valid.get(random.nextInt(valid.size())));
-		}
-	}
-	
-
-	@Override
-	public void makeSmartMove() {
-		if (!gameTable.getState().isFinished()) {
-			A action = algorithm.chooseAction(playerId, gameTable.getState());
+	public void makeRandomMove(GamePlayer jugador) {
+		if (!gameTable.getState().isFinished() && gameTable.getState().getTurn() == jugador.getPlayerNumber() && jugador instanceof RandomPlayer) {
+			A action = jugador.requestAction(gameTable.getState());
 			gameTable.execute(action);
 		}
+	}
+
+	@Override
+	public void makeSmartMove(GamePlayer jugador) {
+		if (!gameTable.getState().isFinished() && gameTable.getState().getTurn() == jugador.getPlayerNumber() && jugador instanceof ConcurrentAiPlayer) {
+			Date startedDate = new Date();
+			A action = jugador.requestAction(gameTable.getState());
+			Date finishDate = new Date();
+			int processTime = (int) (finishDate.getTime() - startedDate.getTime());
+			int totalNodes = ((ConcurrentAiPlayer) jugador).getEvaluationCount();
+			int nodesByMs = totalNodes / processTime;
+			double value = ((ConcurrentAiPlayer) jugador).getValue();
+			String resultMessage = String.format("%d nodes in %d ms (%d n/ms) value = %.4f", totalNodes, processTime, nodesByMs, value);
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    playerInfoObserver.postMessage(resultMessage);
+                    gameTable.execute(action);
+                }
+            });
+		}
+	}
+
+	@Override
+	public void notifyInterfaceNeedBeUpdated() {
+		gameTable.notifyInterfaceNeedBeUpdated();
 	}
 
 	@Override
@@ -59,34 +87,5 @@ public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>>
 	@Override
 	public void stopGame() {
 		System.exit(0);
-	}
-
-	@Override
-	public void handleEvent(GameEvent<S, A> e) {
-	}
-
-	@Override
-	public int getPlayerId() {
-		return playerId;
-	}
-
-	@Override
-	public List<GamePlayer> getGamePlayers() {
-		return gameTable.getGamePlayers();
-	}
-
-	@Override
-	public void notifyInterfaceNeedBeUpdated() {
-		gameTable.notifyInterfaceNeedBeUpdated();
-	}
-
-	@Override
-	public PlayerType getPlayerMode() {
-		return playerType;
-	}
-
-	@Override
-	public void changePlayerMode(PlayerType playerMode) {
-		this.playerType = playerMode;
 	}
 }

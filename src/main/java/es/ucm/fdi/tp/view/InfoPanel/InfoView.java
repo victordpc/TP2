@@ -1,5 +1,6 @@
 package es.ucm.fdi.tp.view.InfoPanel;
 
+import java.awt.Color;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -10,21 +11,29 @@ import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.view.GUIView;
 import es.ucm.fdi.tp.view.Controller.GameController;
 
-public class InfoView<S extends GameState<S, A>, A extends GameAction<S, A>> extends GUIView {
+public class InfoView<S extends GameState<S, A>, A extends GameAction<S, A>> extends GUIView<S, A> {
+	private static final long serialVersionUID = -4962889679551454457L;
+	private MessageViewer<S, A> messageViewer;
+	private PlayerInfoObserver playerInfoObserver;
+	private PlayersInfoViewer<S, A> playersInfoViewer;
 
-	private MessageViewer messageViewer;
-	private PlayersInfoViewer playersInfoViewer;
-	private PlayersInfoObserver playersInfoObserver;
-
-	public InfoView(List<GamePlayer> gamePlayers, PlayersInfoObserver playersInfoObserver) {
-		this.playersInfoObserver = playersInfoObserver;
+	public InfoView(List<GamePlayer> gamePlayers, PlayerInfoObserver playerInfoObserver) {
+		this.playerInfoObserver = playerInfoObserver;
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		initGUI(gamePlayers);
 	}
 
+	public void addContent(String message) {
+		messageViewer.addContent(message);
+	}
+
+	public Color getColorPlayer(int jugador) {
+		return playersInfoViewer.getPlayerColor(jugador);
+	}
+
 	private void initGUI(List<GamePlayer> gamePlayers) {
-		messageViewer = new MessageViewerComponent();
-		playersInfoViewer = new PlayersInfoComponent(gamePlayers, playersInfoObserver);
+		messageViewer = new MessageViewerComponent<S, A>();
+		playersInfoViewer = new PlayersInfoComponent<S, A>(gamePlayers, playerInfoObserver);
 		add(messageViewer);
 		add(playersInfoViewer);
 	}
@@ -33,25 +42,20 @@ public class InfoView<S extends GameState<S, A>, A extends GameAction<S, A>> ext
 		playersInfoViewer.updateColors();
 	}
 
-	public void addContent(String message) {
-		messageViewer.addContent(message);
-	}
-
 	public void setContent(String message) {
 		messageViewer.setContent(message);
 	}
 
 	@Override
-	public void update(GameState state) {
+	public void setGameController(GameController<S, A> gameCtrl) {
 	}
 
 	@Override
-	public void setMessageViewer(MessageViewer messageViewer) {
+	public void setMessageViewer(MessageViewer<S, A> messageViewer) {
 		this.messageViewer = messageViewer;
 	}
 
 	@Override
-	public void setGameController(GameController gameCtrl) {
-	}
+	public void update(S state) {}
 
 }

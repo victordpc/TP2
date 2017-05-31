@@ -3,6 +3,7 @@ package es.ucm.fdi.tp.view;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GameState;
@@ -10,25 +11,29 @@ import es.ucm.fdi.tp.view.Controller.GameController;
 import es.ucm.fdi.tp.view.InfoPanel.MessageViewer;
 
 public abstract class GUIView<S extends GameState<S, A>, A extends GameAction<S, A>> extends JPanel {
-
+	private static final long serialVersionUID = 6447917098288880320L;
 	protected JFrame window;
-
-	public void enableWindowMode() {
-		this.window = new JFrame("");
-		this.window.setContentPane(this);
-		this.window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		this.window.setSize(600, 600);
-		window.setVisible(true);
-	}
 
 	public void disableWindowMode() {
 		window.dispose();
 		window = null;
 	}
 
+	public void enableWindowMode() {
+		this.window = new JFrame("");
+		this.window.setContentPane(this);
+		this.window.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		this.window.setSize(800, 800);
+		window.setVisible(true);
+	}
+
 	public JFrame getWindow() {
 		return window;
 	}
+
+	public abstract void setGameController(GameController<S, A> gameCtrl);
+
+	public abstract void setMessageViewer(MessageViewer<S, A> messageViewer);
 
 	public void setTitle(String newTitle) {
 		if (window != null) {
@@ -40,7 +45,4 @@ public abstract class GUIView<S extends GameState<S, A>, A extends GameAction<S,
 
 	public abstract void update(S state);
 
-	public abstract void setMessageViewer(MessageViewer<S, A> messageViewer);
-
-	public abstract void setGameController(GameController<S, A> gameCtrl);
 }

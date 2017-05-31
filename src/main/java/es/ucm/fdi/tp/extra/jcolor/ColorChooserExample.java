@@ -22,15 +22,35 @@ import javax.swing.table.TableCellRenderer;
 @SuppressWarnings("serial")
 public class ColorChooserExample extends JFrame {
 
-	private JTextField name;
-	private MyTableModel tModel;
+	public static void main(String[] args) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				new ColorChooserExample();
+			}
+		});
+	}
+
+	private ColorChooser colorChooser;
 
 	private Map<Integer, Color> colors; // Line -> Color
-	private ColorChooser colorChooser;
+	private JTextField name;
+
+	private MyTableModel tModel;
 
 	public ColorChooserExample() {
 		super("[=] ColorChooser Example ! [=]");
 		initGUI();
+	}
+
+	private void changeColor(int row) {
+		colorChooser.setSelectedColorDialog(colors.get(row));
+		colorChooser.openDialog();
+		if (colorChooser.getColor() != null) {
+			colors.put(row, colorChooser.getColor());
+			repaint();
+		}
+
 	}
 
 	private void initGUI() {
@@ -103,24 +123,5 @@ public class ColorChooserExample extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(800, 500);
 		this.setVisible(true);
-	}
-
-	private void changeColor(int row) {
-		colorChooser.setSelectedColorDialog(colors.get(row));
-		colorChooser.openDialog();
-		if (colorChooser.getColor() != null) {
-			colors.put(row, colorChooser.getColor());
-			repaint();
-		}
-
-	}
-
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				new ColorChooserExample();
-			}
-		});
 	}
 }

@@ -12,6 +12,8 @@ public interface GamePlayer {
 	 */
 	String getName();
 
+	Color getPlayerColor();
+
 	/**
 	 * returns the number assigned to the player when joining the game (-1 if
 	 * not joined yet)
@@ -32,8 +34,6 @@ public interface GamePlayer {
 	 * demands a move from the player.
 	 */
 	<S extends GameState<S, A>, A extends GameAction<S, A>> A requestAction(S state);
-
-	Color getPlayerColor();
 
 	void setPlayerColor(Color newColor);
 }

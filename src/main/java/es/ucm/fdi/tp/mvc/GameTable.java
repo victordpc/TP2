@@ -15,10 +15,10 @@ import es.ucm.fdi.tp.mvc.GameEvent.EventType;
  */
 public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> implements GameObservable<S, A> {
 
-	private S initState;
 	private S currentState;
-	private List<GameObserver<S, A>> observers = new ArrayList<>();
 	private List<GamePlayer> gamePlayers;
+	private S initState;
+	private List<GameObserver<S, A>> observers = new ArrayList<>();
 
 	public GameTable(S initState) {
 		this.initState = initState;
@@ -26,17 +26,26 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
 		this.observers = new ArrayList<>();
 	}
 
-	public void start() {
-		currentState = initState;
-		notifyGameHasStarted();
-		notifyInfo();
+	@Override
+	public void addObserver(GameObserver<S, A> o) {
+		observers.add(o);
 	}
 
-	public void stop() {
-		GameEvent<S, A> event = new GameEvent<>(GameEvent.EventType.Stop, null, currentState, null,
-				"El juego ha parado");
-		for (GameObserver<S, A> gameObserver : observers) {
-			gameObserver.notifyEvent(event);
+	public void execute(A action) {
+		if (action != null) {
+			if (action.getPlayerNumber() == currentState.getTurn()) {
+				// apply move
+				currentState = action.applyTo(currentState);
+				if (currentState.isFinished()) {
+					notifyGameHasChanged();
+					notifyGameHasFinished();
+				} else {
+					notifyGameHasChanged();
+					notifyInfo();
+				}
+			} else {
+				notifyErrorHasOcurred("No es tu turno jugador " + action.getPlayerNumber());
+			}
 		}
 	}
 
@@ -44,58 +53,17 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
 		return gamePlayers;
 	}
 
-	public void setGamePlayers(List<GamePlayer> gamePlayers) {
-		this.gamePlayers = gamePlayers;
-	}
-
-	// NOTIFICAR DE ERRORES,
-	public void execute(A action) {
-		if (action.getPlayerNumber() == currentState.getTurn()) {
-			// apply move
-			currentState = action.applyTo(currentState);
-			if (currentState.isFinished()) {
-				notifyGameHasChanged();
-				notifyGameHasFinished();
-			} else {
-				notifyGameHasChanged();
-				notifyInfo();
-			}
-		} else {
-			notifyErrorHasOcurred("No es tu turno jugador " + action.getPlayerNumber());
-		}
-	}
-
-	public void restartGame() {
-		currentState = initState;
-		notifyGameHasStarted();
-	}
-
 	public S getState() {
 		return currentState;
 	}
 
-	@Override
-	public void addObserver(GameObserver<S, A> o) {
-		observers.add(o);
+	public void noEsTuTurno(int jugadorQueSeCuela) {
+		notifyErrorHasOcurred("No es tu turno jugador " + jugadorQueSeCuela);
 	}
 
-	@Override
-	public void removeObserver(GameObserver<S, A> o) {
-		observers.remove(o);
-	}
-
-	public void notifyInterfaceNeedBeUpdated() {
-		GameEvent<S, A> event = new GameEvent<>(GameEvent.EventType.Change, null, currentState, null,
-				"El juego ha cambiado");
-		for (GameObserver gameObserver : observers) {
-			gameObserver.notifyEvent(event);
-		}
-	}
-
-	private void notifyGameHasStarted() {
-		GameEvent<S, A> event = new GameEvent<>(GameEvent.EventType.Start, null, currentState, null,
-				"¡La partida ha empezado!");
-		for (GameObserver gameObserver : observers) {
+	private void notifyErrorHasOcurred(String message) {
+		GameEvent<S, A> event = new GameEvent<>(EventType.Error, null, currentState, new GameError(message), null);
+		for (GameObserver<S, A> gameObserver : observers) {
 			gameObserver.notifyEvent(event);
 		}
 	}
@@ -103,21 +71,7 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
 	private void notifyGameHasChanged() {
 		GameEvent<S, A> event = new GameEvent<>(GameEvent.EventType.Change, null, currentState, null,
 				"El juego ha cambiado");
-		for (GameObserver gameObserver : observers) {
-			gameObserver.notifyEvent(event);
-		}
-	}
-
-	private void notifyInfo() {
-		GameEvent<S, A> event = new GameEvent<>(EventType.Info, null, currentState, null, null);
-		for (GameObserver gameObserver : observers) {
-			gameObserver.notifyEvent(event);
-		}
-	}
-
-	private void notifyErrorHasOcurred(String message) {
-		GameEvent<S, A> event = new GameEvent<>(EventType.Error, null, currentState, new GameError(message), null);
-		for (GameObserver gameObserver : observers) {
+		for (GameObserver<S, A> gameObserver : observers) {
 			gameObserver.notifyEvent(event);
 		}
 	}
@@ -132,7 +86,58 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
 			event = new GameEvent<>(GameEvent.EventType.Stop, null, currentState, null,
 					"El juego ha terminado, Ganador " + winner.getName());
 		}
-		for (GameObserver gameObserver : observers) {
+		for (GameObserver<S, A> gameObserver : observers) {
+			gameObserver.notifyEvent(event);
+		}
+	}
+
+	private void notifyGameHasStarted() {
+		GameEvent<S, A> event = new GameEvent<>(GameEvent.EventType.Start, null, currentState, null,
+				"¡La partida ha empezado!");
+		for (GameObserver<S, A> gameObserver : observers) {
+			gameObserver.notifyEvent(event);
+		}
+	}
+
+	private void notifyInfo() {
+		GameEvent<S, A> event = new GameEvent<>(EventType.Info, null, currentState, null, null);
+		for (GameObserver<S, A> gameObserver : observers) {
+			gameObserver.notifyEvent(event);
+		}
+	}
+
+	public void notifyInterfaceNeedBeUpdated() {
+		GameEvent<S, A> event = new GameEvent<>(GameEvent.EventType.Change, null, currentState, null,
+				"El juego ha cambiado");
+		for (GameObserver<S, A> gameObserver : observers) {
+			gameObserver.notifyEvent(event);
+		}
+	}
+
+	@Override
+	public void removeObserver(GameObserver<S, A> o) {
+		observers.remove(o);
+	}
+
+	public void restartGame() {
+		currentState = initState;
+		notifyGameHasStarted();
+	}
+
+	public void setGamePlayers(List<GamePlayer> gamePlayers) {
+		this.gamePlayers = gamePlayers;
+	}
+
+	public void start() {
+		currentState = initState;
+		notifyGameHasStarted();
+		notifyInfo();
+	}
+
+	public void stop() {
+		GameEvent<S, A> event = new GameEvent<>(GameEvent.EventType.Stop, null, currentState, null,
+				"El juego ha parado");
+		for (GameObserver<S, A> gameObserver : observers) {
 			gameObserver.notifyEvent(event);
 		}
 	}

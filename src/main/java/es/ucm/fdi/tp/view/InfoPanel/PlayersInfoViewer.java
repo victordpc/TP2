@@ -9,26 +9,13 @@ import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.view.GUIView;
 import es.ucm.fdi.tp.view.Controller.GameController;
 
-public abstract class PlayersInfoViewer<S extends GameState<S, A>, A extends GameAction<S, A>> extends GUIView {
+public abstract class PlayersInfoViewer<S extends GameState<S, A>, A extends GameAction<S, A>> extends GUIView<S, A> {
+	private static final long serialVersionUID = 8207252960325652993L;
+	protected List<PlayerInfoObserver> playerInfoObserverList = new ArrayList<>();
 
-	protected List<PlayersInfoObserver> playersInfoObserverList = new ArrayList<>();
-
-	public void addObserver(PlayersInfoObserver observer) {
-		playersInfoObserverList.add(observer);
+	public void addObserver(PlayerInfoObserver observer) {
+		playerInfoObserverList.add(observer);
 	}
-
-	protected void notifyObservers(int player, Color color) {
-		for (PlayersInfoObserver observer : playersInfoObserverList) {
-			observer.colorChanged(player, color);
-		}
-	}
-
-	public void setPlayersInfoViewer(PlayersInfoViewer<S, A> playersInfoViewer) {
-	}
-
-	abstract public void setNumberOfPlayer(int i);
-
-	abstract public void updateColors();
 
 	/**
 	 * Used to consult the color assigned to a player
@@ -39,17 +26,30 @@ public abstract class PlayersInfoViewer<S extends GameState<S, A>, A extends Gam
 	 */
 	abstract public Color getPlayerColor(int playerId);
 
+	protected void notifyObservers(int player, Color color) {
+		for (PlayerInfoObserver observer : playerInfoObserverList) {
+			observer.colorChanged(player, color);
+		}
+	}
+
 	@Override
-	public void update(GameState state) {
+	public void setGameController(GameController<S, A> gameCtrl) {
 
 	}
 
 	@Override
-	public void setMessageViewer(MessageViewer messageViewer) {
+	public void setMessageViewer(MessageViewer<S, A> messageViewer) {
+	}
+
+	abstract public void setNumberOfPlayer(int i);
+
+	public void setPlayersInfoViewer(PlayersInfoViewer<S, A> playersInfoViewer) {
 	}
 
 	@Override
-	public void setGameController(GameController gameCtrl) {
+	public void update(S state) {
 
 	}
+
+	abstract public void updateColors();
 }

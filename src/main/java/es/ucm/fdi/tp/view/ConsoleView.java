@@ -8,10 +8,7 @@ import es.ucm.fdi.tp.mvc.GameObserver;
 
 public class ConsoleView<S extends GameState<S, A>, A extends GameAction<S, A>> implements GameObserver<S, A> {
 
-	private GameObservable<S, A> gameTable;
-
 	public ConsoleView(GameObservable<S, A> gameTable) {
-		this.gameTable = gameTable;
 		gameTable.addObserver(this);
 	}
 

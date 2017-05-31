@@ -10,8 +10,6 @@ import es.ucm.fdi.tp.base.model.GameState;
 public class GameEvent<S extends GameState<S, A>, A extends GameAction<S, A>> {
 
 	public enum EventType {
-		/** Sent at the start of a game */
-		Start,
 		/**
 		 * The state of the game has changed; use getState() to get updated
 		 * state
@@ -19,18 +17,20 @@ public class GameEvent<S extends GameState<S, A>, A extends GameAction<S, A>> {
 		Change,
 		/** An error has occured; see getError() to retrieve it */
 		Error,
-		/** The game has ended */
-		Stop,
 		/** None of the above; see toString() */
-		Info
+		Info,
+		/** Sent at the start of a game */
+		Start,
+		/** The game has ended */
+		Stop
 	}
 
-	private EventType type;
 	private A action;
-	private S state;
-	private GameError error;
-
 	private String description;
+	private GameError error;
+	private S state;
+
+	private EventType type;
 
 	/**
 	 * Creates a new GameEvent. Not all fields are needed.
@@ -56,20 +56,20 @@ public class GameEvent<S extends GameState<S, A>, A extends GameAction<S, A>> {
 		this.description = description;
 	}
 
-	public EventType getType() {
-		return type;
-	}
-
 	public A getAction() {
 		return action;
+	}
+
+	public GameError getError() {
+		return error;
 	}
 
 	public S getState() {
 		return state;
 	}
 
-	public GameError getError() {
-		return error;
+	public EventType getType() {
+		return type;
 	}
 
 	@Override

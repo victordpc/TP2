@@ -1,99 +1,86 @@
 package es.ucm.fdi.tp.view;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.*;
+import java.util.List;
 
 import javax.swing.JComponent;
 
 import es.ucm.fdi.tp.base.model.GameAction;
+import es.ucm.fdi.tp.base.model.GamePlayer;
 import es.ucm.fdi.tp.base.model.GameState;
+import es.ucm.fdi.tp.chess.ChessState;
 import es.ucm.fdi.tp.extra.jboard.JBoard;
 import es.ucm.fdi.tp.view.Controller.GameController;
-import es.ucm.fdi.tp.view.InfoPanel.PlayersInfoObserver;
+import es.ucm.fdi.tp.view.InfoPanel.PlayerInfoObserver;
 
 public abstract class RectBoardView<S extends GameState<S, A>, A extends GameAction<S, A>> extends GUIView<S, A> {
 
-	private JComponent jBoard;
-	protected GameController<S, A> gameController;
-	protected S state;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 5811685384437753352L;
+    protected GameController<S, A> gameController;
+    protected JComponent jBoard;
+    protected GamePlayer jugador;
+    protected List<GamePlayer> listaJugadores;
+    protected S state;
+    protected PlayerInfoObserver playerInfoObserver;
+    protected Boolean hasImages;
 
-	public RectBoardView(GameController<S, A> gameController, S state) {
-		this.gameController = gameController;
-		this.state = state;
-		initUI();
-	}
+    public RectBoardView(GameController<S, A> gameController, S state, Boolean hasImages) {
+        this.gameController = gameController;
+        this.state = state;
+        this.hasImages = hasImages;
+        initUI();
+    }
 
-	private void initUI() {
-		this.setLayout(new BorderLayout());
-		jBoard = new JBoard() {
-			@Override
-			protected void keyTyped(int keyCode) {
+    protected Color getBackground(int row, int col) {
+        return (row + col) % 2 == 0 ? Color.LIGHT_GRAY : Color.BLACK;
+    }
 
-			}
+    protected abstract int getNumCols();
 
-			@Override
-			protected void mouseClicked(int row, int col, int clickCount, int mouseButton) {
+    protected abstract int getNumRows();
 
-			}
+    protected Color getPlayerColor(int id) {
+        return this.playerInfoObserver.getColorPlayer(id);
+    }
 
-			@Override
-			protected Shape getShape(int player) {
-				return this.getShape(player);
-			}
+    protected abstract Integer getPosition(int row, int col);
 
-			@Override
-			protected Color getColor(int player) {
-				return this.getColor(player);
-			}
+    protected int getSepPixels() {
+        return 1;
+    }
 
-			@Override
-			protected Integer getPosition(int row, int col) {
-				return this.getPosition(row, col);
-			}
+    protected JBoard.Shape getShape(int player) {
+        return JBoard.Shape.CIRCLE;
+    }
 
-			@Override
-			protected Color getBackground(int row, int col) {
-				return this.getBackground(row, col);
-			}
+    protected Image getImage(int row, int col) {
+        return null;
+    }
 
-			@Override
-			protected int getNumRows() {
-				return 3;
-			}
+    protected abstract void initUI();
 
-			@Override
-			protected int getNumCols() {
-				return 3;
-			}
-		};
-		this.add(jBoard, BorderLayout.CENTER);
-	}
+    protected abstract void keyTyped(int keyCode);
 
-	protected abstract void setPlayersInfoObserver(PlayersInfoObserver observer);
+    protected abstract void mouseClicked(int row, int col, int clickCount, int mouseButton);
 
-	protected JBoard.Shape getShape(int player) {
-		return JBoard.Shape.CIRCLE;
-	}
+    protected void resetValidMoves() {}
 
-	protected Color getBackground(int row, int col) {
-		return (row + col) % 2 == 0 ? Color.LIGHT_GRAY : Color.BLACK;
-	}
+    public void setListPlayers(List<GamePlayer> jugadores, GamePlayer jugadorActual) {
+        this.listaJugadores = jugadores;
+        this.jugador = jugadorActual;
+    }
 
-	protected abstract int getNumCols();
+    protected void setPlayerInfoObserver(PlayerInfoObserver observer) {
+        this.playerInfoObserver = observer;
+    }
 
-	protected abstract int getNumRows();
+    @Override
+    public void update(S state) {
+        this.state = state;
+        jBoard.repaint();
+    }
 
-	protected abstract Integer getPosition(int row, int col);
-
-	protected abstract void mouseClicked(int row, int col, int clickCount, int mouseButton);
-
-	protected abstract void keyTyped(int keyCode);
-
-	protected int getSepPixels() {
-		return 1;
-	}
-
-	protected Color getPlayerColor(int id) {
-		return gameController.getGamePlayers().get(id).getPlayerColor();
-	}
 }
