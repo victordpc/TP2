@@ -94,10 +94,12 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
                 }
                 break;
             case Info:
-                if (e.getState().getTurn() == this.gamePlayer.getPlayerNumber() && !e.getState().isFinished()) {
-                    infoView.addContent("Tu turno");
-                } else {
-                    infoView.addContent("Turno del jugador " + e.getState().getTurn());
+                if (!e.getState().isFinished()) {
+                    if (e.getState().getTurn() == this.gamePlayer.getPlayerNumber()) {
+                        infoView.addContent("Tu turno");
+                    } else {
+                        infoView.addContent("Turno del jugador " + e.getState().getTurn());
+                    }
                 }
                 break;
             case Error:
