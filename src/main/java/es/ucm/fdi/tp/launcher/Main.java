@@ -146,14 +146,27 @@ public class Main {
 		}
 	}
 
-	private static <S extends GameState<S, A>, A extends GameAction<S, A>> void startConsoleMode(
-			GameTable<S, A> gameTable, String playerModes[]) {
+    /**
+     * Inicializa un juego por consola.
+     * @param gameTable Model del juego.
+     * @param playerModes Modo de los jugadores.
+     * @param <S> EStado genérico.
+     * @param <A> Acción genérica.
+     */
+	private static <S extends GameState<S, A>, A extends GameAction<S, A>> void startConsoleMode(GameTable<S, A> gameTable, String playerModes[]) {
 		List<GamePlayer> players = loadPlayers(playerModes);
 		gameTable.setGamePlayers(players);
 		new ConsoleView<S, A>(gameTable);
 		new ConsoleController<S, A>(players, gameTable).run();
 	}
 
+    /**
+     * Inicia un juego en modo interfaz.
+     * @param gameName Nombre del juego.
+     * @param gameTable Modelo del juego.
+     * @param <S>
+     * @param <A>
+     */
 	private static <S extends GameState<S, A>, A extends GameAction<S, A>> void startGUIMode(String gameName, GameTable<S, A> gameTable) {
 		List<GamePlayer> players = loadGuiPlayers(gameTable);
 		if (gameName.equalsIgnoreCase(GameName.TTT.toString())) {

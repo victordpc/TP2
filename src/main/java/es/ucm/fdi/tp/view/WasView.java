@@ -123,6 +123,13 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
 		}
 	}
 
+	/**
+	 * Método que reacciona cuando un jugador hace click sobre el tablero.
+	 * @param row Fila donde ha hecho click el jugador.
+	 * @param col Columna donde ha hecho click el jugador.
+	 * @param clickCount
+	 * @param mouseButton
+	 */
 	@Override
 	protected void mouseClicked(int row, int col, int clickCount, int mouseButton) {
 		if (this.jugador.getPlayerNumber() == state.getTurn()) {

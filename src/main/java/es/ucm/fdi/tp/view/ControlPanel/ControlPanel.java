@@ -58,6 +58,9 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
         initGUI();
     }
 
+    /**
+     * Inicializa todos los elementos de la barra superior de la ventana.
+     */
     private void initGUI() {
         randomMoveButton = new JButton();
         ImageIcon randomIcon = new ImageIcon(RESOURCES_PATH+"dice.png");
@@ -162,6 +165,10 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
         }
     }
 
+    /**
+     * Crea el Spinner de hilos.
+     * @param smartMovesToolBar Toolbar donde se va a añadir el spinner.
+     */
     private void createThreadsSpinner(JToolBar smartMovesToolBar) {
         ImageIcon smartIcon = new ImageIcon(RESOURCES_PATH+"/brain.png");
         smartIconLabel = new JLabel(smartIcon);
@@ -175,6 +182,10 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
         smartMovesToolBar.add(titleLabel);
     }
 
+    /**
+     * Crea el Spinner de tiempo del jugador smart.
+     * @param smartMovesToolBar Toolbar donde se va a añadir el spinner.
+     */
     private void createTimerSpinner(JToolBar smartMovesToolBar) {
         ImageIcon timerIcon = new ImageIcon(RESOURCES_PATH+"/timer.png");
         JLabel timerIconLabel = new JLabel(timerIcon);
@@ -191,6 +202,10 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
         smartMovesToolBar.add(titleLabel);
     }
 
+    /**
+     * Muestra un mensaje para advertirle al jugador de que se va a cerrar el juego.
+     * @return Devuelve un booleano con la respuesta del jugador.
+     */
     private boolean preguntaCerrar() {
         int res = JOptionPane.showConfirmDialog(this, "¿Desea cerrar el juego?", "Confirme cierre", JOptionPane.YES_NO_OPTION);
         return res == JOptionPane.YES_OPTION;
@@ -213,36 +228,63 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
         }
     }
 
+    /**
+     * Añade un observador al controlpanel.
+     * @param newObserver Un nuevo observador.
+     */
     public void addControlPanelObserver(ControlPanelObservable newObserver) {
         controlPanelObservables.add(newObserver);
     }
 
+    /**
+     * Notifica que se ha cambiado el tipo de jugador.
+     * @param playerType Nuevo tipo de jugador.
+     */
     private void notifyPlayerModeHasChanged(PlayerType playerType) {
         for (ControlPanelObservable controlPanelObservable : controlPanelObservables) {
             controlPanelObservable.playerModeHasChange(playerType);
         }
     }
 
+    /**
+     * Notifica a los observadores del Control Panel de que hay que realizar una nueva acción automática (Jugador Random o Smart).
+     * @param playerType tipo de jugador, Random o Smart.
+     */
     private void notifyMakeAutomaticMove(PlayerType playerType) {
         for (ControlPanelObservable controlPanelObservable : controlPanelObservables) {
             controlPanelObservable.makeAutomaticMove(playerType);
         }
     }
 
+    /**
+     * Notifica a los observadores que paren la ejecución del jugador Smart.
+     */
     protected void notifyStopSmartPlayerMove() {
         for (ControlPanelObservable controlPanelObservable : controlPanelObservables) {
             controlPanelObservable.stopSmartPlayerAction();
         }
     }
 
+    /**
+     * Obtiene el número de hilos que desea el jugador para un jugador Smart.
+     * @return Devuelve el número de hilos.
+     */
     public int getConcurrentPlayerThreads() {
         return Integer.parseInt(threadsSpinner.getValue().toString());
     }
 
+    /**
+     * Obtiene el tiempo máximo que desea el jugador para un jugador Smart.
+     * @return Devuelve el tiempo máximo.
+     */
     public int getConcurrentPlayerTimeOut() {
         return (int) Double.parseDouble(timeOutSpinner.getValue().toString());
     }
 
+    /**
+     * Cambia la UI para que se ajuste a una jugada de un jugador Smart.
+     * @param isThinking Booleano que indica si el jugador Smart está o no pensando.
+     */
     public void setUpSmartPlayerAction(Boolean isThinking) {
         stopSmartMoveButton.setEnabled(isThinking);
         if (isThinking) {

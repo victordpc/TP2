@@ -62,6 +62,9 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
         return infoView.getColorPlayer(jugador);
     }
 
+    /**
+     * Inicializa los diversos contenedores que componen el Gamecontainer.
+     */
     public void initGUI() {
         controlPanel = new ControlPanel<S, A>(gameController, this.gamePlayer.getPlayerNumber());
         controlPanel.setBackground(Color.decode("#eeeeee"));
@@ -128,6 +131,9 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
         }
     }
 
+    /**
+     * Realiza un movimiento automático, Smart o Random.
+     */
     private void makeAutomaticMove() {
         if (gameController.getPlayerMode() == PlayerType.RANDOM) {
             makeRandomMove();
@@ -150,10 +156,16 @@ public class GameContainer<S extends GameState<S, A>, A extends GameAction<S, A>
         concurrentAIThread.interrupt();
     }
 
+    /**
+     * Indica al controlador que el usuario quiere realizar una acción random.
+     */
     private void makeRandomMove() {
         gameController.makeRandomMove(randPlayer);
     }
 
+    /**
+     * Indica al controlador que el usuario quiere realizar una acción inteligente.
+     */
     private void makeSmartMove() {
         if (gameController.getPlayerIdTurn() == gamePlayer.getPlayerNumber()) {
             controlPanel.setUpSmartPlayerAction(true);

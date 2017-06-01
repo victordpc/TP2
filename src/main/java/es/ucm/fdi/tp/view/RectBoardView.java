@@ -19,12 +19,34 @@ public abstract class RectBoardView<S extends GameState<S, A>, A extends GameAct
      *
      */
     private static final long serialVersionUID = 5811685384437753352L;
+
+    /**
+     * Controlador del juego.
+     */
     protected GameController<S, A> gameController;
+    /**
+     *UI tablero del juego.
+     */
     protected JComponent jBoard;
+    /**
+     * Jugador de la ventana.
+     */
     protected GamePlayer jugador;
+    /**
+     * Listado de jugadores del juego.
+     */
     protected List<GamePlayer> listaJugadores;
+    /**
+     * Estado/modelo del juego.
+     */
     protected S state;
+    /**
+     * Observador para mostrar info sobre las jugadas.
+     */
     protected PlayerInfoObserver playerInfoObserver;
+    /**
+     * Booleano que índica si tiene imágenes este juego.
+     */
     protected Boolean hasImages;
 
     public RectBoardView(GameController<S, A> gameController, S state, Boolean hasImages) {
