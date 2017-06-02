@@ -3,6 +3,7 @@ package es.ucm.fdi.tp.view.Controller;
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GamePlayer;
 import es.ucm.fdi.tp.base.model.GameState;
+import es.ucm.fdi.tp.base.player.ConcurrentAiPlayer;
 import es.ucm.fdi.tp.base.player.RandomPlayer;
 import es.ucm.fdi.tp.base.player.SmartPlayer;
 import es.ucm.fdi.tp.mvc.GameEvent;
@@ -49,13 +50,20 @@ public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>>
 		}
 	}
 
+	// @Override
+	// public void makeSmartMove(GamePlayer jugador) {
+	// if (!gameTable.getState().isFinished() && gameTable.getState().getTurn()
+	// == jugador.getPlayerNumber()
+	// && jugador instanceof SmartPlayer) {
+	// A action = jugador.requestAction(gameTable.getState());
+	// gameTable.execute(action);
+	// }
+	// }
+
 	@Override
-	public void makeSmartMove(GamePlayer jugador) {
-		if (!gameTable.getState().isFinished() && gameTable.getState().getTurn() == jugador.getPlayerNumber()
-				&& jugador instanceof SmartPlayer) {
-			A action = jugador.requestAction(gameTable.getState());
-			gameTable.execute(action);
-		}
+	public void makeSmartConcurrentMove(ConcurrentAiPlayer smartCPlayer) {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override

@@ -24,6 +24,7 @@ import javax.swing.event.ChangeListener;
 
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GameState;
+import es.ucm.fdi.tp.base.player.ConcurrentAiPlayer;
 import es.ucm.fdi.tp.base.player.RandomPlayer;
 import es.ucm.fdi.tp.base.player.SmartPlayer;
 import es.ucm.fdi.tp.mvc.PlayerType;
@@ -57,15 +58,19 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 	private JButton randomMoveButton;
 	private JButton smartMoveButton;
 	private RandomPlayer randPlayer;
-	private SmartPlayer smartPlayer;
+	// private SmartPlayer smartPlayer;
+	private ConcurrentAiPlayer smartCPlayer;
 
 	public ControlPanel(GameController<S, A> gameController, int idJugador) {
 		this.gameController = gameController;
 		this.controlPanelObservables = new ArrayList<>();
 		this.randPlayer = new RandomPlayer("dummy");
 		this.randPlayer.join(idJugador);
-		this.smartPlayer = new SmartPlayer("dummy", 5);
-		this.smartPlayer.join(idJugador);
+		// this.smartPlayer = new SmartPlayer("dummy", 5);
+		// this.smartPlayer.join(idJugador);
+		this.smartCPlayer = new ConcurrentAiPlayer("dummy");
+		this.smartCPlayer.join(idJugador);
+
 		initGUI();
 	}
 
@@ -82,7 +87,8 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 				gameController.makeRandomMove(this.randPlayer);
 				break;
 			case SmartMove:
-				gameController.makeSmartMove(this.smartPlayer);
+				// gameController.makeSmartMove(this.smartPlayer);
+				this.makeSmartConcurrentMove();
 				break;
 			case Restart:
 				gameController.restartGame();
@@ -94,6 +100,14 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 				break;
 			}
 		}
+	}
+
+	private void makeSmartConcurrentMove() {
+
+		this.smartCPlayer.setMaxThreads(nThreads);
+		this.smartCPlayer.setTimeout(millis);
+
+		gameController.makeSmartConcurrentMove(this.smartCPlayer);
 	}
 
 	public void addControlPanelObserver(ControlPanelObservable newObserver) {
@@ -242,7 +256,8 @@ public class ControlPanel<S extends GameState<S, A>, A extends GameAction<S, A>>
 		case SMART:
 			smartMoveButton.setEnabled(false);
 			randomMoveButton.setEnabled(false);
-			gameController.makeSmartMove(this.smartPlayer);
+			// gameController.makeSmartMove(this.smartPlayer);
+			this.makeSmartConcurrentMove();
 			break;
 		case RANDOM:
 			smartMoveButton.setEnabled(false);

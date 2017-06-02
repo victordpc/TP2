@@ -3,6 +3,7 @@ package es.ucm.fdi.tp.view.Controller;
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GamePlayer;
 import es.ucm.fdi.tp.base.model.GameState;
+import es.ucm.fdi.tp.base.player.ConcurrentAiPlayer;
 import es.ucm.fdi.tp.mvc.GameEvent;
 import es.ucm.fdi.tp.mvc.PlayerType;
 
@@ -17,11 +18,13 @@ public interface GameController<S extends GameState<S, A>, A extends GameAction<
 
 	void makeRandomMove(GamePlayer jugador);
 
-	void makeSmartMove(GamePlayer jugador);
+//	void makeSmartMove(GamePlayer jugador);
 
 	void notifyInterfaceNeedBeUpdated();
 
 	void restartGame();
 
 	void stopGame();
+
+	void makeSmartConcurrentMove(ConcurrentAiPlayer smartCPlayer);
 }
