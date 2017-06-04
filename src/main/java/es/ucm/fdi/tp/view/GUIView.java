@@ -44,4 +44,5 @@ public abstract class GUIView<S extends GameState<S, A>, A extends GameAction<S,
 	}
 
 	public abstract void update(S state);
+
 }

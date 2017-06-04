@@ -1,7 +1,6 @@
 package es.ucm.fdi.tp.extra.jboard;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -70,11 +69,9 @@ public class BoardExample extends JFrame {
 		JPanel mainPanel = new JPanel(new BorderLayout());
 
 		boardComp = new JBoard() {
-
 			@Override
 			protected Color getBackground(int row, int col) {
 				return Color.LIGHT_GRAY;
-
 				// use this for 2 chess like board
 				// return (row+col) % 2 == 0 ? Color.LIGHT_GRAY : Color.BLACK;
 			}
@@ -101,14 +98,16 @@ public class BoardExample extends JFrame {
 
 			@Override
 			protected int getSepPixels() {
-				return 1; // put to 0 if you don't want a separator between
-							// cells
+				return 1; // put to 0 if you don't want a separator between cells
 			}
 
 			@Override
 			protected Shape getShape(int player) {
 				return Shape.CIRCLE;
 			}
+
+			@Override
+			protected Image getImage(int row, int col) {return null;}
 
 			@Override
 			protected void keyTyped(int keyCode) {

@@ -201,12 +201,11 @@ public class WolfAndSheepState extends GameState<WolfAndSheepState, WolfAndSheep
 	@Override
 	public boolean isFinished() {
 		return finished;
-
 	}
 
 	/**
 	 * Método que evalua si una determinada posición ene el tablero está vacía.
-	 * 
+	 * 	
 	 * @param row
 	 *            Fila en la que se encuentra la posición a evaular.
 	 * @param column

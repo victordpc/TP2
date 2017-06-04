@@ -14,11 +14,11 @@ import es.ucm.fdi.tp.view.Controller.GameController;
 public class InfoView<S extends GameState<S, A>, A extends GameAction<S, A>> extends GUIView<S, A> {
 	private static final long serialVersionUID = -4962889679551454457L;
 	private MessageViewer<S, A> messageViewer;
-	private PlayersInfoObserver playersInfoObserver;
+	private PlayerInfoObserver playerInfoObserver;
 	private PlayersInfoViewer<S, A> playersInfoViewer;
 
-	public InfoView(List<GamePlayer> gamePlayers, PlayersInfoObserver playersInfoObserver) {
-		this.playersInfoObserver = playersInfoObserver;
+	public InfoView(List<GamePlayer> gamePlayers, PlayerInfoObserver playerInfoObserver) {
+		this.playerInfoObserver = playerInfoObserver;
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		initGUI(gamePlayers);
 	}
@@ -33,7 +33,7 @@ public class InfoView<S extends GameState<S, A>, A extends GameAction<S, A>> ext
 
 	private void initGUI(List<GamePlayer> gamePlayers) {
 		messageViewer = new MessageViewerComponent<S, A>();
-		playersInfoViewer = new PlayersInfoComponent<S, A>(gamePlayers, playersInfoObserver);
+		playersInfoViewer = new PlayersInfoComponent<S, A>(gamePlayers, playerInfoObserver);
 		add(messageViewer);
 		add(playersInfoViewer);
 	}
@@ -56,7 +56,6 @@ public class InfoView<S extends GameState<S, A>, A extends GameAction<S, A>> ext
 	}
 
 	@Override
-	public void update(S state) {
-	}
+	public void update(S state) {}
 
 }

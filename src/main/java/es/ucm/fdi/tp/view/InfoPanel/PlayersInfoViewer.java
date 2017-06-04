@@ -11,10 +11,10 @@ import es.ucm.fdi.tp.view.Controller.GameController;
 
 public abstract class PlayersInfoViewer<S extends GameState<S, A>, A extends GameAction<S, A>> extends GUIView<S, A> {
 	private static final long serialVersionUID = 8207252960325652993L;
-	protected List<PlayersInfoObserver> playersInfoObserverList = new ArrayList<>();
+	protected List<PlayerInfoObserver> playerInfoObserverList = new ArrayList<>();
 
-	public void addObserver(PlayersInfoObserver observer) {
-		playersInfoObserverList.add(observer);
+	public void addObserver(PlayerInfoObserver observer) {
+		playerInfoObserverList.add(observer);
 	}
 
 	/**
@@ -27,7 +27,7 @@ public abstract class PlayersInfoViewer<S extends GameState<S, A>, A extends Gam
 	abstract public Color getPlayerColor(int playerId);
 
 	protected void notifyObservers(int player, Color color) {
-		for (PlayersInfoObserver observer : playersInfoObserverList) {
+		for (PlayerInfoObserver observer : playerInfoObserverList) {
 			observer.colorChanged(player, color);
 		}
 	}

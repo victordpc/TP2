@@ -1,20 +1,19 @@
 package es.ucm.fdi.tp.view;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.*;
 
 import es.ucm.fdi.tp.extra.jboard.JBoard;
 import es.ucm.fdi.tp.ttt.TttAction;
 import es.ucm.fdi.tp.ttt.TttState;
 import es.ucm.fdi.tp.view.Controller.GameController;
 import es.ucm.fdi.tp.view.InfoPanel.MessageViewer;
-import es.ucm.fdi.tp.view.InfoPanel.PlayersInfoObserver;
+import es.ucm.fdi.tp.view.InfoPanel.PlayerInfoObserver;
 
 public class TttView extends RectBoardView<TttState, TttAction> {
 	private static final long serialVersionUID = 3367678913075958511L;
 
 	public TttView(GameController<TttState, TttAction> gameController, TttState state) {
-		super(gameController, state);
+		super(gameController, state, false);
 	}
 
 	@Override
@@ -80,9 +79,10 @@ public class TttView extends RectBoardView<TttState, TttAction> {
 				return TttView.this.getShape(player);
 			}
 
+			protected Image getImage(int row, int col) {return null;}
+
 			@Override
-			protected void keyTyped(int keyCode) {
-			}
+			protected void keyTyped(int keyCode) {}
 
 			@Override
 			protected void mouseClicked(int row, int col, int clickCount, int mouseButton) {
@@ -98,11 +98,12 @@ public class TttView extends RectBoardView<TttState, TttAction> {
 	protected void keyTyped(int keyCode) {
 	}
 
-	/// QUE SE ILUMINEN LAS CASILLAS VÁLIDAS.
 	@Override
 	protected void mouseClicked(int row, int col, int clickCount, int mouseButton) {
 		TttAction action = new TttAction(this.jugador.getPlayerNumber(), row, col);
-		gameController.makeManualMove(action);
+		if (state.isPositionEmpty(row, col)) {
+			gameController.makeManualMove(action);
+		}
 	}
 
 	@Override
@@ -116,15 +117,5 @@ public class TttView extends RectBoardView<TttState, TttAction> {
 
 	@Override
 	public void setMessageViewer(MessageViewer<TttState, TttAction> infoViewer) {
-	}
-
-	@Override
-	protected void setPlayersInfoObserver(PlayersInfoObserver observer) {
-	}
-
-	@Override
-	public void update(TttState state) {
-		this.state = state;
-		jBoard.repaint();
 	}
 }

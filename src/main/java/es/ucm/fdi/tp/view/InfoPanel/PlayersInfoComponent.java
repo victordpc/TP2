@@ -22,17 +22,32 @@ import es.ucm.fdi.tp.base.model.GameState;
 import es.ucm.fdi.tp.extra.jcolor.ColorChooser;
 import es.ucm.fdi.tp.mvc.PlayerModel;
 
-public class PlayersInfoComponent<S extends GameState<S, A>, A extends GameAction<S, A>>
-		extends PlayersInfoViewer<S, A> {
+public class PlayersInfoComponent<S extends GameState<S, A>, A extends GameAction<S, A>> extends PlayersInfoViewer<S, A> {
 	private static final long serialVersionUID = 1636020027918664845L;
+	/**
+	 * Seleccionador de colores.
+	 */
 	private ColorChooser colorChooser;
+    /**
+     * Dicionario de colores según el jugadorId.
+     */
 	private Map<Integer, Color> colors; // Line -> Color
+    /**
+     * Listado de jugadores.
+     */
 	private List<GamePlayer> gamePlayers;
+    /**
+     * Modo actual del jugador.
+     */
 	private PlayerModel playerModel;
-	private PlayersInfoObserver playersInfoObserver;
+    /**
+     * Observador de la vista.
+     */
+	private PlayerInfoObserver playerInfoObserver;
 
-	public PlayersInfoComponent(List<GamePlayer> gamePlayers, PlayersInfoObserver playersInfoObserver) {
-		this.playersInfoObserver = playersInfoObserver;
+
+	public PlayersInfoComponent(List<GamePlayer> gamePlayers, PlayerInfoObserver playerInfoObserver) {
+		this.playerInfoObserver = playerInfoObserver;
 		this.gamePlayers = gamePlayers;
 		List<String> playerNames = new ArrayList<>();
 		for (GamePlayer gamePlayer : gamePlayers) {
@@ -45,6 +60,10 @@ public class PlayersInfoComponent<S extends GameState<S, A>, A extends GameActio
 		initGUI();
 	}
 
+	/**
+	 * Cambia el color del jugador pasado por parámetro.
+	 * @param row Jugador 0 o 1.
+	 */
 	private void changeColor(int row) {
 		colorChooser.setSelectedColorDialog(colors.get(row));
 		colorChooser.openDialog();
@@ -52,7 +71,7 @@ public class PlayersInfoComponent<S extends GameState<S, A>, A extends GameActio
 			colors.put(row, colorChooser.getColor());
 			repaint();
 		}
-		playersInfoObserver.colorChanged(row, colorChooser.getColor());
+		playerInfoObserver.colorChanged(row, colorChooser.getColor());
 	}
 
 	@Override
@@ -110,6 +129,9 @@ public class PlayersInfoComponent<S extends GameState<S, A>, A extends GameActio
 		add(scrollPane);
 	}
 
+	/**
+	 * Carga los colores.
+	 */
 	private void loadColors() {
 		for (int i = 0; i < gamePlayers.size(); i++) {
 			colors.put(i, gamePlayers.get(i).getPlayerColor());
@@ -117,9 +139,7 @@ public class PlayersInfoComponent<S extends GameState<S, A>, A extends GameActio
 	}
 
 	@Override
-	public void setNumberOfPlayer(int i) {
-
-	}
+	public void setNumberOfPlayer(int i) {}
 
 	@Override
 	public void updateColors() {

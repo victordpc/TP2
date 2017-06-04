@@ -15,9 +15,21 @@ import es.ucm.fdi.tp.mvc.GameEvent.EventType;
  */
 public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> implements GameObservable<S, A> {
 
+	/**
+	 * Estado actual del juego.
+	 */
 	private S currentState;
+	/**
+	 * Jugadores del juego.
+	 */
 	private List<GamePlayer> gamePlayers;
+	/**
+	 *Estado inicial del juego.
+	 */
 	private S initState;
+	/**
+	 * Listado que guarda los observadores del model.
+	 */
 	private List<GameObserver<S, A>> observers = new ArrayList<>();
 
 	public GameTable(S initState) {
@@ -31,20 +43,25 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
 		observers.add(o);
 	}
 
-	// NOTIFICAR DE ERRORES,
+	/**
+	 * Ejecuta una acción en el model.
+	 * @param action Acción a ejecutar.
+	 */
 	public void execute(A action) {
-		if (action.getPlayerNumber() == currentState.getTurn()) {
-			// apply move
-			currentState = action.applyTo(currentState);
-			if (currentState.isFinished()) {
-				notifyGameHasChanged();
-				notifyGameHasFinished();
-			} else {
-				notifyGameHasChanged();
-				notifyInfo();
+		if (action != null) {
+			if (action.getPlayerNumber() == currentState.getTurn()) {
+				// apply move
+				currentState = action.applyTo(currentState);
+				if (currentState.isFinished()) {
+					notifyGameHasFinished();
+					notifyGameHasChanged();
+				} else {
+					notifyInfo();
+						notifyGameHasChanged();
 			}
-		} else {
-			notifyErrorHasOcurred("No es tu turno jugador " + action.getPlayerNumber());
+			} else {
+				notifyErrorHasOcurred("No es tu turno jugador " + action.getPlayerNumber());
+			}
 		}
 	}
 
@@ -60,6 +77,10 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
 		notifyErrorHasOcurred("No es tu turno jugador " + jugadorQueSeCuela);
 	}
 
+	/**
+	 * Notifica a los observadores de un error.
+	 * @param message Mensaje de error.
+	 */
 	private void notifyErrorHasOcurred(String message) {
 		GameEvent<S, A> event = new GameEvent<>(EventType.Error, null, currentState, new GameError(message), null);
 		for (GameObserver<S, A> gameObserver : observers) {
@@ -67,6 +88,9 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
 		}
 	}
 
+	/**
+	 * Notifica a los observadores del modelo, de que se ha producido un cambio en el modelo.
+	 */
 	private void notifyGameHasChanged() {
 		GameEvent<S, A> event = new GameEvent<>(GameEvent.EventType.Change, null, currentState, null,
 				"El juego ha cambiado");
@@ -75,6 +99,9 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
 		}
 	}
 
+	/**
+	 * Notifica a los observadores del modelo, de que el juego ha finalizado.
+	 */
 	private void notifyGameHasFinished() {
 		GameEvent<S, A> event;
 		if (currentState.getWinner() == -1) {
@@ -90,6 +117,9 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
 		}
 	}
 
+	/**
+	 * Notifica a los observadores del modelo, de que el juego ha empezado.
+	 */
 	private void notifyGameHasStarted() {
 		GameEvent<S, A> event = new GameEvent<>(GameEvent.EventType.Start, null, currentState, null,
 				"¡La partida ha empezado!");
@@ -98,6 +128,9 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
 		}
 	}
 
+	/**
+	 * Notifica a los observadores del modelo, de que información para mostrar en el panel.
+	 */
 	private void notifyInfo() {
 		GameEvent<S, A> event = new GameEvent<>(EventType.Info, null, currentState, null, null);
 		for (GameObserver<S, A> gameObserver : observers) {
@@ -105,6 +138,9 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
 		}
 	}
 
+	/**
+	 * Notifica a los observadores del modelo, de que la interfaz necesita ser refrescada.
+	 */
 	public void notifyInterfaceNeedBeUpdated() {
 		GameEvent<S, A> event = new GameEvent<>(GameEvent.EventType.Change, null, currentState, null,
 				"El juego ha cambiado");
@@ -118,21 +154,34 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
 		observers.remove(o);
 	}
 
+	/**
+	 * Reinicia el juego.
+	 */
 	public void restartGame() {
 		currentState = initState;
 		notifyGameHasStarted();
 	}
 
+	/**
+	 * Cambia los jugadores del modelo.
+	 * @param gamePlayers Nuevos jugadores.
+	 */
 	public void setGamePlayers(List<GamePlayer> gamePlayers) {
 		this.gamePlayers = gamePlayers;
 	}
 
+	/**
+	 * Inicia el juego.
+	 */
 	public void start() {
 		currentState = initState;
 		notifyGameHasStarted();
 		notifyInfo();
 	}
 
+	/**
+	 * Para el juego.
+	 */
 	public void stop() {
 		GameEvent<S, A> event = new GameEvent<>(GameEvent.EventType.Stop, null, currentState, null,
 				"El juego ha parado");
