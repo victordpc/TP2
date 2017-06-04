@@ -56,7 +56,6 @@ public class UIController<S extends GameState<S, A>, A extends GameAction<S, A>>
 
 	@Override
 	public void makeSmartMove(SmartPlayer jugador) {
-	    System.out.println("GetTURN " +gameTable.getState().getTurn() +" -- " +jugador.getPlayerNumber());
 		if (!gameTable.getState().isFinished() && gameTable.getState().getTurn() == jugador.getPlayerNumber()) {
 			A action = algorithm.chooseAction(jugador.getPlayerNumber(), gameTable.getState());
 			gameTable.execute(action);

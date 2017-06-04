@@ -156,7 +156,10 @@ public class TttState extends GameState<TttState, TttAction> {
 				}
 			}
 		}
-
 		return valid;
+	}
+
+	public boolean isPositionEmpty(int row, int column) {
+		return board[row][column] == EMPTY;
 	}
 }

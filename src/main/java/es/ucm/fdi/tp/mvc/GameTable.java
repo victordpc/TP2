@@ -40,8 +40,8 @@ public class GameTable<S extends GameState<S, A>, A extends GameAction<S, A>> im
 					notifyGameHasFinished();
 					notifyGameHasChanged();
 				} else {
-					notifyGameHasChanged();
 					notifyInfo();
+					notifyGameHasChanged();
 				}
 			} else {
 				notifyErrorHasOcurred("No es tu turno jugador " + action.getPlayerNumber());

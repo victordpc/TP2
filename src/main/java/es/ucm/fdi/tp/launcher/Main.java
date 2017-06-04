@@ -167,10 +167,10 @@ public class Main {
 				@Override
 				public void run() {
 					for (int i = 0; i < players.size(); i++) {
-						UIController<S, A> gameControllerPlayer = new UIController<S, A>(gameTable);
-						GUIView<S, A> guiViewPlayer = createGUIGame(gameName, gameControllerPlayer, gameTable.getState());
-						GUIView<S, A> containerViewPlayer = new GameContainer<S, A>(i, guiViewPlayer, gameControllerPlayer, gameTable, players);
-						gameControllerPlayer.setPlayerInfoObserver((PlayerInfoObserver)containerViewPlayer);
+						UIController<S, A> gameController = new UIController<S, A>(gameTable);
+						GUIView<S, A> guiViewPlayer = createGUIGame(gameName, gameController, gameTable.getState());
+						GUIView<S, A> containerViewPlayer = new GameContainer<S, A>(i, guiViewPlayer, gameController, gameTable, players);
+						gameController.setPlayerInfoObserver((PlayerInfoObserver)containerViewPlayer);
 						containerViewPlayer.enableWindowMode();
 					}
 				}
