@@ -8,7 +8,7 @@ import javax.swing.JComponent;
 import es.ucm.fdi.tp.base.model.GameAction;
 import es.ucm.fdi.tp.base.model.GamePlayer;
 import es.ucm.fdi.tp.base.model.GameState;
-import es.ucm.fdi.tp.chess.ChessState;
+//import es.ucm.fdi.tp.chess.ChessState;
 import es.ucm.fdi.tp.extra.jboard.JBoard;
 import es.ucm.fdi.tp.view.Controller.GameController;
 import es.ucm.fdi.tp.view.InfoPanel.PlayerInfoObserver;

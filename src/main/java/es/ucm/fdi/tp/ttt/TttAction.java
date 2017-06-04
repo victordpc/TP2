@@ -6,8 +6,7 @@ import es.ucm.fdi.tp.base.model.GameAction;
  * An action for TickTackToe.
  */
 public class TttAction implements GameAction<TttState, TttAction> {
-
-	private static final long serialVersionUID = -8491198872908329925L;
+ 	private static final long serialVersionUID = -8491198872908329925L;
 
 	private int col;
 	private int player;

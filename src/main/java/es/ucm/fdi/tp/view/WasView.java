@@ -96,7 +96,9 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
 			}
 
 			@Override
-			protected Image getImage(int row, int col) {return null;}
+			protected Image getImage(int row, int col) {
+				return null;
+			}
 
 			@Override
 			protected void keyTyped(int keyCode) {
@@ -115,7 +117,8 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
 
 	@Override
 	protected void keyTyped(int keyCode) {
-		if ((gameController.getPlayerMode() == PlayerType.MANUAL) && (originCoordinates != null) && (keyCode == KeyEvent.VK_ESCAPE)) {
+		if ((gameController.getPlayerMode() == PlayerType.MANUAL) && (originCoordinates != null)
+		/* && (keyCode == KeyEvent.VK_ESCAPE) */) {
 			playerInfoObserver.postMessage("Selección cancelada, elige una nueva ficha de origen");
 			originCoordinates = null;
 			jBoard.repaint();
@@ -125,8 +128,11 @@ public class WasView extends RectBoardView<WolfAndSheepState, WolfAndSheepAction
 
 	/**
 	 * Método que reacciona cuando un jugador hace click sobre el tablero.
-	 * @param row Fila donde ha hecho click el jugador.
-	 * @param col Columna donde ha hecho click el jugador.
+	 * 
+	 * @param row
+	 *            Fila donde ha hecho click el jugador.
+	 * @param col
+	 *            Columna donde ha hecho click el jugador.
 	 * @param clickCount
 	 * @param mouseButton
 	 */
